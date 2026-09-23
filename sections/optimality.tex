@@ -1,0 +1,378 @@
+\section{Optimality of the interpretations}\label{app:optimality}
+Corollary~\ref{cor:detectable} converts detectable colors into a lower
+bound, so the larger $\Det$ is, the better. This appendix bounds $|\Det|$
+from above, for every set of colors and every type-constant interpretation,
+and shows that the interpretations \eqref{eq:omega-inputs} and
+\eqref{eq:phi-inputs} of Section~\ref{sec:logical} are optimal in this
+sense. Nothing here is needed for Theorems~\ref{main:omega}
+and~\ref{main:phi}; the results explain why Theorem~\ref{main:omega}
+carries a central binomial coefficient and why the factor of two in
+Theorem~\ref{main:phi} cannot be removed by a better interpretation. The
+notation is that of Sections~\ref{sec:preservation} and~\ref{sec:logical}.
+
+\subsection{Where a deletion can be seen}\label{app:where}
+The lemma below bounds $|\Det|$ from above, for every set of colors and
+every type-constant interpretation. It turns the informal account of the
+anchors in Section~\ref{ov:structure} into a precise statement, and
+Appendices~\ref{app:middle} and~\ref{app:alllabels} combine it with the
+form of the clauses of $\Psi_k$ and $\Phi_k$.
+
+Call $\varphi(x,y)=\exists z\,\psi$ a \emph{witness query} if $\psi$ is
+quantifier-free and every atom of $\psi$, equalities included, has $z$ as
+exactly one of its two arguments and $x$ or $y$ as the other. Both $\Psi_k$
+and
+$\Phi_k$ are witness queries, and so is the $\Phi'_k$ of
+Remark~\ref{rem:iff}.
+
+\begin{lemma}[Where a deletion can be seen]\label{lem:where}
+Let $\varphi=\exists z\,\psi$ be a witness query whose relation symbols are
+interpreted on $\M$ by type-constant relations. Every color detectable for
+$\varphi$ is detected at a pair one of whose endpoints is the hub, and
+\begin{enumerate}[nosep,label=(\alph*)]
+\item for each anchor $x$, at most one color is detected at $(x,h)$ and at
+ most one at $(h,x)$;
+\item at most one color is detected at $(h,h)$; at most one at the pairs
+ $(h,v)$ with $v$ a cell vertex, taken together; and at most one at the
+ pairs $(u,h)$ with $u$ a cell vertex;
+\item these three kinds detect at most two colors between them.
+\end{enumerate}
+Hence at most $2|X|+2$ colors are detectable for $\varphi$ on $\M$.
+\end{lemma}
+\begin{proof}
+Every atom of $\psi$ is evaluated at $(u,z)$, $(z,u)$, $(z,v)$ or $(v,z)$,
+and the types of all four are determined by
+$\bigl(\tp(u,z),\tp(z,v)\bigr)$, since converse carries each type onto a
+type (Corollary~\ref{cor:closure}). The interpretations being
+type-constant, the truth value of $\psi$ at a witness $z$ therefore depends
+only on the profile of $z$ at $(u,v)$; write $\psi(\tau_1,\tau_2)$ for it.
+For $u,v\in D_J$, separate the cell witnesses from the remaining
+witnesses:
+\[
+ \varphi^{\M\res J}(u,v)=c(u,v)\vee\sigma_J(u,v),\qquad
+ \sigma_I(u,v)=\bigvee_{z\in\cell I\setminus\{u,v\}}
+ \psi\bigl(\tp(u,z),\tp(z,v)\bigr),
+\]
+where $c(u,v)$ collects the witnesses in $X\cup\{h\}\cup(\{u,v\}\cap U)$.
+These survive every deletion and keep their profiles, so $c$ does not depend
+on $J$. As $\sigma_I$ is monotone in $I$, detecting $\lambda$ at $(u,v)$
+requires $c(u,v)=0$, $\sigma_{\Col}(u,v)=1$ and
+$\sigma_{\Col\setminus\{\lambda\}}(u,v)=0$; only the last two are used
+below.
+
+The profiles realized by the cell witnesses were listed in the proof of
+Lemma~\ref{lem:local}, and among the entries of \eqref{eq:response-table}
+only the five carrying $\ell_I$, $r_I$ or $d_I$ depend on $I$; at every
+other pair, $\sigma_I(u,v)=\sigma_{\Col}(u,v)$ for every nonempty $I$,
+which proves the first assertion. Those five kinds of pairs are $(x,h)$ and
+$(h,x)$ for an anchor $x$, the pair $(h,h)$, and the pairs $(h,v)$ and
+$(u,h)$ with $v$ and $u$ cell vertices, and at them the profiles realized
+by $z\in\cell I$ are respectively
+\[
+ (\tpl x,\ctype\lambda),\quad
+ (\ctype\lambda,\tpr x),\quad
+ (\ctype\lambda,\ctype\lambda),\quad
+ (\ctype\lambda,\ctype\mu),\quad
+ (\ctype\mu,\ctype\lambda)
+ \qquad(\lambda\in I,\ \mu\in\Col),
+\]
+where the last two follow from Lemma~\ref{lem:palette}(b), which supplies
+every $\mu$ on the cell side inside every retained cell. In each case
+$\sigma_I(u,v)=\bigvee_{\lambda\in I}s(\lambda)$ for a function $s$ of
+$\lambda$ alone, and in the last two cases $s$ depends on neither $v$ nor
+$u$ (the term $c$ does depend on them, since the hub and the endpoint are
+themselves witnesses there, but $c$ is unaffected by deletions). Hence
+$\sigma_{\Col}=1$ and $\sigma_{\Col\setminus\{\lambda\}}=0$ force
+$s(\lambda)=1$ and $s(\mu)=0$ for every $\mu\ne\lambda$, which at most one
+$\lambda$ can satisfy; in the last two cases that single $\lambda$ serves
+every choice of the cell vertex at once. This proves (a) and (b).
+
+For (c), suppose that $(h,h)$ detects $\lambda_0$ while some pair $(h,v)$
+detects a different color $\lambda_1$. The first gives
+$\psi(\ctype{\lambda_0},\ctype{\lambda_0})=1$, the second gives
+$\bigvee_{\mu\in\Col}\psi(\ctype{\lambda_0},\ctype\mu)=0$, and these
+contradict each other. Hence $(h,h)$ and the pairs $(h,v)$ detect the same
+color if they detect any color at all, and the same holds for $(h,h)$ and
+the pairs $(u,h)$ by symmetry. Thus if $(h,h)$ detects a color, the three
+kinds together detect exactly one color, and otherwise they detect at most
+two. Summing $|X|+|X|+2$ gives the bound.
+\end{proof}
+The bound is linear in the number of anchors, which is the precise content
+of the informal remark in Section~\ref{ov:structure} that the anchors are
+the resource that the lower bound consumes. The constant is exact: for
+$|\Col|\ge2|X|+2$, take one relation symbol per type, interpreted by the
+indicator of that type, and let $\psi$ be the disjunction, over the profiles
+$(\ctype{\lambda_0},\ctype{\lambda_1})$ and, for each anchor $x$,
+$(\tpl x,\ctype{\alpha_x})$ and $(\ctype{\beta_x},\tpr x)$, where the
+$2|X|+2$ colors $\lambda_0,\lambda_1,\alpha_x,\beta_x$ are distinct, of the
+symbol of the first type applied to $(x,z)$ conjoined with the symbol of
+the second type applied to $(z,y)$. Then $\lambda_0$ is detected at the pairs $(h,v)$,
+$\lambda_1$ at the pairs $(u,h)$, and $\alpha_x$ and $\beta_x$ at $(x,h)$
+and $(h,x)$, respectively (the witnesses in $X\cup\{h\}\cup\{u,v\}$ realize
+none of these profiles, so the term $c$ of the proof vanishes there).
+
+\subsection{Bollob\'as's set-pair inequality}\label{app:bollobas}
+The bound for $\Psi_k$ comes from a classical inequality of extremal set
+theory, which we state and prove for completeness. A finite family
+$(A_\lambda,B_\lambda)_{\lambda\in I}$ of pairs of sets is
+\emph{cross-intersecting} if $A_\lambda\cap B_\lambda=\varnothing$ for every
+$\lambda\in I$ and $A_\lambda\cap B_\mu\ne\varnothing$ for all
+$\lambda\ne\mu$ in $I$.
+
+\begin{lemma}[Bollob\'as's set-pair inequality~\citep{bollobas1965}]\label{lem:bollobas}
+Every cross-intersecting family $(A_\lambda,B_\lambda)_{\lambda\in I}$
+satisfies
+\begin{equation}\label{eq:set-pair}
+ \sum_{\lambda\in I}\binom{|A_\lambda|+|B_\lambda|}{|A_\lambda|}^{-1}\ \le\ 1 .
+\end{equation}
+In particular, if all the sets are subsets of $[k]$, then
+$|I|\le\binom{k}{\lfloor k/2\rfloor}$.
+\end{lemma}
+\begin{proof}
+Let $\pi$ be a uniformly random linear order of the union of all the sets,
+and let $E_\lambda$ be the event that every element of $A_\lambda$ precedes
+every element of $B_\lambda$. The two sets being disjoint, $\Pr[E_\lambda]$
+is the reciprocal of $\binom{|A_\lambda|+|B_\lambda|}{|A_\lambda|}$. The
+events are pairwise disjoint: for $\lambda\ne\mu$ choose
+$a\in A_\lambda\cap B_\mu$ and $b\in A_\mu\cap B_\lambda$, both available,
+and distinct because $a=b$ would put $a$ in
+$A_\lambda\cap B_\lambda=\varnothing$; then $E_\lambda$ puts $a$ before $b$
+while $E_\mu$ puts $b$ before $a$. Summing the probabilities
+gives~\eqref{eq:set-pair}. For subsets of $[k]$, disjointness gives
+$|A_\lambda|+|B_\lambda|\le k$, so every summand is at least
+$\binom{k}{\lfloor k/2\rfloor}^{-1}$, and the second claim follows.
+\end{proof}
+The inequality is usually quoted in the uniform case $|A_\lambda|=a$ and
+$|B_\lambda|=b$, where it reads $|I|\le\binom{a+b}{a}$; the proof above is
+the standard permutation argument (cf.~\citet{katona1974}), and
+\citet{tuza1994} surveys the many uses of the inequality. The bound
+$\binom{k}{\lfloor k/2\rfloor}$ is attained by letting $B_\lambda$ range
+over all $\lfloor k/2\rfloor$-element subsets of $[k]$ and taking
+$A_\lambda=[k]\setminus B_\lambda$.
+
+\subsection{The middle layer is forced}\label{app:middle}
+Fix such an interpretation and write
+\[
+ G(\tau)=\{i\in[k]:R_i(\tau)=0\}
+\]
+for the set of clauses that a type $\tau$ leaves unsatisfied. A witness with
+profile $(\tau_1,\tau_2)$ satisfies clause $i$ exactly when $R_i(\tau_1)=1$
+or $R_i(\tau_2)=1$, so it satisfies all $k$ clauses exactly when
+\begin{equation}\label{eq:gap-disjoint}
+ G(\tau_1)\cap G(\tau_2)=\varnothing.
+\end{equation}
+Because each clause is a disjunction, the test has become a disjointness
+test between two subsets of $[k]$, symmetric in the two edges. This is the
+only feature of $\Psi_k$ used below.
+
+\begin{proposition}[The middle layer is forced]\label{prop:middle-layer}
+Let $\Col$ be any finite set of colors with $|\Col|\ge2$, let $X$ be any
+finite set of anchors, and interpret $R_1,\ldots,R_k$ on the resulting
+structure $\M$ by any type-constant relations. The set $\Det$ of colors
+detectable for $\Psi_k$ satisfies
+\[
+ |\Det|\ \le\ \binom{k}{\lfloor k/2\rfloor},
+\]
+and the interpretation \eqref{eq:omega-inputs} attains this bound.
+\end{proposition}
+\begin{proof}
+$\Psi_k$ is a witness query, so Lemma~\ref{lem:where} applies: every
+detectable color is detected at one of the five kinds of pairs listed there.
+Let $\Det'$ be the set of colors detected at a pair $(x,h)$ or $(h,x)$ with
+$x$ an anchor. We first bound $|\Det'|$ and then show that the three kinds
+of pairs not involving an anchor add nothing to it.
+
+Fix $\lambda\in\Det'$ together with a pair at which it is detected. If that
+pair is $(x,h)$ then, by the proof of Lemma~\ref{lem:where}, the cell
+witnesses realize the profiles $(\tpl x,\ctype\mu)$ with $\mu$ retained, so
+detection means that \eqref{eq:gap-disjoint} holds for
+$(\tpl x,\ctype\lambda)$ and fails for $(\tpl x,\ctype\mu)$ for every color
+$\mu\ne\lambda$; put $A_\lambda=G(\tpl x)$. If the pair is $(h,x)$ the
+profiles are $(\ctype\mu,\tpr x)$ and the same holds with
+$A_\lambda=G(\tpr x)$, because \eqref{eq:gap-disjoint} is symmetric. Either
+way, writing $B_\lambda=G(\ctype\lambda)$,
+\[
+ A_\lambda\cap B_\lambda=\varnothing,\qquad
+ A_\lambda\cap B_\mu\ne\varnothing\quad(\mu\in\Col,\ \mu\ne\lambda).
+\]
+In particular $(A_\lambda,B_\lambda)_{\lambda\in\Det'}$ is a
+cross-intersecting family of subsets of $[k]$, and
+Lemma~\ref{lem:bollobas} gives $|\Det'|\le\binom{k}{\lfloor k/2\rfloor}$.
+
+Now consider the pairs not involving an anchor. At a pair $(h,v)$ with $v$ a
+cell vertex, the proof of Lemma~\ref{lem:where} gives
+$s(\lambda)=\bigvee_{\mu\in\Col}\bigl[G(\ctype\lambda)\cap
+G(\ctype\mu)=\varnothing\bigr]$, and detection of $\lambda$ requires
+$s(\lambda)=1$ and $s(\mu)=0$ for every $\mu\ne\lambda$. Since
+\eqref{eq:gap-disjoint} is symmetric, the color witnessing $s(\lambda)=1$
+can only be $\lambda$ itself, so $G(\ctype\lambda)=\varnothing$; but then
+$s(\mu)=1$ for every $\mu$, a contradiction because $|\Col|\ge2$. Hence no
+color is detected at the pairs $(h,v)$ and, by symmetry, none at the pairs
+$(u,h)$. At $(h,h)$, a color $\lambda$ is detected only if
+$G(\ctype\lambda)=\varnothing$ and $G(\ctype\mu)\ne\varnothing$ for every
+$\mu\ne\lambda$. In that case $G(\tau)\cap G(\ctype\lambda)=\varnothing$ for
+every type $\tau$, so no anchor pair detects a color other than $\lambda$,
+and $\Det=\{\lambda\}$. In all cases
+$|\Det|\le\max(1,|\Det'|)\le\binom{k}{\lfloor k/2\rfloor}$. For
+\eqref{eq:omega-inputs} we have $G(\tpl{x_A})=[k]\setminus A$ and
+$G(\ctype B)=B$, so \eqref{eq:gap-disjoint} reads $B\subseteq A$, and
+\eqref{eq:omega-decoder} makes all $\binom{k}{\lfloor k/2\rfloor}$ colors
+detectable.
+\end{proof}
+The interpretation \eqref{eq:omega-inputs} is precisely the extremal family
+described after Lemma~\ref{lem:bollobas}: its pairs are
+$([k]\setminus A,A)$ for $A\in\Col$. The loss of a factor $\Theta(\sqrt k)$
+is therefore inherent to $\Psi_k$ together with this construction
+(Section~\ref{ov:formula}). The two extra colors allowed by
+Lemma~\ref{lem:where} never materialize for $\Psi_k$, because the symmetry
+of \eqref{eq:gap-disjoint} prevents the pairs $(h,v)$ and $(u,h)$ from
+detecting anything; they are available only to witness queries with an
+asymmetric $\psi$, such as the one exhibited after that lemma. Note that
+the proposition bounds the
+number of colors that the structure can be made to detect; it is not an
+upper bound on the number of compositions that $\Psi_k$ requires, which we
+do not determine.
+
+It is instructive to see what the disjunction costs. Detection at an anchor
+pair already forces the tuples $\bigl(R_i(\ctype\lambda)\bigr)_{i\le k}$ to
+be pairwise distinct over $\Det'$, which by itself gives only
+$|\Det'|\le2^k$; it is the disjointness test \eqref{eq:gap-disjoint} that
+reduces $2^k$ to the middle layer. The next subsection replaces the
+disjunctive clause by one that tests two labels for equality, a test subject
+to no such constraint, and thereby recovers all $2^k$ subsets.
+
+\subsection{All labels at once}\label{app:alllabels}
+Proposition~\ref{prop:middle-layer} bounded the number of colors that
+$\Psi_k$ can be made to detect by the size of the middle layer. For $\Phi_k$
+the corresponding bound is $2^k$, so \eqref{eq:phi-inputs} gives up
+nothing; the proof is shorter than that of
+Proposition~\ref{prop:middle-layer}, because the agreement test
+\eqref{eq:eta} is already a test between two sets.
+
+Fix a type-constant interpretation of the $2k$ symbols, over any set of
+colors and with any number of anchors, and give a type $\tau$ the
+\emph{key set}
+\[
+ \mathcal S_\tau=\bigl\{A\subseteq[k]:H_A(\tau)=1\bigr\},
+\]
+where $H_A$ is the relation of \eqref{eq:phi-upper}; being an intersection
+of type-constant relations, $H_A$ is type-constant, so the key set is well
+defined. Explicitly, $A\in\mathcal S_\tau$ means that $P_i(\tau)=1$ for
+every $i\in A$ and $Q_i(\tau)=1$ for every $i\notin A$. A witness with
+profile $(\tau_1,\tau_2)$ satisfies clause $i$ exactly when $P_i$ holds on
+both types or $Q_i$ does; recording for each $i$ which alternative is taken,
+and collecting the indices of the first kind into a set $A$, we see that it
+satisfies all $k$ clauses exactly when
+\begin{equation}\label{eq:phi-meet}
+ \mathcal S_{\tau_1}\cap\mathcal S_{\tau_2}\ne\varnothing .
+\end{equation}
+This is the counterpart of \eqref{eq:gap-disjoint}, and the contrast between
+the two conditions is the whole difference between the two formulas: there
+the test is disjointness, here it is non-empty intersection. The key set
+also refines the dichotomy between labelled and unlabelled types of
+Section~\ref{sec:phi}: it is empty exactly when $\tau$ carries no label, a singleton exactly
+when $\tau$ carries a label, and larger when some index has both of its
+symbols true, a case that the dichotomy does not cover but that a general
+interpretation may use. Finally, the union in \eqref{eq:phi-upper} ranges
+over exactly the sets $A$ that can occur in a key set, and
+\eqref{eq:phi-meet} explains why: a witness serves exactly when a single
+$H_A$ holds on both of its edges.
+
+\begin{proposition}[All labels at once]\label{prop:all-labels}
+Let $\Col$ be any finite set of colors with $|\Col|\ge2$, let $X$ be any
+finite set of anchors, and interpret $P_1,Q_1,\ldots,P_k,Q_k$ on the
+resulting structure $\M$ by any type-constant relations. The set $\Det$ of
+colors detectable for $\Phi_k$ satisfies
+\[
+ |\Det|\ \le\ 2^k,
+\]
+and the interpretation \eqref{eq:phi-inputs} attains this bound.
+\end{proposition}
+\begin{proof}
+$\Phi_k$ is a witness query, so Lemma~\ref{lem:where} applies: every
+detectable color is detected at one of the five kinds of pairs listed there.
+As in the proof of Proposition~\ref{prop:middle-layer}, let $\Det'$ be the
+set of colors detected at a pair $(x,h)$ or $(h,x)$ with $x$ an anchor.
+
+Fix $\lambda\in\Det'$ together with a pair at which it is detected. If that
+pair is $(x,h)$ then, by the proof of Lemma~\ref{lem:where}, the cell
+witnesses realize the profiles $(\tpl x,\ctype\mu)$ with $\mu$ retained, so
+detection means that \eqref{eq:phi-meet} holds for $(\tpl x,\ctype\lambda)$
+and fails for $(\tpl x,\ctype\mu)$ for every $\mu\ne\lambda$; put
+$T_\lambda=\mathcal S_{\tpl x}$. If the pair is $(h,x)$ the profiles are
+$(\ctype\mu,\tpr x)$ and the same holds with
+$T_\lambda=\mathcal S_{\tpr x}$, because \eqref{eq:phi-meet} is symmetric.
+Either way
+\[
+ T_\lambda\cap\mathcal S_{\ctype\lambda}\ne\varnothing,\qquad
+ T_\lambda\cap\mathcal S_{\ctype\mu}=\varnothing
+ \quad(\mu\in\Col,\ \mu\ne\lambda).
+\]
+Choosing for each $\lambda\in\Det'$ a set in
+$T_\lambda\cap\mathcal S_{\ctype\lambda}$ therefore defines a map
+$\Det'\to2^{[k]}$, and it is injective: the set chosen for $\lambda$ lies in
+$T_\lambda$, hence in no $\mathcal S_{\ctype\mu}$ with $\mu\ne\lambda$,
+whereas the set chosen for $\mu$ lies in $\mathcal S_{\ctype\mu}$. Hence
+$|\Det'|\le2^k$.
+
+The pairs not involving an anchor again add nothing. At a pair $(h,v)$ with
+$v$ a cell vertex,
+$s(\lambda)=\bigvee_{\mu\in\Col}\bigl[\mathcal S_{\ctype\lambda}\cap
+\mathcal S_{\ctype\mu}\ne\varnothing\bigr]$, and detection of $\lambda$
+requires $s(\lambda)=1$ and $s(\mu)=0$ for every $\mu\ne\lambda$. As
+\eqref{eq:phi-meet} is symmetric, the color witnessing $s(\lambda)=1$ can
+only be $\lambda$ itself, so $\mathcal S_{\ctype\lambda}\ne\varnothing$,
+while $s(\mu)=0$ forces $\mathcal S_{\ctype\mu}=\varnothing$ for every
+$\mu\ne\lambda$ (take $\mu$ itself in the join). The same two conditions
+are necessary for detection at $(h,h)$ and, by symmetry, at the pairs
+$(u,h)$. Under these conditions an anchor pair can detect a color
+$\lambda'$ only if $\mathcal S_{\ctype{\lambda'}}\ne\varnothing$, that is,
+only if $\lambda'=\lambda$, so $\Det=\{\lambda\}$. In all cases
+$|\Det|\le\max(1,|\Det'|)\le2^k$.
+
+For \eqref{eq:phi-inputs}, a type carrying the label $A$ has
+$\mathcal S_\tau=\{A\}$, while a type carrying no label has
+$c_i(\tau)=\cdb$ for some $i$ and hence $\mathcal S_\tau=\varnothing$. So
+\eqref{eq:phi-meet} holds for $(\tpl{x_A},\ctype B)$ exactly when $A=B$, and
+fails whenever one of the two types is unlabelled; this is
+\eqref{eq:phi-decoder}, and all $2^k$ colors are detectable.
+\end{proof}
+Together, the two propositions locate the slack that remains in
+Theorem~\ref{main:phi}. Corollary~\ref{cor:detectable} turns $|\Det|$
+detectable colors into $\lceil|\Det|/2\rceil$ compositions, so on this
+structure no interpretation of the symbols of $\Phi_k$ yields a bound above
+the $2^{k-1}$ of Theorem~\ref{main:phi}, against the $2^k$ compositions of
+\eqref{eq:phi-upper}. Unlike
+the factor $\Theta(\sqrt k)$ of Section~\ref{sec:psi}, the factor of two is
+therefore not a loss incurred in the choice of labels: it is the support
+number $\wid\land=2$ of Lemma~\ref{lem:and-width}, that is, the ability of
+a single composition to monitor two colors at once. This value is exact:
+the family exhibited in the proof of Lemma~\ref{lem:and-width} needs both
+of its colors, so the per-gate bound behind $|K|\le2m$ cannot be improved,
+although a particular composition may have a smaller support. Closing the
+factor of two would require a different invariant, not a different
+interpretation.
+
+\subsection{The equivalence query}\label{app:iff}
+One variant of $\Phi_k$ is worth recording, because it looks simpler than
+$\Phi_k$ and is not covered by Theorem~\ref{main:phi}.
+\begin{remark}[The equivalence query]\label{rem:iff}
+Over $k$ symbols let
+$\Phi'_k(x,y)=\exists z\bigwedge_{i=1}^k\bigl(R_i(x,z)\leftrightarrow
+R_i(z,y)\bigr)$, with $\leftrightarrow$ an abbreviation of fixed size, so
+that $|\Phi'_k|=\Theta(k)$. Substituting $P_i:=R_i$ and
+$Q_i:=\overline{R_i}$ turns a term for $\Phi_k$ into a term for $\Phi'_k$
+with the same number of compositions, so Theorem~\ref{main:phi} does
+\emph{not} transfer to $\Phi'_k$; a separate interpretation is needed, and
+it costs one label, because an equivalence is also satisfied by two false
+bits. Write $\prof(\tau)=\{i:R_i(\tau)=1\}$ for the \emph{profile} of a
+type, take $\Col=2^{[k]}$ with an anchor $x_A$ for each \emph{nonempty} $A$,
+and put $\prof(\tpl{x_A})=A$, $\prof(\ctype B)=B$, $\prof(\tpeq)=\varnothing$,
+$\prof(\tpa{x_A}{x_B})=[k]\setminus B$ and $\prof(\tpr{x_B})=\varnothing$.
+At $(x_A,h)$ a cell witness in $\cell B$ succeeds iff $B=A$; the hub shows
+$\varnothing$ on its loop, which is no anchor's label; and an anchor $x_B$
+is seen from $x_A$ with profile $[k]\setminus B$ while showing $B$ to the
+hub, and no set equals its complement. So the $2^k-1$ nonempty colors are
+detectable, $2m\ge2^k-1$, and hence $m\ge2^{k-1}$ again because $m$ is an
+integer. Unlike $\Phi_k$, the
+formula $\Phi'_k$ is not positive.
+\end{remark}

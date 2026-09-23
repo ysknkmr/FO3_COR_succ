@@ -1,0 +1,109 @@
+\section{Further kernels and scalar interactions}\label{app:kernels}
+This appendix collects three remarks on the support number that are not
+needed for the theorems of Section~\ref{sec:matrix}: the upper bound of
+Proposition~\ref{prop:semiring-width} is attained over the common tropical
+semirings, wider scalars reduce the number of products by exactly a factor
+of their width, and kernels of unbounded support number exist. The notation is that
+of Sections~\ref{sec:responses} and~\ref{sec:matrix}.
+
+\subsection{The support number of tropical multiplication}\label{app:tropical}
+The upper bound $\wid\otimes\le3\breadth$ of
+Proposition~\ref{prop:semiring-width} is attained whenever the semiring has
+room for it. By the proof of that proposition, a support has to fix the
+three scalar values $\bigvee_{\lambda\in J}p_\lambda$,
+$\bigvee_{\lambda\in J}q_\lambda$ and
+$\bigvee_{\lambda\in J}p_\lambda\otimes q_\lambda$. Suppose that
+$\mathbb S$ has breadth one and contains elements $0_{\mathbb S}<a<b$ with
+$a\otimes a\ne0_{\mathbb S}$, where $a\le b$ means $a\vee b=b$ (for
+min-plus this is the reverse of the numerical order); the letters $a$ and
+$b$ are local to this paragraph. Max-plus, min-plus and max-min, tabulated in
+Section~\ref{semi:weighted-section}, all qualify, with $(a,b)=(0,1)$,
+$(1,0)$ and $(\tfrac12,1)$ respectively. Take three colors with
+\[
+ (p_{\lambda_1},q_{\lambda_1})=(b,0_{\mathbb S}),\qquad
+ (p_{\lambda_2},q_{\lambda_2})=(0_{\mathbb S},b),\qquad
+ (p_{\lambda_3},q_{\lambda_3})=(a,a).
+\]
+The two marginal joins are both $b$ because $0_{\mathbb S}<a<b$, and the
+paired response is $a\otimes a$ because $0_{\mathbb S}$ annihilates. Only
+$\lambda_1$ attains the first marginal join, because
+$0_{\mathbb S}\vee a=a\ne b$; only $\lambda_2$ attains the second; and only
+$\lambda_3$ makes the paired response differ from $0_{\mathbb S}$. Every
+support therefore contains all three colors, and together with the
+proposition this gives $\wid\otimes=3$. The three responses are independent
+here: $\{\lambda_3\}$ fixes the paired response but neither marginal join,
+while $\{\lambda_1,\lambda_2\}$ fixes both marginal joins but not the paired
+response. Over these semirings, the factor $3\breadth$ in
+Theorems~\ref{thm:weighted} and~\ref{main:matrix} is thus the support
+number itself and not slack in the proposition; closing it would require a
+different invariant, as with the factor of two in Section~\ref{sec:phi}.
+
+\subsection{Vector-valued scalars, and other scalar interactions}\label{app:scalars}
+The same invariant also separates scalar capacity from the number of
+aggregations. Take $S=\bool^b$, the $b$-bit scalars, with coordinatewise
+Boolean operations; embed an input bit $\alpha$ diagonally as
+$(\alpha,\ldots,\alpha)$, and require the same encoding of the output. A
+single product then performs $b$ Boolean products, and pointwise functions
+may mix coordinates freely.
+
+Widening the scalars gains a factor of $b$, and nothing more.
+\begin{proposition}[Bits per scalar against product count]\label{prop:width}
+For $k,b\ge1$, the minimum number $m$ of these products computing $\Phi_k$
+satisfies
+\[
+ \frac{2^{k-1}}b\ \le\ m\ \le\ \left\lceil\frac{2^k}b\right\rceil.
+\]
+The bounds hold with or without sharing, and at every fixed size
+$n\ge n_0(2^k)$ for size-specific targets.
+\end{proposition}
+\begin{proof}
+Each coordinate of a reference product has a support of at most two colors, so their
+union has size at most $2b$, and the same support preserves the whole tuple,
+including through pointwise maps that mix coordinates. The read-off
+identity \eqref{eq:phi-decoder} therefore forces $2bm\ge2^k$, by restriction
+or by
+recoloring at a fixed size, which is the lower bound.
+
+For the upper bound, partition the $2^k$ subsets $A$ into groups of size at
+most $b$. A pointwise map puts the values $H_A$ of \eqref{eq:phi-upper} into
+separate coordinates, with zeros in the unused ones, and one product then
+computes all the $H_A;H_A$ of a group. Pointwise disjunction merges the
+coordinates and the groups and copies the result diagonally. Product values
+need not be shared. The target here is the encoded Boolean query $\Phi_k$,
+not $F_k$ on arbitrary $\bool^b$-valued inputs.
+\end{proof}
+
+\paragraph{Beyond semiring multiplication.}
+For $S=[0,1]$ with join $\max$, any kernel that is monotone in each
+argument, in a direction that does not depend on the value of the other
+argument, has support number at most three: choose one color attaining the
+appropriate extreme of $p_\lambda$, which serves the entire left response,
+one color attaining the appropriate extreme of $q_\lambda$, which serves the
+entire right response, and one color maximizing the paired response. The
+two arguments may have different directions of monotonicity; what the
+uniformity provides is that a single color serves the whole of
+$\ell_{\Col}$, and a single color the whole of $r_{\Col}$. Consequently,
+the Boolean queries require at least $N(\varphi)/3$ such aggregations, even
+with different kernels at different gates and arbitrary uniform pointwise
+numerical functions. This follows from the same preservation theorem and
+uses no associative multiplication. One example is the comparison kernel,
+which is $1$ if $p\le q$ and $0$ otherwise: it is nonincreasing in $p$ and
+nondecreasing in $q$, regardless of the other argument.
+
+Unrestricted kernels can behave differently. On the nonnegative integers
+with join $\max$, the kernel given by $p\odot q=1$ if $p\mathbin{\&}q\ne0$
+and $p\odot q=0$ otherwise, where $\&$ denotes bitwise AND, has unbounded
+support number, since distinct one-bit masks give arbitrarily large
+irredundant left responses. For $\Phi_k$, a free pointwise map encodes at
+each entry $(u,v)$ the set of subsets $A\subseteq[k]$ with $(u,v)\in H_A$,
+where $H_A$ is the intersection of \eqref{eq:phi-upper}, as the bit mask
+$\sum_{A:(u,v)\in H_A}2^{\num A}$ with $\num A=\sum_{i\in A}2^{\,i-1}$.
+Distinct subsets occupy distinct bit positions, so two masks have a nonzero
+bitwise AND exactly when some $H_A$ contains both entries; a single
+aggregation with this kernel therefore computes
+$\bigcup_{A\subseteq[k]}H_A;H_A$, which is $\Phi_k$ by
+\eqref{eq:phi-upper}. On the structures of Section~\ref{sec:phi}, the mask
+is $2^{\num A}$ at an entry whose type carries the label $A$ and $0$ at an
+unlabelled entry. Unlimited scalar precision is therefore not ruled out by
+itself: what a finite support number limits is the way in which encoded
+states can interact through a witness.

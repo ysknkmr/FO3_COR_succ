@@ -1,0 +1,451 @@
+\section{A preservation theorem for compositions}\label{sec:preservation}
+This section carries out steps~(i) and~(ii) of the outline in
+Section~\ref{ov:outline}: it builds the structure $\M$ and proves the
+preservation theorem (Theorem~\ref{thm:preservation}), for an arbitrary
+kernel in place of conjunction. The construction does not mention $\Psi_k$
+or $\Phi_k$, whose interpretation is step~(iii) (Section~\ref{sec:logical}).
+The proof uses just one property of composition, isolated in
+Section~\ref{sec:responses}, and this is what makes the theorem applicable
+to matrix products in Section~\ref{sec:matrix}.
+
+\paragraph{The shape of the argument.}
+The argument has three independent parameters, and each of the sections
+that follow varies one of them while holding the other two fixed: the
+interpretation of the source query on $\M$ (Section~\ref{sec:logical}, for
+$\Psi_k$ and for $\Phi_k$), the family of perturbations of $\M$ (deletion
+of cells here, recoloring of the hub's edges on a fixed domain in
+Section~\ref{sec:robustness}), and the operation whose occurrences are
+counted (conjunction in Section~\ref{sec:responses}, a semiring product and
+an arbitrary kernel in Section~\ref{sec:matrix}). A single number, the
+support number of Definition~\ref{def:width}, couples the three, and it
+depends only on the operation and the join. Everything else is proved here
+for an arbitrary kernel, so Section~\ref{sec:matrix} only has to recompute
+$\wid\odot$; this is why the construction that separates \FOthree\ from
+\CoR\ also answers the question of \citet{brijder2019} about MATLANG
+(Section~\ref{semi:typed-section}).
+
+Two features of the conclusion are worth recording, since they are not
+usually available together. First, the bound is proved against a fixed
+finite family of $|\Col|+1$ structures, chosen in advance of the candidate
+and written down explicitly (Proposition~\ref{prop:explicit}); no limit is
+taken and no infinite family is involved. Second, a shared subterm is
+charged only once, so the statement concerns circuits and not only terms.
+We claim no more than this: the invariant separates one structure from a
+bounded family of its perturbations, and the bound accordingly counts
+occurrences of a single operation in a language whose remaining operations
+are free. It is not a lower bound for Boolean circuits with access to
+individual entries of the input.
+
+\subsection{The structure}\label{sec:structure}
+Fix a finite set $\Col$ of \emph{colors} with $N=|\Col|\ge2$. The vertices
+of $\M$ are of three kinds (Figure~\ref{fig:structure} on
+page~\pageref{fig:structure}):
+\begin{itemize}[nosep]
+\item one \emph{hub} $h$;
+\item for each color $\lambda\in\Col$ a \emph{cell} $\cell\lambda$ of
+ $L=\lceil12N^2\ln(2N)\rceil$ \emph{cell vertices}; the cells are disjoint,
+ and $\cell\Col=\bigcup_{\lambda\in\Col}\cell\lambda$;
+\item a finite set $X$ of \emph{anchors}, one per color in
+ Section~\ref{sec:logical} and possibly more in
+ Section~\ref{sec:robustness}.
+\end{itemize}
+The \emph{core} is $U=\{h\}\cup\cell\Col$ and the domain is $D=X\cup U$. A
+pair of \emph{distinct} vertices is called an \emph{edge}. Every edge
+$\{u,v\}$ between two core vertices carries a color
+$\colr(u,v)=\colr(v,u)\in\Col$; edges incident to an anchor carry none. The
+hub's edges announce the cell,
+\begin{equation}\label{eq:hub-colours}
+ \colr(h,u)=\lambda\qquad\text{for }u\in\cell\lambda,
+\end{equation}
+and the edges between cell vertices are colored so that the following holds.
+
+\begin{lemma}[Extension property]\label{lem:palette}
+The edges between cell vertices can be colored so that
+\begin{enumerate}[nosep,label=(\alph*)]
+\item for all distinct $u,v\in\cell\Col$, all colors $\mu,\nu\in\Col$, and
+ every cell $\cell\lambda$, some $z\in\cell\lambda\setminus\{u,v\}$
+ satisfies $\colr(u,z)=\mu$ and $\colr(z,v)=\nu$;
+\item for every $u\in\cell\Col$, every color $\mu\in\Col$, and every cell
+ $\cell\lambda$, some $z\in\cell\lambda\setminus\{u\}$ satisfies
+ $\colr(u,z)=\mu$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Part (b) follows from (a) by choosing any $v\ne u$ and any $\nu$. For (a),
+color the edges between cell vertices independently and uniformly at random.
+A \emph{requirement} is a choice of $\lambda$, of distinct
+$u,v\in\cell\Col$, and of $\mu,\nu$; since $|\cell\Col|=NL$ there are fewer
+than $N\cdot(NL)^2\cdot N^2=N^5L^2$ of them. For a fixed requirement, each of
+the at least $L-2$ vertices $z\in\cell\lambda\setminus\{u,v\}$ satisfies it
+with probability $N^{-2}$, and these events are independent because they
+concern disjoint pairs of edges, so the requirement fails with probability at
+most $(1-N^{-2})^{L-2}\le\exp(-(L-2)/N^2)$. As $\ln(2N)\le N$ and $N\ge2$ we
+have $L\le13N^3$ and $(L-2)/N^2\ge12\ln(2N)-\tfrac12$, so the probability
+that some requirement fails is at most
+\[
+ N^5L^2\exp(-(L-2)/N^2)
+ \ \le\ 169N^{11}\exp(1/2)\,(2N)^{-12}
+ \ =\ \frac{169\exp(1/2)}{4096\,N}\ <\ 1 .
+\]
+Hence a coloring with property (a) exists.
+\end{proof}
+The constant $12$ is sufficient rather than optimal: it is what produces
+the factor $1/N$ in the bound just displayed. Nothing below depends on its
+value, since $L$ enters the results of this paper only through the size
+threshold \eqref{eq:size-threshold}.
+
+We fix such a coloring once and for all. As explained in
+Section~\ref{ov:structure}, only the hub distinguishes cells, by
+\eqref{eq:hub-colours} and Lemma~\ref{lem:palette}, and the anchors, which
+are never deleted, will be distinguished by the interpretation of the
+relation symbols. A pair $(x,h)$ with $x$ an anchor is called a
+\emph{read-off pair}; these are the only pairs at which
+Section~\ref{sec:logical} evaluates the two hard queries.
+
+The coloring of Lemma~\ref{lem:palette} is the only object in this paper
+obtained from a probabilistic existence argument, and this argument can be
+avoided: Appendix~\ref{app:explicit} gives a deterministic polynomial-time
+construction and a closed form over a prime field, in which the cells are
+the cosets of the $N$-th powers (Proposition~\ref{prop:explicit}). Either
+construction makes the $|\Col|+1$ structures of
+Corollary~\ref{cor:detectable} explicit, and with the closed form the size
+threshold \eqref{eq:size-threshold} remains polynomial in $N$. The cells
+cannot be made much smaller: property~(a) of Lemma~\ref{lem:palette}
+already forces $L\ge N^2+1$ (Remark~\ref{rem:covering}).
+
+\subsection{Types, homogeneity, and profiles}\label{sec:types}
+Every ordered pair of vertices receives a \emph{type}, by cases:
+\begin{equation}\label{eq:types}
+ \tp(u,v)=
+ \begin{cases}
+  \tpa{x}{x'}&\text{if }u=x\in X\text{ and }v=x'\in X,\\
+  \tpl{x}&\text{if }u=x\in X\text{ and }v\in U,\\
+  \tpr{x}&\text{if }u\in U\text{ and }v=x\in X,\\
+  \tpeq&\text{if }u=v\in U,\\
+  \ctype{\colr(u,v)}&\text{if }u\ne v\text{ and }u,v\in U.
+ \end{cases}
+\end{equation}
+As sets of pairs, $\tpa{x}{x'}=\{(x,x')\}$, $\tpl{x}=\{x\}\times U$,
+$\tpr{x}=U\times\{x\}$, $\tpeq=\Delta_U$, and
+$\ctype\lambda=\{(u,v)\in U^2:u\ne v,\ \colr(u,v)=\lambda\}$; they partition
+$D^2$. There are $|X|^2+2|X|+1+|\Col|$ types, however large the cells are.
+
+Note that a cell is not a type, and neither is $\{h\}$: the pairs $(h,u)$
+with $u\in\cell\lambda$ lie in $\ctype\lambda$ together with every other
+edge of color $\lambda$ (Section~\ref{ov:types}).
+
+An array $P:D^2\to S$ with values in a set $S$ --- in particular a relation,
+where $S$ is the set $\bool=\{0,1\}$ of truth values --- is
+\emph{type-constant} if it is constant on every type;
+we then write $P(\tau)$ for its value there. The point of this subsection is
+that type-constancy propagates to everything computed from type-constant
+inputs (Section~\ref{ov:types}), because a witness is seen only through the
+types of its two edges: for type-constant $P,Q$, the term
+$P(u,z)\land Q(z,v)$ that a witness $z$ contributes to $(P;Q)(u,v)$ depends
+only on the \emph{profile} $\bigl(\tp(u,z),\tp(z,v)\bigr)$ of $z$ at
+$(u,v)$, so the value of the composition is determined by the set of
+profiles that some witness realizes. The structure is built so that this
+set depends only on the type of the pair.
+
+\begin{lemma}[Homogeneity]\label{lem:profile}
+For every type $\tau$, the set of witness profiles
+\[
+ W_\tau=\{(\tp(u,z),\tp(z,v)):z\in D\}
+\]
+is the same for all pairs $(u,v)\in\tau$.
+\end{lemma}
+\begin{proof}
+Let $(u,v)\in\tau$. A witness $z$ is an anchor, one of the two endpoints, or
+another core vertex; we list the profiles of each kind and check that they
+do not depend on the choice of $(u,v)$ in $\tau$.
+
+\emph{Case $\tau=\ctype\lambda$.} Then $u\ne v$ are core vertices with
+$\colr(u,v)=\lambda$. An anchor $z=x$ gives $(\tpr{x},\tpl{x})$; $z=u$ gives
+$(\tpeq,\ctype\lambda)$ and $z=v$ gives $(\ctype\lambda,\tpeq)$. A core
+witness $z\notin\{u,v\}$ gives $(\ctype{\mu},\ctype{\nu})$ with
+$\mu=\colr(u,z)$ and $\nu=\colr(z,v)$, and every pair $(\mu,\nu)$ occurs:
+for $u,v\in\cell\Col$ by Lemma~\ref{lem:palette}(a); for $u=h$ choose
+$z\in\cell\mu\setminus\{v\}$ with $\colr(z,v)=\nu$ by
+Lemma~\ref{lem:palette}(b), so that $\colr(h,z)=\mu$ by
+\eqref{eq:hub-colours}; the case $v=h$ is symmetric.
+
+\emph{Case $\tau=\tpeq$.} Then $u=v\in U$. Anchors contribute as before, $z=u$
+gives $(\tpeq,\tpeq)$, and a core witness $z\ne u$ gives
+$(\ctype\mu,\ctype\mu)$ with $\mu=\colr(u,z)$; every $\mu$ occurs, by
+Lemma~\ref{lem:palette}(b) if $u\in\cell\Col$ and by
+\eqref{eq:hub-colours} if $u=h$.
+
+\emph{Case $\tau=\tpl{x}$.} Then $u=x$ is an anchor and $v\in U$. An anchor $z=x'$
+(possibly $x'=x$) gives $(\tpa{x}{x'},\tpl{x'})$; $z=v$ gives
+$(\tpl{x},\tpeq)$; a core witness $z\ne v$ gives $(\tpl{x},\ctype\mu)$ with
+$\mu=\colr(z,v)$, and every $\mu$ occurs as in the previous case. The type
+$\tpr{x}$ is symmetric, and a type $\tpa{x}{x'}$ consists of a single pair.
+\end{proof}
+
+Homogeneity is exactly the property that composition needs.
+\begin{corollary}[Type-constant relations are closed]\label{cor:closure}
+Let $P,Q$ be type-constant relations on $D$. Then $P;Q$, $P^\smile$,
+$\overline P$, $P\cup Q$, $P\cap Q$, and the constants $\zero,\one,\id$ are
+type-constant, and for every type $\tau$
+\begin{equation}\label{eq:profile-value}
+ (P;Q)(\tau)=\bigvee_{(\tau_1,\tau_2)\in W_\tau}P(\tau_1)\land Q(\tau_2).
+\end{equation}
+\end{corollary}
+\begin{proof}
+For $(u,v)\in\tau$ we have
+$(P;Q)(u,v)=\bigvee_{z\in D}P(\tp(u,z))\land Q(\tp(z,v))$, and by
+Lemma~\ref{lem:profile} the set of profiles over which the join ranges
+depends only on $\tau$; this is \eqref{eq:profile-value}. Union,
+intersection, and complement act entrywise. Converse maps each type onto a
+type ($\ctype\lambda$ and $\tpeq$ onto themselves, $\tpl{x}$ onto $\tpr{x}$,
+$\tpa{x}{x'}$ onto $\tpa{x'}{x}$). The constants $\zero$ and $\one$ are constant,
+and $\id$ is true exactly on the types $\tpeq$ and $\tpa{x}{x}$.
+\end{proof}
+Thus every relation computed on $\M$ from type-constant inputs is a finite
+table with one entry per type.
+
+\subsection{Deleting cells: three responses}\label{sec:responses}
+For a nonempty set $J\subseteq\Col$ let
+\[
+ D_J=X\cup\{h\}\cup\cell J,\qquad \cell J=\bigcup_{\lambda\in J}\cell\lambda,
+\]
+and write $\M\res J$ and $P\res J$ for $\M\res D_J$ and $P\res D_J$: the
+cells of all colors outside $J$ are deleted and everything else is
+retained. We ask how the value of a composition on $\M\res J$ depends on
+$J$.
+
+\paragraph{Compositions as aggregations.}
+It costs nothing to answer this question for a more general operation,
+which is what Section~\ref{sec:matrix} needs. Let $(S,\vee,0)$ be a join-semilattice with
+least element $0$, so that finite joins are associative, commutative and
+idempotent, and let $\odot$ be any binary operation on $S$, called the
+\emph{kernel}. For arrays $P,Q:D'^2\to S$ on a domain $D'$, the
+\emph{aggregation} of $P$ and $Q$ with kernel $\odot$ is
+\begin{equation}\label{eq:aggregation}
+ (P\agg\odot Q)(u,v)=\bigvee_{z\in D'}P(u,z)\odot Q(z,v).
+\end{equation}
+For $S=\bool=\{0,1\}$, with disjunction as the join and $\odot=\land$, this
+is composition,
+$P\agg\land Q=P;Q$, and a reader interested only in
+Theorems~\ref{main:omega} and~\ref{main:phi} may read $p\odot q$ as
+$p\land q$ throughout. No algebraic law is assumed for $\odot$. A
+\emph{computation} is a circuit whose gates are aggregations, possibly with
+different kernels at different gates, together with arbitrary functions
+$S^r\to S$ applied entry by entry, transpose, constant arrays, and the
+equality array, which takes two fixed distinct values on and off the
+diagonal. For $S=\bool$ this includes every \CoR\ term and every relational
+circuit. The gates other than aggregations are \emph{free}: they commute
+with restriction to a subdomain, and they preserve type-constancy.
+Lemma~\ref{lem:profile} and \eqref{eq:profile-value} hold for every kernel,
+with $\odot$ in place of $\land$, since only the idempotence of $\vee$ was
+used in Corollary~\ref{cor:closure}.
+
+\paragraph{Where the retained colors enter.}
+Let $P,Q$ be type-constant arrays on $D$ and write
+\[
+ p_\lambda=P(\ctype\lambda),\qquad q_\lambda=Q(\ctype\lambda)
+ \qquad(\lambda\in\Col)
+\]
+for their values on the edges of color $\lambda$. As explained in
+Section~\ref{ov:twocolors}, whose argument does not depend on the kernel, a
+deletion can change the value of an aggregation only at a pair with a hub
+endpoint, and the hub sees the whole of $\cell\lambda$ through $p_\lambda$
+and $q_\lambda$ alone: a retained witness $z\in\cell\lambda$ contributes a
+term $p_\lambda\odot s$, $s\odot q_\lambda$ or $p_\lambda\odot q_\lambda$,
+where $s$ is the value carried by its other edge, according to whether the
+hub is the left endpoint, the right endpoint, or both. This motivates the
+three \emph{responses} of the family $(p_\lambda,q_\lambda)_{\lambda\in\Col}$
+to a set $J$ of colors:
+\begin{equation}\label{eq:responses}
+ \ell_J(s)=\bigvee_{\lambda\in J}p_\lambda\odot s,\qquad
+ r_J(s)=\bigvee_{\lambda\in J}s\odot q_\lambda,\qquad
+ d_J=\bigvee_{\lambda\in J}p_\lambda\odot q_\lambda
+ \qquad(s\in S).
+\end{equation}
+The \emph{left} and \emph{right responses} $\ell_J$ and $r_J$ are functions
+on $S$; the \emph{paired response} $d_J$ is a scalar. For $\odot=\land$ they amount to the three bits of Section~\ref{ov:twocolors}.
+
+These three responses are all that a deletion can disturb.
+\begin{lemma}[Three responses preserve an aggregation]\label{lem:local}
+Let $P,Q$ be type-constant arrays on $D$ and $\varnothing\ne J\subseteq\Col$.
+If $(\ell_J,r_J,d_J)=(\ell_{\Col},r_{\Col},d_{\Col})$, then
+\[
+ (P\agg\odot Q)\res J=(P\res J)\agg\odot(Q\res J),
+\]
+where the right-hand side is evaluated on $D_J$.
+\end{lemma}
+\begin{proof}
+Let $u,v\in D_J$. Both sides are joins over witnesses, the left one over
+$z\in D$ and the right one over $z\in D_J$. Witnesses in $X\cup\{h\}$ and
+witnesses in $\{u,v\}$ lie in $D_J$ and contribute the same term to both
+sides. It remains to compare, for $I=J$ and for $I=\Col$, the contribution
+of the cell witnesses,
+\[
+ \sigma_I(u,v)=\bigvee_{z\in\cell I\setminus\{u,v\}}
+ P(u,z)\odot Q(z,v).
+\]
+As $P$ and $Q$ are type-constant, $\sigma_I(u,v)$ is determined by the set
+of profiles realized by $z\in\cell I\setminus\{u,v\}$. We read these off
+from \eqref{eq:hub-colours} and Lemma~\ref{lem:palette} for each kind of
+endpoint. Following the rule $p_\lambda=P(\ctype\lambda)$, write $p_x=P(\tpl{x})$ and
+$q_{x'}=Q(\tpr{x'})$; the two subscript positions differ because $P$ is
+always the left factor of the aggregation and $Q$ the right one. The result
+is
+\begin{equation}\label{eq:response-table}
+\renewcommand{\arraystretch}{1.35}
+\begin{array}{c|ccc}
+ \sigma_I(u,v)& v=x'\in X&v=h&v\in\cell J\\ \hline
+ u=x\in X&p_x\odot q_{x'}&r_I(p_x)&r_{\Col}(p_x)\\[1pt]
+ u=h&\ell_I(q_{x'})&d_I&\displaystyle\bigvee_{\mu\in\Col}\ell_I(q_\mu)\\[3pt]
+ u\in\cell J&\ell_{\Col}(q_{x'})&\displaystyle\bigvee_{\mu\in\Col}r_I(p_\mu)&
+ \begin{cases}d_{\Col}&\text{if }u=v,\\[1pt]
+ \displaystyle\bigvee_{\mu,\nu\in\Col}p_\mu\odot q_\nu&\text{if }u\ne v.\end{cases}
+\end{array}
+\end{equation}
+We verify the table row by row. For two anchor endpoints, every cell witness
+contributes the same term $p_x\odot q_{x'}$, so the entry does not depend on
+$I$. For an anchor $x$ and the hub, a witness $z\in\cell\lambda$ has
+$\tp(z,h)=\ctype\lambda$, so the retained colors $\lambda\in I$ enter
+through $r_I$. For an anchor
+and a cell vertex $v$, the edges $\{z,v\}$ with $z$ in any single retained
+cell already realize every color, by Lemma~\ref{lem:palette}(b), so the
+entry does not depend on $I$. In the second row a witness $z\in\cell\lambda$
+is seen from the hub through $p_\lambda$: at $(h,x')$ this gives
+$\ell_I(q_{x'})$; at $(h,h)$ the two edges of $z$ have the same color
+$\lambda$, which gives $d_I$; at $(h,v)$ with $v$ a cell vertex the profiles
+are $(\ctype\lambda,\ctype\mu)$ with $\lambda\in I$ and $\mu$ arbitrary, by
+Lemma~\ref{lem:palette}(b). The first two entries of the third row are
+obtained from the third column by exchanging the roles of the two endpoints.
+Finally, for two cell-vertex endpoints, Lemma~\ref{lem:palette}(a) yields
+every ordered pair of colors if $u\ne v$, while for $u=v$ both edges of $z$
+have the same color and every color occurs.
+
+Only the entries containing $\ell_I$, $r_I$ or $d_I$ depend on $I$, and the
+hypothesis makes them equal for $I=J$ and $I=\Col$; for instance
+$\bigvee_\mu\ell_J(q_\mu)=\bigvee_\mu\ell_{\Col}(q_\mu)$. Hence
+$\sigma_J(u,v)=\sigma_{\Col}(u,v)$ for all $u,v\in D_J$, and adding back the
+unchanged witnesses gives the identity.
+\end{proof}
+The lemma applies to any type-constant operands, not only to inputs, and
+Lemma~\ref{lem:profile} makes it available at every gate of a computation.
+It says that an aggregation cannot distinguish $J$ from $\Col$ unless its
+three responses do; how many colors are needed to fix those responses is a
+property of the kernel alone.
+
+\begin{definition}[Support and support number]\label{def:width}
+A set $K\subseteq\Col$ \emph{supports} the family
+$(p_\lambda,q_\lambda)_{\lambda\in\Col}$ if
+$(\ell_K,r_K,d_K)=(\ell_{\Col},r_{\Col},d_{\Col})$. The \emph{support number}
+$\wid\odot$ of a kernel $\odot$, with respect to the given join, is
+the least $c$ such that every finite family, over every finite set of
+colors, has a support of size at most $c$; it is $\infty$ if no such $c$
+exists. It therefore depends on the join as well as on $\odot$; the join is
+always the one fixed with $S$, and Section~\ref{sec:matrix} varies both.
+\end{definition}
+If $K$ supports a family then so does every $J$ with
+$K\subseteq J\subseteq\Col$, since $\ell_K\le\ell_J\le\ell_{\Col}$ pointwise
+and likewise for $r$ and $d$. A support may be empty: as $\ell_\varnothing$
+and $r_\varnothing$ are identically $0$ and $d_\varnothing=0$, the empty set
+supports exactly the families whose three responses to $\Col$ vanish, which
+for $\odot=\land$ happens as soon as every $p_\lambda$ and every $q_\lambda$
+is $0$. For a general kernel that last inference is not available, since no
+algebraic law is assumed for $\odot$ and $0\odot s$ need not be $0$. Either
+way an empty support causes no trouble, since it is the retained set $J$ of
+colors, never the support, that is required to be nonempty.
+
+For the kernel that Theorems~\ref{main:omega} and~\ref{main:phi} need, two
+colors always suffice.
+\begin{lemma}[Conjunction has support number two]\label{lem:and-width}
+For $S=\bool$, with disjunction as the join and $\odot=\land$, one has
+$\wid\land=2$.
+\end{lemma}
+\begin{proof}
+Here $\ell_J(s)=s\land\bigvee_{\lambda\in J}p_\lambda$,
+$r_J(s)=s\land\bigvee_{\lambda\in J}q_\lambda$, and
+$d_J=\bigvee_{\lambda\in J}(p_\lambda\land q_\lambda)$. So $K$ supports the
+family iff it contains a color with $p_\lambda=1$ whenever there is one, a
+color with $q_\lambda=1$ whenever there is one, and a color with
+$p_\lambda=q_\lambda=1$ whenever there is one. If some color has
+$p_\lambda=q_\lambda=1$, it alone supports the family; otherwise one color
+with $p_\lambda=1$ and one with $q_\lambda=1$, whenever such colors exist,
+together support it. The family
+$(p_\lambda,q_\lambda)=(1,0),(0,1)$ on two colors needs both of them, so
+$\wid\land\ge2$.
+\end{proof}
+The \emph{support number} of a computation $\Comp$ is the sum of the
+support numbers of its aggregation gates,
+\[
+ \wid\Comp=\sum_{g\text{ an aggregation gate of }\Comp}\wid{\odot_g},
+\]
+so a \CoR\ term or relational circuit with $m$ compositions has support
+number $2m$.
+
+\subsection{Simultaneous preservation}\label{sec:simultaneous}
+As outlined in Section~\ref{ov:wholeterm}, choosing a support at every
+gate and taking the union preserves every aggregation of a computation at
+once.
+\begin{theorem}[Preservation]\label{thm:preservation}
+Let $\Comp$ be a computation whose inputs are type-constant arrays on $D$.
+There is a set $K\subseteq\Col$ with $|K|\le\wid{\Comp}$ such that for
+every nonempty $J$ with $K\subseteq J\subseteq\Col$ and every gate $g$ of
+$\Comp$,
+\[
+ \text{value of $g$ on the inputs restricted to $D_J$}
+ \;=\;
+ \bigl(\text{value of $g$ on $D$}\bigr)\res J .
+\]
+In particular the outputs agree. Each aggregation gate is charged once,
+however often its value is used.
+\end{theorem}
+\begin{proof}
+If $\wid{\Comp}=\infty$, take $K=\Col$. Otherwise evaluate $\Comp$ on
+$D$. By Corollary~\ref{cor:closure}, extended to arbitrary kernels as noted
+in Section~\ref{sec:responses}, the value of every gate is type-constant.
+For each aggregation gate $g$ with operands $P,Q$ choose a support $K_g$ of
+the family $(P(\ctype\lambda),Q(\ctype\lambda))_{\lambda\in\Col}$ with
+$|K_g|\le\wid{\odot_g}$, and let $K=\bigcup_gK_g$. Now fix a nonempty
+$J\supseteq K$ and proceed by induction along the evaluation order. For the
+inputs the claim holds by definition. A free gate commutes with
+restriction, so if its operands agree after restriction, so does its value.
+At an aggregation gate the operands agree by induction, $J\supseteq K_g$
+supports its reference operands, and Lemma~\ref{lem:local} gives the claim.
+The supports were chosen on the reference computation, independently of
+$J$; this is why a single set $K$ serves every $J\supseteq K$.
+\end{proof}
+Two remarks are in order. First, the only closure property used is that of the values on
+$D$; nothing is assumed about the restricted values. Second, for a \CoR\
+term or circuit with $m$ compositions Lemma~\ref{lem:and-width} gives
+$|K|\le2m$; complement gates need no separate treatment, since the theorem
+asserts an equality (Section~\ref{ov:wholeterm}).
+
+The theorem reduces lower bounds to counting. Let $\varphi$ be a binary
+query and let $\M$ interpret its symbols by type-constant relations. A color
+$\lambda$ is \emph{detectable} for $\varphi$ if
+\[
+ \varphi^{\M\res(\Col\setminus\{\lambda\})}(u,v)\ne\varphi^{\M}(u,v)
+ \qquad\text{for some }u,v\in D_{\Col\setminus\{\lambda\}},
+\]
+that is, if deleting the cell of color $\lambda$ changes $\varphi$ at a pair
+of surviving vertices.
+
+\begin{corollary}[Detectable colors]\label{cor:detectable}
+Let $\Det\subseteq\Col$ be a set of detectable colors for $\varphi$ on $\M$.
+Every computation $\Comp$ whose output equals $\varphi$ on $\M$ and on the
+$|\Det|$ structures $\M\res(\Col\setminus\{\lambda\})$, $\lambda\in\Det$,
+has $\wid{\Comp}\ge|\Det|$. In particular, every \CoR\ term or relational
+circuit that agrees with $\varphi$ on these $|\Det|+1$ finite structures has
+at least $\lceil|\Det|/2\rceil$ compositions, since that count is an integer.
+\end{corollary}
+\begin{proof}
+If $\wid{\Comp}<|\Det|$, the set $K$ of Theorem~\ref{thm:preservation}
+misses some $\lambda\in\Det$. For $J=\Col\setminus\{\lambda\}$, which is
+nonempty as $N\ge2$, the output of $\Comp$ on $\M\res J$ is the restriction
+of its output on $\M$, whereas $\varphi$ changes at a pair of $D_J$.
+\end{proof}
+For a non-Boolean $S$, ``the output equals $\varphi$'' means that the output
+encodes the truth values of $\varphi$ by two fixed distinct elements of $S$;
+intermediate values may be arbitrary. In both interpretations of
+Section~\ref{sec:logical} every color is detectable, so $\Det=\Col$ and the
+bound is $\lceil|\Col|/2\rceil$; Remark~\ref{rem:iff} in
+Appendix~\ref{app:optimality} is the one place where a single color has to
+be given up.

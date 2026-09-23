@@ -1,0 +1,285 @@
+\section{Size-specific computations and bounded error}\label{sec:robustness}
+Restriction compares structures of different sizes. In this section we keep
+the domain fixed and allow the target to be chosen separately for each
+domain size. No new finite structure needs to be built, because of the way
+in which a deletion acted in the first place: by
+Section~\ref{sec:responses}, a deletion affected a composition only through
+the three responses, that is, only by removing a color from the palette
+that the hub can see. Recoloring the hub's edges into $\cell\lambda$ with
+some other color has exactly the same effect and removes no vertex. The
+same three responses therefore control such a recoloring of $\M$, on a
+domain that never changes.
+
+\subsection{Transport of type values on a fixed domain}
+For a map $f:\Col\to\Col$, we change only the colors of the edges at the
+hub:
+\[
+ \colr_f(h,u)=\colr_f(u,h)=f(\lambda)\quad(u\in\cell\lambda),\qquad
+ \colr_f(u,u')=\colr(u,u')\quad(u\ne u'\in\cell\Col),
+\]
+and put $J=f(\Col)$. Write $\ctype\lambda^f$ for the new color types and
+$\tp_f$ for the new typing map; the anchor types and $\tpeq$ are unchanged.
+Every color still occurs on edges between cell vertices, so these types are
+nonempty and partition $D^2$. What is lost is homogeneity: seen from the
+hub, only the colors in $J$ now occur, whereas every color still occurs
+elsewhere. Hence Lemma~\ref{lem:profile} fails for $\colr_f$, and the
+type-constant arrays with respect to the recolored types need not be closed
+under aggregation. The lemma below replaces this closure property.
+
+For a type-constant $P$, let $f_\ast P$ be the array that takes the value
+$P(\ctype\lambda)$ on $\ctype\lambda^f$ and agrees with $P$ on all other
+types. This map commutes with uniform pointwise functions, transpose, and
+the permitted constants. In particular, it does not change the values at
+the read-off pairs:
+\begin{equation}\label{eq:transport-anchor}
+ (f_\ast P)(x,h)=P(x,h)\qquad(x\in X).
+\end{equation}
+The map $f_\ast$ transports values between types; it need not preserve
+individual entries elsewhere.
+
+The three responses now have to be compatible with $f_\ast$ rather than
+with restriction.
+\begin{lemma}[Three-response recoloring]\label{lem:recolor}
+For type-constant $P,Q$, if the responses \eqref{eq:responses} agree on
+$J=f(\Col)$ and on $\Col$, then
+\[
+ f_\ast(P\agg\odot Q)=(f_\ast P)\agg\odot(f_\ast Q).
+\]
+\end{lemma}
+\begin{proof}
+Both sides are arrays on the same domain $D$; we compare them at a pair
+$(u,v)$. We call $\tau$ the \emph{name} of the recolored type of $(u,v)$: it
+is $\ctype\lambda$ when $\tp_f(u,v)=\ctype\lambda^f$, and it is the type
+itself for the four kinds of types that $\colr_f$ leaves unchanged, namely
+$\tpeq$, the $\tpl x$, the $\tpr x$ and the $\tpa x{x'}$. By the definition of $f_\ast$ the
+left-hand side at $(u,v)$ equals $(P\agg\odot Q)(\tau)$, which by
+\eqref{eq:profile-value} is the join of $P(\tau_1)\odot Q(\tau_2)$ over the
+reference profiles $(\tau_1,\tau_2)\in W_\tau$. The right-hand side at
+$(u,v)$ is the join of the same expression over the names of the recolored
+profiles,
+\[
+ W^f_{(u,v)}=\bigl\{\text{names of }
+ \bigl(\tp_f(u,z),\tp_f(z,v)\bigr):z\in D\bigr\},
+\]
+because $(f_\ast P)(u,z)=P(\tau_1)$ when $\tau_1$ is the name of
+$\tp_f(u,z)$, and likewise for $Q$. So it suffices to show that the two
+joins agree. Since $\colr_f$ differs from $\colr$ only on the edges at the
+hub, and there replaces the palette $\Col$ by $J$, we sort the witnesses
+into three groups.
+
+\emph{Anchor witnesses and endpoint witnesses.} An anchor witness $z$ gives
+two types among the anchor types, which $\colr_f$ does not touch, so it
+contributes its reference term. A witness $z\in\{u,v\}\cap U$ gives
+$(\tpeq,\tau)$ or $(\tau,\tpeq)$ if $u\ne v$, and $(\tpeq,\tpeq)$ if $u=v$;
+these are the reference profiles that $W_\tau$ attaches to the endpoints of
+a pair of type $\tau$, because $\tau$ is by construction the name of the
+recolored type of $(u,v)$.
+
+\emph{The hub as a witness, when neither endpoint is the hub.} The hub then
+contributes exactly one profile name, and that name already occurs among the
+cell witnesses at the same pair, so idempotence of the join absorbs it. In
+detail, writing $\cell\mu$ and $\cell\nu$ for the cells of the left and the
+right endpoint when these are cell vertices: at two distinct cell endpoints
+the hub gives
+$(\ctype{f(\mu)},\ctype{f(\nu)})$, and Lemma~\ref{lem:palette}(a) realizes
+every ordered pair of colors there; at equal cell endpoints it gives a
+paired name $(\ctype{f(\mu)},\ctype{f(\mu)})$, and Lemma~\ref{lem:palette}(b)
+realizes every paired color; at an anchor--cell pair it gives $(\tpl{x},
+\ctype{f(\nu)})$ or $(\ctype{f(\mu)},\tpr{x'})$, and
+Lemma~\ref{lem:palette}(b) realizes every color on the cell side; and at a
+pair of two anchors it gives $(\tpl{x},\tpr{x'})$, which every core witness
+gives.
+
+\emph{Cell witnesses.} These are the entries of the table
+\eqref{eq:response-table}, read with $I=J$ and with the cell endpoints
+ranging over all of $\cell\Col$. Indeed a witness $z\in\cell\mu$ is now seen
+\emph{from the hub} through the name $\ctype{f(\mu)}$, so as $\mu$ runs over
+$\Col$ that name runs over $J$; at any other endpoint every color is still
+available, by Lemma~\ref{lem:palette}. The entries that depend on $I$ are
+$r_I(p_x)$, $\ell_I(q_{x'})$, $d_I$, $\bigvee_\mu\ell_I(q_\mu)$ and
+$\bigvee_\mu r_I(p_\mu)$, and the hypothesis turns each of them into its
+value at $I=\Col$, which is the reference entry. The remaining entries do
+not depend on $I$.
+
+The three groups exhaust $D$, and together they reproduce the join over
+$W_\tau$ at every pair $(u,v)$. Beyond the idempotence of the join, no law
+of $\odot$ is used.
+\end{proof}
+
+\needspace{9\baselineskip}
+As in Section~\ref{sec:simultaneous}, choosing a support at every gate
+handles an entire computation at once.
+\begin{theorem}[Simultaneous transport]\label{thm:transport}
+For a computation $\Comp$ with type-constant inputs on $D$, there is
+$K\subseteq\Col$ with $|K|\le\wid{\Comp}$ such that every map
+$f:\Col\to\Col$ with $f(\Col)\supseteq K$ transports every intermediate
+value by $f_\ast$: the value of each gate on the inputs $f_\ast P$ is
+$f_\ast$ of its value on the original inputs $P$. One may use the same
+support as in Theorem~\ref{thm:preservation}.
+\end{theorem}
+\begin{proof}
+Use the support selected at each aggregation gate on the reference
+computation. Free
+operations commute with $f_\ast$ and Lemma~\ref{lem:recolor} handles
+aggregation, so induction in evaluation order gives the claim. If the
+support number is infinite, use $K=\Col$ and the same argument, since
+$f(\Col)=\Col$ preserves every response. Each shared gate is charged once.
+\end{proof}
+All comparisons now take place on one and the same domain $D$. The wiring,
+kernels, scalar constants, and pointwise functions may therefore have been
+chosen for that domain size, provided that they are fixed before the input
+is given and are uniform across entries. Besides the inputs, the arrays
+available as primitives remain those listed in
+Section~\ref{sec:responses}, namely the constant arrays and the equality
+array. What is ruled out is any further primitive array whose $(u,v)$ entry
+varies with $u$ and $v$, such as an array recording the cell of each
+vertex, since such an array would give the computation exactly the
+information that a type hides.
+
+\subsection{Detectable labels at a fixed size}
+For $f:\Col\to\Col$, let $\M_f$ be the structure on $D$ whose relations are
+$f_\ast R^{\M}$, that is, the reference structure with its hub edges
+recolored. Suppose that a Boolean-output query $\varphi$ has a
+type-constant interpretation on $\M$ together with a set $\Det\subseteq\Col$
+of labels, with corresponding anchors $x_\lambda$, that are
+\emph{detectable under recoloring} in the following sense: for every
+$\lambda\in\Det$,
+\begin{equation}\label{eq:transport-decoder}
+ \varphi^{\M_f}(x_\lambda,h)\ \text{holds}\iff\lambda\in f(\Col).
+\end{equation}
+For a non-Boolean $S$, the two truth values are represented by two fixed
+distinct output states.
+
+For each $\lambda\in\Det$, fix a color $\lambda'\ne\lambda$ and let
+$f_\lambda:\Col\to\Col$ be the map that fixes all other colors and sends
+$\lambda$ to $\lambda'$; then $f_\lambda(\Col)=\Col\setminus\{\lambda\}$,
+and $\M_{f_\lambda}$ is $\M$ with the hub edges into $\cell\lambda$
+recolored $\lambda'$. All of these structures have the same domain $D$, and
+they are the fixed-size counterparts of the deletions used in
+Corollary~\ref{cor:detectable}.
+\begin{proposition}[A fixed-size test]\label{prop:fixed-test}
+Under these assumptions, any aggregation computation $\Comp$ agreeing with
+$\varphi$ on $\M$ and on the $|\Det|$ structures $\M_{f_\lambda}$,
+$\lambda\in\Det$, has $\wid{\Comp}\ge|\Det|$.
+\end{proposition}
+\begin{proof}
+If $\wid{\Comp}<|\Det|$, a support from Theorem~\ref{thm:transport} omits
+some $\lambda\in\Det$. The structures $\M$ and $\M_{f_\lambda}$ then give
+the same output at $(x_\lambda,h)$ by \eqref{eq:transport-anchor}, but
+opposite correct answers by \eqref{eq:transport-decoder}. These $|\Det|+1$
+structures are fixed independently of the candidate.
+\end{proof}
+
+For both logical families, every color is detectable under recoloring, so
+$\Det=\Col$, and the number of colors is
+\begin{equation}\label{eq:two-parameters}
+ N(\Psi_k)=\binom{k}{\lfloor k/2\rfloor}\quad(k\ge2),
+ \qquad
+ N(\Phi_k)=2^k\quad(k\ge1).
+\end{equation}
+Each of the structures involved has
+\begin{equation}\label{eq:size-threshold}
+ n_0(N)=N+1+N\lceil12N^2\ln(2N)\rceil=O(N^3\log N)
+\end{equation}
+elements: $N$ anchors, the hub, and $N$ cells of $L$ vertices each. Both
+values of $N$ in \eqref{eq:two-parameters} are exponential in $k$, and so
+is the threshold: $n_0=2^{O(k)}$ for either family. Consequently, nothing
+below applies to a target that only has to be correct on structures whose
+size is polynomial in $k$, and the construction cannot be adjusted to supply
+such structures: property~(a) of Lemma~\ref{lem:palette} already forces
+$L\ge N^2+1$ (Remark~\ref{rem:covering}), so structures of the kind used
+here have at least $N^3$ vertices however the coloring is chosen.
+
+Both families satisfy \eqref{eq:transport-decoder} once the domain has been
+padded with inert anchors, as the next theorem verifies. That theorem and
+Corollary~\ref{cor:randomized} below are the precise form of
+Theorem~\ref{main:robust}.
+\begin{theorem}[Size-specific lower bounds]\label{thm:fixed-size}
+Let $\varphi$ be $\Psi_k$ or $\Phi_k$, let $N(\varphi)$ be as in
+\eqref{eq:two-parameters}, and let $n\ge n_0(N(\varphi))$ with $n_0$ as in
+\eqref{eq:size-threshold}. All the composition-count and term-size lower
+bounds of Theorems~\ref{main:omega} and~\ref{main:phi} hold for targets that
+are required to be correct only on $n$-element inputs, even when the target
+depends arbitrarily on $k$ and $n$.
+More generally, let $\Comp$ be an aggregation computation of this Boolean
+query in the sense of Section~\ref{sec:responses}, with arbitrary
+intermediate scalar values, whose wiring, kernels, scalar constants and
+pointwise maps may all have been chosen for $k$ and $n$, and whose primitive
+arrays are the inputs of $\varphi$ together with the constant arrays and the
+equality array, and nothing else. Then $\wid{\Comp}\ge N(\varphi)$.
+\end{theorem}
+The last restriction is essential; see the discussion after
+Theorem~\ref{thm:transport}.
+\begin{proof}
+Use the corresponding interpretation of Section~\ref{sec:logical} and add
+anchors until the domain has size $n$; this is possible for every $n$ in
+the stated range, since the initial domain has $n_0(N)$ elements. The extra
+anchors are made inert as follows. For $\Psi_k$, set every entry incident
+to an extra anchor to
+zero, so that such a witness has both of its edges false at a read-off
+pair. For $\Phi_k$, give every entry incident to an extra anchor the code
+$\cdb$, so that no type at such an anchor carries a label and such a witness
+fails every clause; the core inputs of \eqref{eq:phi-inputs} are kept
+unchanged. In both cases the original anchors
+and the hub remain excluded as witnesses, for the reasons given in
+Section~\ref{sec:logical}, and all the inputs remain type-constant.
+
+It remains to check \eqref{eq:transport-decoder}. For both families a color
+is a subset of $[k]$. After recoloring by $f$, a witness in the original
+cell $\cell B$ is seen from the hub through $f(B)$ rather than $B$, so for
+$\Psi_k$ it satisfies the clauses at $x_A$ exactly when $f(B)\subseteq A$,
+hence exactly when $f(B)=A$, and for $\Phi_k$ it succeeds at $x_A$ exactly
+when $f(B)=A$. Either way the pair $(x_\lambda,h)$ is satisfied precisely
+when $\lambda\in f(\Col)$, which is \eqref{eq:transport-decoder} for every
+$\lambda\in\Col$.
+Proposition~\ref{prop:fixed-test} now gives the support-number bound. For
+\CoR\ we have $\wid{\Comp}=2m$, so $m\ge\lceil N(\varphi)/2\rceil$ since $m$
+is an integer, and Equation~\eqref{eq:tree-size} gives the term-size bounds.
+\end{proof}
+The explicit upper bounds are valid at every size, so the composition count
+for $\Phi_k$ remains $\Theta(2^k)$ even when the target may depend on the
+size. This is a result about relational circuits, not a lower bound for
+unrestricted Boolean circuits with access to individual input entries.
+
+\subsection{A bounded-error consequence}
+For fixed $k$ and $n$, a randomized computation is an input-independent
+probability distribution over computations in the sense of
+Section~\ref{sec:responses}, each of which has its wiring, kernels,
+constants and pointwise maps fixed. The distribution may depend on $k$ and
+$n$. The error is measured at each input and each output pair. Random
+auxiliary relations, random vertex labels, and input-dependent choices of a
+circuit are not part of this model: the first two are in general not
+type-constant, so Theorem~\ref{thm:transport} does not apply to a
+computation that has one of them among its primitives (see the discussion
+after that theorem). The distribution may thus range over the computation,
+but not over the arrays from which it starts.
+
+\begin{corollary}[Bounded error at a fixed size]\label{cor:randomized}
+Let $\varphi$ be either family and $n\ge n_0(N(\varphi))$. A randomized
+relational circuit computing $\varphi$ with error at most $\varepsilon<1/2$
+on every input and output pair satisfies
+\[
+ \mathbb E[\gcost{\Comp}]\ \ge\ \frac{1-2\varepsilon}{2}\,N(\varphi).
+\]
+The same holds for expected composition occurrences in terms. For general
+aggregation computations the bound is
+$\mathbb E[\wid{\Comp}]\ge(1-2\varepsilon)N(\varphi)$.
+\end{corollary}
+\begin{proof}
+Choose a label $\lambda$ uniformly from $\Col$ and, with equal
+probability, test $(x_\lambda,h)$ on $\M$ or on $\M_{f_\lambda}$; the
+correct answers are opposite. For a deterministic computation with support
+$K$, every $\lambda\notin K$ gives the same output on the two tests, so at
+most one of them can be correct, and the success probability is at most
+\[
+ \frac12+\frac{|K|}{2N(\varphi)}
+ \ \le\ \frac12+\frac{\wid{\Comp}}{2N(\varphi)}.
+\]
+Averaging over the input-independent distribution, a pointwise error of at
+most $\varepsilon$ gives an average success probability of at least
+$1-\varepsilon$, and comparing this with the bound above yields the claim.
+If the expected support number is infinite, the claim is immediate. For
+relational circuits, use $\wid{\Comp}=2\gcost{\Comp}$.
+\end{proof}
+In particular, error $1/3$ still requires $N(\varphi)/6$ compositions in
+expectation, that is $2^k/6$ for $\Phi_k$.

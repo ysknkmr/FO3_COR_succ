@@ -1,0 +1,486 @@
+\subsection{Technical overview}\label{sec:overview}
+We outline the proof of Theorem~\ref{main:omega}. Theorem~\ref{main:phi}
+uses the same construction and the same preservation theorem, and differs
+only in the interpretation of the relation symbols.
+
+\subsubsection{Outline}\label{ov:outline}
+The term \eqref{eq:omega-upper} contains one composition for each way of
+distributing the $k$ clauses between the two edges of the witness. A more
+economical term might use complementation, factor out common subterms, or
+share them, and a normal-form argument would have to account for all of
+these possibilities. We therefore do not analyze the syntax of a candidate
+term at all. Instead, we fix a single finite structure, delete parts of it,
+and ask which of the resulting substructures a given term can still
+distinguish from the original.
+
+We say that a term or a query \emph{distinguishes} two structures over the
+same vocabulary, one of them a substructure of the other, if the relations
+that it defines on them differ at some pair of vertices of the smaller
+structure; equivalently, the term or query \emph{detects} the deletion that
+produced the smaller structure. The proof has three steps.
+\begin{enumerate}[nosep,label=(\roman*)]
+\item We build one finite structure $\M$ (Figure~\ref{fig:structure}).
+ Apart from a hub and some anchors, its vertices are partitioned into
+ \emph{cells} $\cell\lambda$, one for each color $\lambda$ in a finite set
+ $\Col$ of at least two colors. The only substructures we use are those
+ obtained by deleting entire cells: for nonempty $J\subseteq\Col$, let
+ $\M\res J$ be $\M$ with every cell $\cell\lambda$ such that
+ $\lambda\notin J$ removed. Thus no vertex is ever removed individually,
+ and the hub and the anchors survive every deletion.
+\item To a \CoR\ term $t$ with $m$ compositions we attach a set
+ $K\subseteq\Col$ of at most $2m$ colors, and show that $t$ does not
+ distinguish $\M$ from $\M\res J$ for any nonempty $J\supseteq K$
+ (Theorem~\ref{thm:preservation}): deleting cells is invisible to $t$ as
+ long as every cell whose color lies in $K$ is retained.
+\item We interpret the relation symbols of $\Psi_k$ on $\M$ so that
+ $\Psi_k$ does distinguish $\M$ from $\M\res(\Col\setminus\{\lambda\})$, for
+ every single color $\lambda$ (Section~\ref{sec:logical}).
+\end{enumerate}
+Suppose $t\equiv_{\rm fin}\Psi_k$, and let $\lambda$ be any color. By~(iii)
+the formula distinguishes $\M$ from $\M\res(\Col\setminus\{\lambda\})$, and
+hence so does $t$. Since $|\Col|\ge2$, the set $\Col\setminus\{\lambda\}$ is
+nonempty, so by~(ii) this is possible only if
+$\Col\setminus\{\lambda\}\not\supseteq K$, that is, only if $\lambda\in K$.
+Hence $K=\Col$ and $2m\ge|\Col|$. Taking for $\Col$ the $\lfloor
+k/2\rfloor$-element subsets of $[k]$ gives the composition bound of
+Theorem~\ref{main:omega}; the bound on $|t|$ follows from
+\eqref{eq:tree-size}.
+
+The remainder of this section treats the three steps in order.
+Section~\ref{ov:structure} constructs $\M$ and specifies the pairs of
+vertices at which a query is read off; Sections~\ref{ov:types}
+to~\ref{ov:wholeterm} prove~(ii) by showing that what a term computes on
+$\M$ is too coarse to detect an individual cell; and
+Section~\ref{ov:formula} establishes~(iii).
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  cellnode/.style={draw,ellipse,minimum width=2.1cm,minimum height=1.0cm,thick},
+  vtx/.style={circle,fill=black,inner sep=1.1pt},
+  anch/.style={draw,rectangle,thick,minimum size=6mm,fill=white,inner sep=1pt}
+]
+ % ---------- hub ----------
+ \node[vtx,label={[label distance=1pt]above:{hub $h$}}] (hub) at (0.4,3.6) {};
+ % ---------- cells ----------
+ \node[cellnode] (c1) at (-3.0,0) {};
+ \node[cellnode] (c2) at ( 0.4,0) {};
+ \node[cellnode] (c3) at ( 3.8,0) {};
+ \node[below=2pt of c1,font=\footnotesize] {$\cell{\lambda_1}$};
+ \node[below=2pt of c2,font=\footnotesize] {$\cell{\lambda_2}$};
+ \node[below=2pt of c3,font=\footnotesize] {$\cell{\lambda_3}$};
+ \foreach \c in {1,2}{
+   \node[vtx] (c\c a) at ($(c\c)+(-0.58,0.12)$) {};
+   \node[vtx] (c\c b) at ($(c\c)+(0.0,-0.22)$) {};
+   \node[vtx] (c\c c) at ($(c\c)+(0.58,0.12)$) {};
+ }
+ % four dots in the third cell: the number drawn carries no meaning
+ \node[vtx] (c3a) at ($(c3)+(-0.68,0.08)$) {};
+ \node[vtx] (c3b) at ($(c3)+(-0.23,-0.24)$) {};
+ \node[vtx] (c3c) at ($(c3)+(0.23,0.18)$) {};
+ \node[vtx] (c3d) at ($(c3)+(0.68,-0.12)$) {};
+ % ---------- anchors: one per color ----------
+ \node[anch] (x1) at (-6.7,3.6) {$x_{\lambda_1}$};
+ \node[anch] (x2) at (-6.7,2.5) {$x_{\lambda_2}$};
+ \node[anch] (x3) at (-6.7,1.4) {$x_{\lambda_3}$};
+ \node[font=\footnotesize,align=center] at (-6.7,4.45) {anchors:\\one per color};
+ % anchor edges carry no color; only a few are drawn
+ \draw[lightgray,thin] (x2) -- (hub);
+ \draw[lightgray,thin] (x3) -- (hub);
+ \draw[lightgray,thin] (x1) -- (x2);
+ \draw[lightgray,thin] (x2) -- (x3);
+ \foreach \t in {c1,c2,c3}{ \draw[lightgray,thin] (x2) -- (\t.north west); }
+ % ---------- the read-off pair ----------
+ \draw[very thick] (x1) -- (hub);
+ \node[font=\footnotesize,fill=white,inner sep=1.5pt] at (-3.15,3.83)
+      {read-off pair $(x_{\lambda_1},h)$};
+ % ---------- hub edges: one line style per color ----------
+ \foreach \d in {a,b,c}{ \draw[thick]         (hub) -- (c1\d); }
+ \foreach \d in {a,b,c}{ \draw[thick,dashed]  (hub) -- (c2\d); }
+ \foreach \d in {a,b,c,d}{ \draw[thick,dotted]  (hub) -- (c3\d); }
+ \node[font=\footnotesize,fill=white,inner sep=1pt] at (-1.54,1.60) {$\lambda_1$};
+ \node[font=\footnotesize,fill=white,inner sep=1pt] at ( 0.40,1.60) {$\lambda_2$};
+ \node[font=\footnotesize,fill=white,inner sep=1pt] at ( 2.34,1.60) {$\lambda_3$};
+ % ---------- random colors among cell vertices ----------
+ \draw[gray] (c1c) -- (c2a);
+ \draw[gray] (c2c) -- (c3a);
+ \draw[gray] (c1b) to[bend right=30] (c3b);
+ \draw[gray] (c2a) to[bend right=45] (c2c);
+ \node[gray,font=\footnotesize] at (2.15,-1.92)
+      {random colors, inside and between cells};
+ % ---------- the deletion ----------
+ \draw[thick,densely dashed,rounded corners=3pt]
+      ($(c1)+(-1.40,0.72)$) rectangle ($(c1)+(1.40,-1.08)$);
+ \node[font=\footnotesize,align=center] at (-3.0,-1.92)
+      {deleted in\\$\M\res(\Col\setminus\{\lambda_1\})$};
+\end{tikzpicture}
+\caption{The structure $\M$ with three colors. Each ellipse is a cell and
+the dots inside it are cell vertices; all cells have the same (large) number
+of vertices, and the number drawn here is not significant. Every pair of
+\emph{distinct} vertices is an edge; only a few are drawn. The hub is joined
+to each vertex of $\cell\lambda$ by an edge of color $\lambda$ (solid,
+dashed and dotted for $\lambda_1,\lambda_2,\lambda_3$), so the hub alone can
+distinguish the cells. Edges between cell vertices, inside a cell or across
+cells, carry random colors (gray) and realize every color between every
+pair of cells. Anchors, one per color, are joined to all vertices and their
+edges carry no color (light gray); they are distinguished by the relation
+symbols and are never deleted. Deleting the cell $\cell{\lambda_1}$ removes
+all of its vertices but leaves the read-off pair $(x_{\lambda_1},h)$ in
+place.}
+\label{fig:structure}
+\end{figure}
+
+\subsubsection{The structure (Section~\ref{sec:structure})}\label{ov:structure}
+Recall that $\Col$ is a finite set of \emph{colors}. The vertices of $\M$
+are of three kinds, each with a distinct role (Figure~\ref{fig:structure}):
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}lll@{}}
+\toprule
+ &Number&Role\\
+\midrule
+hub $h$&one&the only vertex that can distinguish the cells\\
+cells $\cell\lambda$&one per color $\lambda\in\Col$&contain the witnesses; a deletion removes a whole cell\\
+anchors $x_\lambda$&one per color, never deleted&the query is read off at the pair $(x_\lambda,h)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Every pair of distinct vertices is an \emph{edge}, and every edge not
+incident to an anchor carries a color $\colr(u,v)=\colr(v,u)\in\Col$. The
+hub's edges announce the cell,
+\[
+ \colr(h,u)=\lambda\qquad\text{for }u\in\cell\lambda,
+\]
+while the edges between two \emph{cell vertices}, inside one cell or across
+two, are colored at random. Lemma~\ref{lem:palette} then yields the
+following \emph{extension property}:
+\begin{quote}
+for all \emph{distinct} cell vertices $u,v$, all colors $\mu,\nu$, and every
+cell $\cell\lambda$, some $z\in\cell\lambda$ other than $u$ and $v$
+satisfies $\colr(u,z)=\mu$ and $\colr(z,v)=\nu$.
+\end{quote}
+Thus a cell vertex sees every color in every cell and cannot distinguish one
+cell from another, whereas the hub can: it sees each cell in a single color.
+Edges incident to an anchor are left uncolored; anchors are instead
+distinguished by the interpretation of the relation symbols
+(Section~\ref{sec:logical}).
+
+
+\paragraph{Why anchors are needed.}
+We call a pair $(x_\lambda,h)$ a \emph{read-off pair}. Such a pair must
+serve two purposes, one supplied by each of its two vertices.
+
+First, it must survive every deletion. The test for a color $\lambda$
+compares $\M$ with $\M\res(\Col\setminus\{\lambda\})$, so the query must be
+read off at a pair that is present in both structures, and
+Section~\ref{sec:logical} assigns a different pair to each color. A cell
+vertex does not survive the deletion of its own cell, and the hub is a
+single vertex, so the construction needs $|\Col|$ further vertices that are
+never deleted and that the relation symbols can distinguish. These are the
+anchors. They are indispensable rather than merely convenient: both hard
+formulas have the form $\exists z\,\psi$ in which every atom of $\psi$
+relates $z$ to $x$ or to $y$, and for formulas of this form
+Lemma~\ref{lem:where} in Appendix~\ref{app:optimality} bounds the number
+of detectable colors by $2|X|+2$, where $X$ is the set of anchors, for every
+interpretation of the kind used in this paper (Section~\ref{ov:types}). The number of anchors is thus
+precisely the resource that the lower bound consumes.
+
+Second, it must be able to see the cell of a witness. The edge from a
+witness $z\in\cell\lambda$ to the hub has color $\lambda$, whereas the edges
+from a cell vertex into $\cell\lambda$ realize every color, by the extension
+property. Hence the hub is the only vertex from which the cell of a witness
+can be read off.
+
+An anchor, by contrast, has no colored edges at all. The only color
+associated with $x_\lambda$ is the $\lambda$ in its name; we call it the
+\emph{label} of the anchor, and the interpretation of the relation symbols
+in Section~\ref{sec:logical} will make it readable. Labels and colors are
+the same objects; the two words merely indicate whether the object is
+carried by an anchor or by an edge. Consequently, a query can compare a
+witness against a label only at a read-off pair $(x_\lambda,h)$: the anchor
+supplies the label, the hub supplies the color of the witness, and the query
+tests whether the two agree.
+
+This completes step~(i) of the outline. The read-off pairs play no further
+role until Section~\ref{ov:formula}, where $\Psi_k$ performs exactly the
+comparison just described and \eqref{eq:omega-decoder} records the result;
+step~(ii), proved in Sections~\ref{ov:types} to~\ref{ov:wholeterm},
+concerns all pairs of $\M$ simultaneously, and only step~(iii) uses one
+designated pair per color.
+
+\subsubsection{Types and type-constant relations (Section~\ref{sec:types})}\label{ov:types}
+Pairs of vertices are sorted into finitely many \emph{types}, each of which
+records only part of the information that the construction attaches to a
+pair.
+\needspace{10\baselineskip}
+Concretely, the type of an ordered pair $(u,v)$ is
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}ll@{}}
+\toprule
+the pair $(u,v)$ itself&if $u$ and $v$ are both anchors,\\
+\emph{out of $x$}&if $u$ is the anchor $x$ and $v$ is not an anchor,\\
+\emph{into $x$}&if $v$ is the anchor $x$ and $u$ is not an anchor,\\
+\emph{loop}&if $u=v$ and $u$ is not an anchor,\\
+\emph{color $\lambda$}&if $u\ne v$, neither is an anchor and $\colr(u,v)=\lambda$.\\
+\bottomrule
+\end{tabular}
+\end{center}
+We write $\tp(u,v)$ for this type, and $\ctype\lambda$ for the type
+\emph{color $\lambda$}; the formal definition, with names for the remaining
+types, is \eqref{eq:types}. The number of types is finite and independent
+of the size of the cells: there is one type per ordered pair of anchors, one
+\emph{out of} and one \emph{into} type per anchor, one type for the loops,
+and one type per color.
+
+A type records which anchors are involved, whether the two endpoints
+coincide, and the color of the edge between them. It does not record which
+cell an endpoint lies in, which vertex of that cell it is, or whether the
+hub is an endpoint at all: in Figure~\ref{fig:structure}, an edge inside
+$\cell{\lambda_2}$, an edge from $\cell{\lambda_1}$ to $\cell{\lambda_3}$,
+and an edge from the hub into $\cell{\lambda_1}$ all have the same type
+whenever they carry the same color. Types are thus a deliberate coarsening
+rather than the finest available classification of pairs. In particular,
+although the hub is clearly visible in $\M$, what makes it special is not
+that types can see it but that the colors of its edges are deterministic
+(Section~\ref{ov:twocolors}).
+
+Call a binary relation $P$ on the vertices \emph{type-constant} if $P(u,v)$
+depends only on $\tp(u,v)$, and write $P(\tau)$ for the common value of $P$
+on the pairs of a type $\tau$. Not every relation is type-constant.
+Consider, for example, the relation
+$P=\cell{\lambda_1}\times\cell{\lambda_1}$, which holds at $(u,v)$ exactly
+when both endpoints lie in the first cell of Figure~\ref{fig:structure}. It
+holds at the loop $(u,u)$ of a vertex $u\in\cell{\lambda_1}$ but fails at
+the loop $(h,h)$ of the hub, although these two pairs have the same type,
+namely \emph{loop}; hence $P$ is not constant on that type. The relation
+symbols of $\Psi_k$ and $\Phi_k$ will be interpreted by type-constant
+relations (Section~\ref{sec:logical}), and type-constancy then propagates
+to everything computed from them.
+
+\paragraph{Everything computed is type-constant.}
+Let $P,Q$ be type-constant. In
+\[
+ (P;Q)(u,v)=\bigvee_{z}P(u,z)\land Q(z,v),
+ \qquad\text{the join taken over all vertices }z,
+\]
+the term that a witness $z$ contributes depends only on the pair of types
+$\bigl(\tp(u,z),\tp(z,v)\bigr)$, and on nothing else about $z$. We call
+this pair the \emph{profile} of $z$ at $(u,v)$. The value of the
+composition is therefore determined by the \emph{set} of profiles that some
+witness realizes: not by how many witnesses realize a profile, and not by
+which vertices they are.
+
+Lemma~\ref{lem:profile} states that this set of realized profiles depends
+only on the type of $(u,v)$. If $(u,v)$ is an edge of color $\lambda$, for
+instance, the realized profiles are (color $\mu$, color $\nu$) for every
+pair of colors, by the extension property; (loop, color $\lambda$) and
+(color $\lambda$, loop), realized by $z=u$ and $z=v$; and (into $x$, out of
+$x$) for each anchor $x$. Hence $P;Q$ is again type-constant. Boolean
+operations and converse trivially preserve type-constancy
+(Corollary~\ref{cor:closure}), so every relation that a \CoR\ term computes
+on $\M$ from type-constant inputs is a table with one entry per type. In
+particular, no term can single out a cell, let alone an individual vertex.
+
+\subsubsection{A composition sees at most two colors (Section~\ref{sec:responses})}\label{ov:twocolors}
+Fix two type-constant relations $P,Q$ and abbreviate their values on the edges of
+color $\lambda$ as
+\[
+ p_\lambda=P(\ctype\lambda),\qquad q_\lambda=Q(\ctype\lambda).
+\]
+
+As in step~(i) of the outline, delete the cells of all colors outside a
+nonempty set $J\subseteq\Col$. A deletion removes witnesses, and a witness
+matters only through its profile, so the deletion can change the value of
+$P;Q$ at a pair only if it removes the \emph{last} witness of some profile
+at that pair. At a pair with no hub endpoint this never happens: by the
+extension property, a single surviving cell already realizes every profile
+that the deleted cells realized. At a pair with a hub endpoint it can
+happen, but only in a limited way. Every edge from the hub into
+$\cell\lambda$ has color $\lambda$, so the hub sees a witness
+$z\in\cell\lambda$ only through $p_\lambda$ and $q_\lambda$:
+$P(h,z)=p_\lambda$ and $Q(z,h)=q_\lambda$. Consider the contribution of such
+a $z$ to the join $(P;Q)(u,v)=\bigvee_zP(u,z)\land Q(z,v)$ at a pair $(u,v)$
+that has the hub as an endpoint. The hub may be the left endpoint, the right
+endpoint, or both, and in these three cases the contribution of $z$ is
+\[
+ \begin{aligned}
+  p_\lambda\land Q(\tp(z,v))&\qquad\text{when }u=h\text{ and }v\ne h,\\
+  P(\tp(u,z))\land q_\lambda&\qquad\text{when }v=h\text{ and }u\ne h,\\
+  p_\lambda\land q_\lambda&\qquad\text{when }u=v=h.
+ \end{aligned}
+\]
+At a pair of $\M\res J$, the anchors and the two endpoints themselves
+survive the deletion and contribute the same terms regardless of $J$. The
+only part of the join that $J$ can affect is therefore the part ranging over
+the cell witnesses, that is, over the colors $\lambda\in J$ and, for each
+such color, over the vertices of $\cell\lambda$. In the first case, as $z$
+ranges over a cell, the factor $Q(\tp(z,v))$ takes the same set of values
+whichever cell is chosen, by the extension property; the join therefore
+factors as $\bigl(\bigvee_{\lambda\in J}p_\lambda\bigr)\land c$ with $c$
+independent of $J$, and the only information about $J$ that survives is
+whether some $\lambda\in J$ has $p_\lambda=1$. The second case is symmetric.
+In the third case both edges of $z$ carry the color $\lambda$, and what
+survives is whether some $\lambda\in J$ has $p_\lambda=q_\lambda=1$. Thus
+$J$ can influence the value only through three bits (Lemma~\ref{lem:local}):
+\begin{center}
+whether some $\lambda\in J$ has $p_\lambda=1$;\quad whether some has
+$q_\lambda=1$;\quad whether some has both.
+\end{center}
+Two colors always suffice to fix all three bits (Lemma~\ref{lem:and-width}).
+If some color has $p_\lambda=q_\lambda=1$, that color alone fixes all three;
+otherwise the third bit is $0$, and one color for each of the first two bits
+suffices. We call such a set of at most two colors a \emph{support} of the
+composition. As long as no cell whose color lies in the support is deleted,
+the value of the composition on the surviving vertices is unchanged.
+
+For example, Figure~\ref{fig:structure} has three colors, so a family
+$(p_\lambda,q_\lambda)_{\lambda\in\Col}$ consists of two triples. Suppose
+first that
+\[
+ (p_{\lambda_1},p_{\lambda_2},p_{\lambda_3})=(1,1,0),
+ \qquad
+ (q_{\lambda_1},q_{\lambda_2},q_{\lambda_3})=(0,1,1),
+\]
+that is, $P$ holds on the edges of colors $\lambda_1$ and $\lambda_2$, and
+$Q$ holds on those of colors $\lambda_2$ and $\lambda_3$. Since
+$p_{\lambda_2}=q_{\lambda_2}=1$, the color $\lambda_2$ alone fixes all three
+bits, so $\{\lambda_2\}$ is a support, and both $\cell{\lambda_1}$ and
+$\cell{\lambda_3}$ can be deleted without affecting the composition. Suppose
+instead that
+\[
+ (p_{\lambda_1},p_{\lambda_2},p_{\lambda_3})=(1,0,0),
+ \qquad
+ (q_{\lambda_1},q_{\lambda_2},q_{\lambda_3})=(0,1,0).
+\]
+Now no color has both of its values equal to $1$: keeping $\lambda_1$ alone
+would change the second bit and keeping $\lambda_2$ alone would change the
+first, so every support must contain both colors, and
+$\{\lambda_1,\lambda_2\}$ is one. Lemma~\ref{lem:and-width} states that this
+is the worst case.
+
+\subsubsection{From one composition to a whole term (Section~\ref{sec:simultaneous})}\label{ov:wholeterm}
+A support controls a single composition. For a term $t$ with $m$
+compositions, let $K$ be the union of the supports of all of its
+compositions, so that $|K|\le2m$, and fix any nonempty $J\supseteq K$.
+Induction along the evaluation order then shows that the value of every
+subterm of $t$ on $\M\res J$ is the restriction of its value on $\M$
+(Theorem~\ref{thm:preservation}): the Boolean operations and converse
+commute with restriction, and at a composition the two operands already
+agree by induction, while $J$ contains the support of that composition, so
+Section~\ref{ov:twocolors} applies. Hence $t$ does not distinguish $\M$ from
+$\M\res J$ for any nonempty $J\supseteq K$, which is step~(ii) of the
+outline. A shared subterm is charged only once, so the same argument bounds
+the number of composition gates of a circuit.
+
+At a composition gate, the two relations being compared are always related
+by an inclusion in one direction, for a trivial reason: deleting cells
+removes witnesses and never adds any, so a pair related by the composition
+on $\M\res J$ is related by it on $\M$ as well. Writing $D$ for the vertex
+set of $\M$, $D_J$ for that of $\M\res J$, and $P\res D_J$ for the set of
+pairs of a relation $P$ that have both endpoints in $D_J$,
+\[
+ (P\res D_J)\,;(Q\res D_J)\ \subseteq\ (P;Q)\res D_J
+\]
+holds for every $J$. What can fail is the reverse inclusion: a pair may be
+related on $\M$ only through a witness that the deletion removed. Excluding
+this is precisely the role of a support, which is why
+Section~\ref{ov:twocolors} yields an \emph{equality} and not merely this
+inclusion.
+
+Complement is the operation for which the distinction between inclusion and
+equality matters. The issue is not that complement fails to commute with
+restriction: a subterm is complemented within the structure on which it is
+evaluated, relative to $D_J^2$ on $\M\res J$ and to $D^2$ on $\M$, and
+$D_J^2\setminus(P\res D_J)=(D^2\setminus P)\res D_J$ holds exactly, for
+every relation $P$. The issue is that complement reverses inclusions rather
+than preserving them. If only the inclusion displayed above were available,
+the two sides for the complemented subterm would satisfy
+\[
+ D_J^2\setminus\bigl[(P\res D_J)\,;(Q\res D_J)\bigr]
+ \ \supseteq\
+ D_J^2\setminus\bigl[(P;Q)\res D_J\bigr],
+\]
+with the inclusion now pointing in the opposite direction, and a further
+complement would reverse it again. No single inclusion can therefore be
+maintained through a term whose complements occur at arbitrary depths. An
+equality, by contrast, has no direction to reverse: $A=B$ yields
+$D_J^2\setminus A=D_J^2\setminus B$, and union, intersection and converse
+preserve equalities equally well. This is why complement gates require no
+separate treatment, why no monotonicity is used anywhere in the argument,
+and why the target may be an arbitrary \CoR\ term rather than a positive
+one.
+
+\subsubsection{The formula detects every deletion (Section~\ref{sec:logical})}\label{ov:formula}
+It remains to interpret the $R_i$. Recall that $\Psi_k$ has one quantifier,
+$\Psi_k(x,y)=\exists z\bigwedge_{i=1}^k\bigl(R_i(x,z)\lor R_i(z,y)\bigr)$.
+Evaluated at a pair $(u,v)$ of vertices, it asks for a \emph{witness}: a
+vertex $z$ such that every one of the $k$ clauses holds, either through the
+edge $(u,z)$ or through the edge $(z,v)$.
+
+So far $\Col$ has been an arbitrary finite set of colors. We now fix it: let
+$\Col$ be the set of $\lfloor k/2\rfloor$-element subsets of $[k]$, and
+write $A,B$ for colors in place of $\lambda,\mu$. There is one anchor $x_A$
+for each color $A$.
+
+We now define the relations $R_i$. For all colors $A$ and $B$,
+\begin{center}
+\begin{tabular}{@{}l@{\quad}l@{}}
+$R_i(x_A,u)$ holds exactly when $i\in A$,&for every vertex $u$ that is not
+ an anchor;\\
+$R_i(u,v)$ holds exactly when $i\notin B$,&for every two distinct non-anchor
+ vertices\\
+&$u,v$ whose edge has the color $B$;\\
+\end{tabular}
+\end{center}
+and $R_i$ is false on every remaining pair. This interpretation is
+type-constant, as required by Section~\ref{ov:types}: the pairs from $x_A$
+to a non-anchor vertex form a single type (edges at an anchor carry no
+color), and the pairs of color $B$ form a single type, whether they run
+from the hub into $\cell B$ or between two cell vertices.
+
+At the read-off pair $(x_A,h)$, a
+vertex $z$ of $\cell B$ satisfies clause $i$ if $i\in A$, through the edge
+$(x_A,z)$, or if $i\notin B$, through the edge $(z,h)$; so it satisfies
+all $k$ clauses exactly when $B\subseteq A$, and since $A$ and $B$ have the
+same size, exactly when $B=A$. The hub is not a witness: $R_i$ is false on
+the loop $(h,h)$, so at $z=h$ clause $i$ would need $i\in A$, and $A$
+contains only $\lfloor k/2\rfloor$ of the $k$ indices. Nor is an anchor
+$x_B$: $R_i$ is false on the pair $(x_A,x_B)$, so clause $i$ would need
+$i\in B$, and $|B|=\lfloor k/2\rfloor$ as well. The witnesses at $(x_A,h)$
+are therefore
+exactly the vertices of the single cell $\cell A$, and
+\[
+ \Psi_k\text{ holds at }(x_A,h)\text{ in }\M\res J
+ \iff A\in J,
+\]
+which is \eqref{eq:omega-decoder}. Deleting $\cell A$ therefore changes the
+value of $\Psi_k$ at a pair that survives the deletion, so every color is
+detectable, which completes step~(iii) of the outline.
+
+The choice of labels is forced by the method, in a sense that can be made
+precise. At a read-off pair, the formula compares the set announced by the
+anchor with the set carried by the witness's edge to the hub, and a color is
+detected precisely when exactly one color passes this comparison.
+Recording, for each of the two sides, the set of clauses that it leaves
+unsatisfied turns the comparison into a disjointness test between two
+subsets of $[k]$, and detection into a cross-intersecting condition on
+pairs of such subsets. Bollob\'as's set-pair inequality
+(Lemma~\ref{lem:bollobas}), which bounds the size of such a family of pairs
+of subsets of $[k]$ by $\binom{k}{\lfloor k/2\rfloor}$, then bounds the
+number of detectable colors by the same quantity
+(Proposition~\ref{prop:middle-layer} in Appendix~\ref{app:optimality}), and
+the interpretation above attains this bound. This explains why
+Theorem~\ref{main:omega} involves a central binomial coefficient rather
+than $2^k$. The resulting gap of a factor
+$\Theta(\sqrt k)$ against the $2^k$ compositions of \eqref{eq:omega-upper}
+is not closed in this paper; by the same proposition, it is inherent to
+$\Psi_k$ and to this construction, and not an artifact of the particular
+relations we chose. The formula $\Phi_k$ avoids this loss by requiring
+agreement rather than inclusion, which allows all $2^k$ subsets of $[k]$ to
+serve as labels (Section~\ref{sec:phi}). Finally, the only property of
+conjunction used in the argument is the one isolated in
+Section~\ref{ov:twocolors}, namely that two colors fix its three bits.
+Section~\ref{sec:matrix} replaces conjunction by a semiring product, and the
+same argument goes through with three colors in place of two.

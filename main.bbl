@@ -1,0 +1,329 @@
+\begin{thebibliography}{56}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Adler and Immerman(2003)]{adler-immerman2003}
+Micah Adler and Neil Immerman.
+\newblock An $n!$ lower bound on formula size.
+\newblock \emph{ACM Transactions on Computational Logic}, 4\penalty0 (3):\penalty0 296--314, 2003.
+\newblock \doi{10.1145/772062.772064}.
+
+\bibitem[B{\'a}r{\'a}ny et~al.(2012)B{\'a}r{\'a}ny, {ten Cate}, and Otto]{BaranyTenCateOtto2012}
+Vince B{\'a}r{\'a}ny, Balder {ten Cate}, and Martin Otto.
+\newblock Queries with guarded negation.
+\newblock \emph{Proceedings of the VLDB Endowment}, 5\penalty0 (11):\penalty0 1328--1339, 2012.
+\newblock \doi{10.14778/2350229.2350250}.
+
+\bibitem[Bollob{\'a}s(1965)]{bollobas1965}
+B{\'e}la Bollob{\'a}s.
+\newblock On generalized graphs.
+\newblock \emph{Acta Mathematica Academiae Scientiarum Hungaricae}, 16\penalty0 (3--4):\penalty0 447--452, 1965.
+\newblock \doi{10.1007/BF01904851}.
+
+\bibitem[Brady(2000)]{brady2000}
+Geraldine Brady.
+\newblock \emph{From {P}eirce to {S}kolem: A Neglected Chapter in the History of Logic}, volume~4 of \emph{Studies in the History and Philosophy of Mathematics}.
+\newblock North-Holland, Amsterdam, 2000.
+
+\bibitem[Brijder et~al.(2019{\natexlab{a}})Brijder, Geerts, {Van den Bussche}, and Weerwag]{brijder2019tods}
+Robert Brijder, Floris Geerts, Jan {Van den Bussche}, and Timmy Weerwag.
+\newblock On the expressive power of query languages for matrices.
+\newblock \emph{ACM Transactions on Database Systems}, 44\penalty0 (4):\penalty0 15:1--15:31, 2019{\natexlab{a}}.
+\newblock Conference version in ICDT 2018.
+
+\bibitem[Brijder et~al.(2019{\natexlab{b}})Brijder, Gyssens, and {Van den Bussche}]{brijder2019}
+Robert Brijder, Marc Gyssens, and Jan {Van den Bussche}.
+\newblock On matrices and {$K$}-relations, 2019{\natexlab{b}}.
+\newblock URL \url{https://arxiv.org/abs/1904.03934v1}.
+\newblock arXiv:1904.03934v1.
+
+\bibitem[Brijder et~al.(2022)Brijder, Gyssens, and {Van den Bussche}]{brijder2022}
+Robert Brijder, Marc Gyssens, and Jan {Van den Bussche}.
+\newblock On matrices and {$K$}-relations.
+\newblock \emph{Annals of Mathematics and Artificial Intelligence}, 90\penalty0 (2--3):\penalty0 181--210, 2022.
+\newblock \doi{10.1007/s10472-021-09760-4}.
+
+\bibitem[Bringmann et~al.(2019)Bringmann, Fischer, and K{\"u}nnemann]{BringmannFischerKunnemann2019}
+Karl Bringmann, Nick Fischer, and Marvin K{\"u}nnemann.
+\newblock A fine-grained analogue of {S}chaefer's theorem in {P}: Dichotomy of {$\exists^k\forall$}-quantified first-order graph properties.
+\newblock In \emph{34th Computational Complexity Conference (CCC)}, volume 137 of \emph{Leibniz International Proceedings in Informatics (LIPIcs)}, pages 31:1--31:27. Schloss Dagstuhl -- Leibniz-Zentrum f{\"u}r Informatik, 2019.
+\newblock \doi{10.4230/LIPIcs.CCC.2019.31}.
+
+\bibitem[Burris and Legris(2021)]{burris-legris}
+Stanley Burris and Javier Legris.
+\newblock The algebra of logic tradition.
+\newblock The Stanford Encyclopedia of Philosophy, edited by Edward N. Zalta, 2021.
+\newblock URL \url{https://plato.stanford.edu/entries/algebra-logic-tradition/}.
+\newblock Substantive revision of 12 February 2021.
+
+\bibitem[Bush(1952)]{bush1952}
+K.~A. Bush.
+\newblock Orthogonal arrays of index unity.
+\newblock \emph{The Annals of Mathematical Statistics}, 23\penalty0 (3):\penalty0 426--434, 1952.
+\newblock \doi{10.1214/aoms/1177729387}.
+
+\bibitem[Codd(1970)]{Codd1970}
+E.~F. Codd.
+\newblock A relational model of data for large shared data banks.
+\newblock \emph{Communications of the ACM}, 13\penalty0 (6):\penalty0 377--387, 1970.
+\newblock \doi{10.1145/362384.362685}.
+
+\bibitem[Codd(1972)]{Codd1972}
+E.~F. Codd.
+\newblock Relational completeness of data base sublanguages.
+\newblock In Randall~J. Rustin, editor, \emph{Data Base Systems}, volume~6 of \emph{Courant Computer Science Symposia}, pages 65--98. Prentice-Hall, Englewood Cliffs, NJ, 1972.
+
+\bibitem[Dawar et~al.(2007)Dawar, Grohe, Kreutzer, and Schweikardt]{dawar2007}
+Anuj Dawar, Martin Grohe, Stephan Kreutzer, and Nicole Schweikardt.
+\newblock Model theory makes formulas large.
+\newblock In \emph{Automata, Languages and Programming, 34th International Colloquium (ICALP 2007)}, volume 4596 of \emph{Lecture Notes in Computer Science}, pages 913--924. Springer, 2007.
+
+\bibitem[Etessami et~al.(2002)Etessami, Vardi, and Wilke]{etessami-vardi-wilke2002}
+Kousha Etessami, Moshe~Y. Vardi, and Thomas Wilke.
+\newblock First-order logic with two variables and unary temporal logic.
+\newblock \emph{Information and Computation}, 179\penalty0 (2):\penalty0 279--295, 2002.
+\newblock \doi{10.1006/inco.2001.2953}.
+
+\bibitem[Ewald and Sieg(2013)]{hilbert-lectures}
+William Ewald and Wilfried Sieg, editors.
+\newblock \emph{David {H}ilbert's Lectures on the Foundations of Arithmetic and Logic 1917--1933}, volume~3 of \emph{David {H}ilbert's Lectures on the Foundations of Mathematics and Physics, 1891--1933}.
+\newblock Springer, Berlin and Heidelberg, 2013.
+\newblock \doi{10.1007/978-3-540-69444-1}.
+
+\bibitem[Fletcher et~al.(2015)Fletcher, Gyssens, Leinders, Surinx, {Van den Bussche}, {Van Gucht}, Vansummeren, and Wu]{FletcherEtAl2015}
+George H.~L. Fletcher, Marc Gyssens, Dirk Leinders, Dimitri Surinx, Jan {Van den Bussche}, Dirk {Van Gucht}, Stijn Vansummeren, and Yuqing Wu.
+\newblock Relative expressive power of navigational querying on graphs.
+\newblock \emph{Information Sciences}, 298:\penalty0 390--406, 2015.
+\newblock \doi{10.1016/j.ins.2014.11.031}.
+
+\bibitem[French et~al.(2013)French, van~der Hoek, Iliev, and Kooi]{french2013}
+Tim French, Wiebe van~der Hoek, Petar Iliev, and Barteld Kooi.
+\newblock On the succinctness of some modal logics.
+\newblock \emph{Artificial Intelligence}, 197:\penalty0 56--85, 2013.
+\newblock \doi{10.1016/j.artint.2013.02.003}.
+
+\bibitem[Gao and Impagliazzo(2019)]{GaoImpagliazzo2019}
+Jiawei Gao and Russell Impagliazzo.
+\newblock The fine-grained complexity of strengthenings of first-order logic.
+\newblock Report TR19-009, Electronic Colloquium on Computational Complexity, 2019.
+\newblock URL \url{https://eccc.weizmann.ac.il/report/2019/009/}.
+
+\bibitem[Gao et~al.(2017)Gao, Impagliazzo, Kolokolova, and Williams]{GaoImpagliazzoKolokolovaWilliams2017}
+Jiawei Gao, Russell Impagliazzo, Antonina Kolokolova, and Ryan Williams.
+\newblock Completeness for first-order properties on sparse structures with algorithmic applications.
+\newblock In \emph{Proceedings of the Twenty-Eighth Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)}, pages 2162--2181. SIAM, 2017.
+\newblock \doi{10.1137/1.9781611974782.141}.
+
+\bibitem[Geerts et~al.(2021)Geerts, Mu{\~n}oz, Riveros, {Van den Bussche}, and Vrgo{\v c}]{geerts2021}
+Floris Geerts, Thomas Mu{\~n}oz, Cristian Riveros, Jan {Van den Bussche}, and Domagoj Vrgo{\v c}.
+\newblock Matrix query languages.
+\newblock \emph{SIGMOD Record}, 50\penalty0 (3):\penalty0 6–19, 2021.
+\newblock \doi{10.1145/3503780.3503782}.
+
+\bibitem[Green et~al.(2007)Green, Karvounarakis, and Tannen]{green2007}
+Todd~J. Green, Grigoris Karvounarakis, and Val Tannen.
+\newblock Provenance semirings.
+\newblock In \emph{Proceedings of the Twenty-Sixth ACM SIGMOD-SIGACT-SIGART Symposium on Principles of Database Systems (PODS 2007)}, pages 31--40. ACM, 2007.
+
+\bibitem[Grohe and Schweikardt(2005)]{grohe-schweikardt2005}
+Martin Grohe and Nicole Schweikardt.
+\newblock The succinctness of first-order logic on linear orders.
+\newblock \emph{Logical Methods in Computer Science}, 1\penalty0 (1:6):\penalty0 1--25, 2005.
+\newblock \doi{10.2168/LMCS-1(1:6)2005}.
+\newblock Conference version in LICS 2004.
+
+\bibitem[Hedayat et~al.(1999)Hedayat, Sloane, and Stufken]{hedayat-sloane-stufken1999}
+A.~S. Hedayat, Neil J.~A. Sloane, and John Stufken.
+\newblock \emph{Orthogonal Arrays: Theory and Applications}.
+\newblock Springer Series in Statistics. Springer, New York, 1999.
+\newblock \doi{10.1007/978-1-4612-1478-6}.
+
+\bibitem[Hella and Vilander(2019)]{hella-vilander2019}
+Lauri Hella and Miikka Vilander.
+\newblock Formula size games for modal logic and $\mu$-calculus.
+\newblock \emph{Journal of Logic and Computation}, 29\penalty0 (8):\penalty0 1311--1344, 2019.
+\newblock \doi{10.1093/logcom/exz025}.
+
+\bibitem[Hellings et~al.(2021)Hellings, Pilachowski, {Van Gucht}, Gyssens, and Wu]{HellingsEtAl2021}
+Jelle Hellings, Catherine~L. Pilachowski, Dirk {Van Gucht}, Marc Gyssens, and Yuqing Wu.
+\newblock From relation algebra to semi-join algebra: An approach to graph query optimization.
+\newblock \emph{The Computer Journal}, 64\penalty0 (5):\penalty0 789--811, 2021.
+\newblock \doi{10.1093/comjnl/bxaa031}.
+
+\bibitem[Hellings et~al.(2022)Hellings, {Van Gucht}, Gyssens, and Wu]{HellingsEtAl2022}
+Jelle Hellings, Dirk {Van Gucht}, Marc Gyssens, and Yuqing Wu.
+\newblock The power of {T}arski's relation algebra on trees.
+\newblock \emph{Journal of Logical and Algebraic Methods in Programming}, 126:\penalty0 100748, 2022.
+\newblock \doi{10.1016/j.jlamp.2022.100748}.
+
+\bibitem[Hilbert and Ackermann(1928)]{hilbert-ackermann1928}
+David Hilbert and Wilhelm Ackermann.
+\newblock \emph{Grundz{\"u}ge der theoretischen Logik}, volume~27 of \emph{Die Grundlehren der mathematischen Wissenschaften}.
+\newblock Julius Springer, Berlin, 1928.
+
+\bibitem[Jerrum and Snir(1982)]{jerrum-snir1982}
+Mark Jerrum and Marc Snir.
+\newblock Some exact complexity results for straight-line computations over semirings.
+\newblock \emph{Journal of the ACM}, 29\penalty0 (3):\penalty0 874--897, 1982.
+
+\bibitem[Jukna(2012)]{jukna2012}
+Stasys Jukna.
+\newblock \emph{Boolean Function Complexity: Advances and Frontiers}, volume~27 of \emph{Algorithms and Combinatorics}.
+\newblock Springer, Berlin and Heidelberg, 2012.
+\newblock \doi{10.1007/978-3-642-24508-4}.
+
+\bibitem[Katona(1974)]{katona1974}
+Gyula O.~H. Katona.
+\newblock Solution of a problem of {A}. {E}hrenfeucht and {J}. {M}ycielski.
+\newblock \emph{Journal of Combinatorial Theory, Series A}, 17\penalty0 (2):\penalty0 265--266, 1974.
+\newblock \doi{10.1016/0097-3165(74)90018-1}.
+
+\bibitem[Kerr(1970)]{kerr1970}
+Leslie~R. Kerr.
+\newblock \emph{The Effect of Algebraic Structure on the Computational Complexity of Matrix Multiplication}.
+\newblock PhD thesis, Cornell University, 1970.
+
+\bibitem[Kleene(1952)]{kleene1952}
+Stephen~Cole Kleene.
+\newblock \emph{Introduction to Metamathematics}, volume~1 of \emph{Bibliotheca Mathematica}.
+\newblock North-Holland and P. Noordhoff, Amsterdam and Groningen, 1952.
+
+\bibitem[Lidl and Niederreiter(1997)]{lidl-niederreiter1997}
+Rudolf Lidl and Harald Niederreiter.
+\newblock \emph{Finite Fields}, volume~20 of \emph{Encyclopedia of Mathematics and its Applications}.
+\newblock Cambridge University Press, Cambridge, 2nd edition, 1997.
+\newblock \doi{10.1017/CBO9780511525926}.
+
+\bibitem[Linnik(1944)]{linnik1944}
+Yuri~V. Linnik.
+\newblock On the least prime in an arithmetic progression. {I}. {T}he basic theorem.
+\newblock \emph{Recueil Math{\'e}matique (Matematicheskii Sbornik) N.S.}, 15(57)\penalty0 (2):\penalty0 139--178, 1944.
+
+\bibitem[L{\"o}wenheim(1915)]{loewenheim1915}
+Leopold L{\"o}wenheim.
+\newblock {\"U}ber {M}{\"o}glichkeiten im {R}elativkalk{\"u}l.
+\newblock \emph{Mathematische Annalen}, 76\penalty0 (4):\penalty0 447--470, 1915.
+\newblock \doi{10.1007/BF01458217}.
+\newblock Page references are to the English translation, \emph{On possibilities in the calculus of relatives}, in van Heijenoort (ed.), \emph{From Frege to G{\"o}del}, Harvard University Press, 1967, pp.~228--251.
+
+\bibitem[Maddux(1991)]{maddux1991}
+Roger~D. Maddux.
+\newblock The origin of relation algebras in the development and axiomatization of the calculus of relations.
+\newblock \emph{Studia Logica}, 50\penalty0 (3--4):\penalty0 421--455, 1991.
+\newblock \doi{10.1007/BF00370681}.
+
+\bibitem[Maddux(2006)]{maddux2006}
+Roger~D. Maddux.
+\newblock \emph{Relation Algebras}, volume 150 of \emph{Studies in Logic and the Foundations of Mathematics}.
+\newblock Elsevier, Amsterdam, 2006.
+
+\bibitem[Mehlhorn and Galil(1976)]{mehlhorn-galil1976}
+Kurt Mehlhorn and Zvi Galil.
+\newblock Monotone switching circuits and {B}oolean matrix product.
+\newblock \emph{Computing}, 16\penalty0 (1--2):\penalty0 99--111, 1976.
+
+\bibitem[Moore(1988)]{moore1988}
+Gregory~H. Moore.
+\newblock The emergence of first-order logic.
+\newblock In William Aspray and Philip Kitcher, editors, \emph{History and Philosophy of Modern Mathematics}, volume~11 of \emph{Minnesota Studies in the Philosophy of Science}, pages 95--135. University of Minnesota Press, Minneapolis, 1988.
+
+\bibitem[Morgan(1856)]{demorgan1856}
+Augustus~De Morgan.
+\newblock On the syllogism, no.~{II}.
+\newblock \emph{Transactions of the Cambridge Philosophical Society}, 9:\penalty0 79--127, 1856.
+\newblock Read 25 February 1850.
+
+\bibitem[Morgan(1864)]{demorgan1864}
+Augustus~De Morgan.
+\newblock On the syllogism, no.~{IV}, and on the logic of relations.
+\newblock \emph{Transactions of the Cambridge Philosophical Society}, 10:\penalty0 331--358, 1864.
+\newblock Read 23 April 1860. Reprinted in Heath (ed.), \emph{On the Syllogism and Other Logical Writings}, Routledge and Kegan Paul, 1966.
+
+\bibitem[Nakamura(2022)]{nakamura2022}
+Yoshiki Nakamura.
+\newblock Expressive power and succinctness of the positive calculus of binary relations.
+\newblock \emph{Journal of Logical and Algebraic Methods in Programming}, 127:\penalty0 100760, 2022.
+\newblock \doi{10.1016/j.jlamp.2022.100760}.
+
+\bibitem[Paterson(1975)]{paterson1975}
+Michael~S. Paterson.
+\newblock Complexity of monotone networks for {B}oolean matrix product.
+\newblock \emph{Theoretical Computer Science}, 1\penalty0 (1):\penalty0 13--20, 1975.
+
+\bibitem[Peirce(1870)]{peirce1870}
+Charles~S. Peirce.
+\newblock Description of a notation for the logic of relatives, resulting from an amplification of the conceptions of {B}oole's calculus of logic.
+\newblock \emph{Memoirs of the American Academy of Arts and Sciences}, 9:\penalty0 317--378, 1870.
+
+\bibitem[Peirce(1880)]{peirce1880}
+Charles~S. Peirce.
+\newblock On the algebra of logic.
+\newblock \emph{American Journal of Mathematics}, 3\penalty0 (1):\penalty0 15--57, 1880.
+\newblock \doi{10.2307/2369442}.
+
+\bibitem[Pratt(1975)]{pratt1975}
+Vaughan~R. Pratt.
+\newblock The power of negative thinking in multiplying {B}oolean matrices.
+\newblock \emph{SIAM Journal on Computing}, 4\penalty0 (3):\penalty0 326--330, 1975.
+
+\bibitem[Pratt(1992)]{pratt1992}
+Vaughan~R. Pratt.
+\newblock Origins of the calculus of binary relations.
+\newblock In \emph{Proceedings of the 7th Annual IEEE Symposium on Logic in Computer Science}, pages 248--254, Santa Cruz, CA, 1992. IEEE Computer Society.
+\newblock \doi{10.1109/LICS.1992.185537}.
+
+\bibitem[Savitch(1970)]{savitch1970}
+Walter~J. Savitch.
+\newblock Relationships between nondeterministic and deterministic tape complexities.
+\newblock \emph{Journal of Computer and System Sciences}, 4\penalty0 (2):\penalty0 177--192, 1970.
+\newblock \doi{10.1016/S0022-0000(70)80006-X}.
+
+\bibitem[Sch{\"o}ning(1989)]{schoening1989}
+Uwe Sch{\"o}ning.
+\newblock \emph{Logic for Computer Scientists}, volume~8 of \emph{Progress in Computer Science and Applied Logic}.
+\newblock Birkh{\"a}user, Boston, 1989.
+\newblock English translation of \emph{Logik f{\"u}r Informatiker}, B.I.-Wissenschaftsverlag, 1987.
+
+\bibitem[Schr{\"o}der(1895)]{schroeder1895}
+Ernst Schr{\"o}der.
+\newblock \emph{Vorlesungen {\"u}ber die Algebra der Logik (Exakte Logik), Dritter Band: Algebra und Logik der Relative}.
+\newblock B. G. Teubner, Leipzig, 1895.
+
+\bibitem[Tarski(1941)]{tarski1941}
+Alfred Tarski.
+\newblock On the calculus of relations.
+\newblock \emph{The Journal of Symbolic Logic}, 6\penalty0 (3):\penalty0 73--89, 1941.
+\newblock \doi{10.2307/2268577}.
+
+\bibitem[Tarski and Givant(1987)]{tarski-givant1987}
+Alfred Tarski and Steven Givant.
+\newblock \emph{A Formalization of Set Theory without Variables}, volume~41 of \emph{Colloquium Publications}.
+\newblock American Mathematical Society, Providence, RI, 1987.
+\newblock \doi{10.1090/coll/041}.
+
+\bibitem[Tuza(1994)]{tuza1994}
+Zsolt Tuza.
+\newblock Applications of the set-pair method in extremal hypergraph theory.
+\newblock In \emph{Extremal Problems for Finite Sets (Visegr{\'a}d, 1991)}, volume~3 of \emph{Bolyai Society Mathematical Studies}, pages 479--514. J{\'a}nos Bolyai Mathematical Society, Budapest, 1994.
+
+\bibitem[Vardi(1995)]{vardi1995}
+Moshe~Y. Vardi.
+\newblock On the complexity of bounded-variable queries.
+\newblock In \emph{Proceedings of the Fourteenth ACM SIGACT-SIGMOD-SIGART Symposium on Principles of Database Systems (PODS 1995)}, pages 266--276. ACM, 1995.
+
+\bibitem[Williams(2014)]{Williams2014}
+Ryan Williams.
+\newblock Faster decision of first-order graph properties.
+\newblock In \emph{Joint Meeting of the Twenty-Third EACSL Annual Conference on Computer Science Logic and the Twenty-Ninth Annual ACM/IEEE Symposium on Logic in Computer Science (CSL-LICS)}, pages 80:1--80:6. ACM, 2014.
+\newblock \doi{10.1145/2603088.2603121}.
+
+\bibitem[Xylouris(2011)]{xylouris2011}
+Triantafyllos Xylouris.
+\newblock On the least prime in an arithmetic progression and estimates for the zeros of {D}irichlet {$L$}-functions.
+\newblock \emph{Acta Arithmetica}, 150\penalty0 (1):\penalty0 65--91, 2011.
+\newblock \doi{10.4064/aa150-1-4}.
+
+\end{thebibliography}

@@ -1,0 +1,153 @@
+\section{An explicit structure}\label{app:explicit}
+This appendix states and proves the explicit colorings announced in
+Section~\ref{sec:structure}, which make the coloring of
+Lemma~\ref{lem:palette} deterministic. Nothing here is needed for the lower
+bounds; it is recorded so that the $|\Col|+1$ structures of
+Corollary~\ref{cor:detectable} can be written down rather than merely shown
+to exist. The symbols $q$, $\ind$, $\psi$, $\omega$, the modulus $m$, the
+partial coloring $\sigma$ and the summation indices $j,j',j''$ are local to
+this appendix.
+
+\begin{proposition}[Explicit colorings]\label{prop:explicit}
+Let $N\ge2$. A coloring with the two properties of Lemma~\ref{lem:palette}
+can be obtained in either of the following ways.
+\begin{enumerate}[nosep,label=(\alph*)]
+\item Keep $L=\lceil12N^2\ln(2N)\rceil$ and any $N$ disjoint cells of that
+ size. A valid coloring is then produced by a deterministic algorithm whose
+ running time is polynomial in $|D|$.
+\item In closed form: let $q$ be a prime with $q\equiv1\pmod{2N}$ and
+ $q\ge6N^6$, let $\ind:\mathbb F_q^{\times}\to\mathbb Z_N$ be a surjective
+ homomorphism, identify $\Col$ with $\mathbb Z_N$, and take
+ \[
+  \cell\Col=\mathbb F_q^{\times},\qquad
+  \cell\lambda=\ind^{-1}(\lambda),\qquad
+  \colr(u,v)=\ind(u-v),
+ \]
+ so that the cells are the cosets of the $N$-th powers. Here
+ $L=(q-1)/N$, which is $N^{O(1)}$; for $N=2$ the coloring is the Paley
+ graph.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}[Proof of Proposition~\ref{prop:explicit}(a)]
+Order the edges between cell vertices arbitrarily and color them one at a
+time. A \emph{requirement} is a tuple $(\lambda,u,v,\mu,\nu)$ as in the
+proof of Lemma~\ref{lem:palette}; there are fewer than $N^5L^2$ of them. For
+a partial coloring $\sigma$ of an initial segment of the edges, let
+$E(\sigma)$ be the expected number of failed requirements when the remaining
+edges are colored independently and uniformly at random. For a single
+requirement the events ``$z$ witnesses it'' concern disjoint pairs of edges
+for distinct $z$, so
+\[
+ \Pr[\,(\lambda,u,v,\mu,\nu)\text{ fails}\mid\sigma\,]
+ =\prod_{z\in\cell\lambda\setminus\{u,v\}}
+ \bigl(1-\Pr[\,z\text{ witnesses it}\mid\sigma\,]\bigr),
+\]
+and each factor $\Pr[\,z\text{ witnesses it}\mid\sigma\,]$ is $0$,
+$\tfrac1{N^2}$, $\tfrac1N$ or $1$ according to how many of the two edges
+$\{u,z\}$ and $\{z,v\}$ are already colored by $\sigma$ and whether those
+colors are $\mu$ and $\nu$. Hence $E(\sigma)$ is computable
+exactly, in time $O(N^5L^3)$.
+
+The calculation in the proof of Lemma~\ref{lem:palette} shows that
+$E(\varnothing)<1$.
+When the next edge is colored, $E(\sigma)$ is the average of its $N$ values
+over the colors available for that edge, so one of those colors does not
+increase it.
+Coloring greedily in this way produces a total coloring $\sigma^\ast$ with
+$E(\sigma^\ast)\le E(\varnothing)<1$; but $E(\sigma^\ast)$ is the number of
+requirements that $\sigma^\ast$ fails, an integer, hence $0$. Fewer than
+$N^2L^2$ edges are colored and each step evaluates $E$ at $N$ candidates, so
+the running time is polynomial in $|D|$. Property (b) of
+Lemma~\ref{lem:palette} follows from (a) as before.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:explicit}(b)]
+Primes $q\equiv1\pmod{2N}$ with $q\ge6N^6$ exist by Dirichlet's theorem,
+and one of them is polynomial in $N$: applied to the modulus
+$m=2N\lceil3N^5\rceil\ge6N^6$, Linnik's theorem \citep{linnik1944} --- see
+\citet{xylouris2011} for the best known exponent --- gives a prime
+$q\equiv1\pmod m$ with $q=N^{O(1)}$, and any such $q$ satisfies
+$q\equiv1\pmod{2N}$ and $q\ge m\ge6N^6$. The modulus is taken to be $m$ rather than $2N$ because $q$
+has to satisfy $q\ge6N^6$ as well as $q\equiv1\pmod{2N}$, and for the least
+prime of the progression $1\pmod{2N}$ lying above $6N^6$ there is no
+unconditional estimate to appeal to: at that height $2N$ is of size about
+$q^{1/6}$, far outside the range in which the Siegel--Walfisz theorem
+applies. We make no claim about that least prime, and nothing below depends
+on it. A surjective homomorphism
+$\ind:\mathbb F_q^{\times}\to\mathbb Z_N$ exists because $N\mid q-1$, and
+its fibres partition $\cell\Col=\mathbb F_q^{\times}$ into $N$ cells of
+$L=(q-1)/N$ elements each. Since $\mathbb F_q^{\times}$ is cyclic,
+$\ker\ind$ is its unique subgroup of index $N$, of order $(q-1)/N$, and that
+order is even because $2N\mid q-1$; the element $-1$, the unique one of
+order $2$, therefore lies in $\ker\ind$. So $\ind(-1)=0$, hence
+$\colr(v,u)=\ind(-1)+\colr(u,v)=\colr(u,v)$ and the coloring is
+symmetric.
+
+For property (a), fix distinct $u,v\in\mathbb F_q^{\times}$, colors
+$\mu,\nu\in\mathbb Z_N$ and a cell $\cell\gamma$. Any $z$ with
+$\ind(z)=\gamma$, $\ind(z-u)=\mu$ and $\ind(z-v)=\nu$ lies in
+$\cell\gamma\setminus\{u,v\}$ and satisfies $\colr(u,z)=\mu$ and
+$\colr(z,v)=\nu$, as required. Put $\omega=\exp(2\pi i/N)$ and
+$\psi=\omega^{\ind}$, a multiplicative character of $\mathbb F_q$ of order
+$N$, so that for $x\ne0$ the indicator of the event $\ind(x)=\lambda$ equals
+$\frac1N\sum_{j<N}\omega^{-j\lambda}\psi^j(x)$. The number of such $z$ is
+\[
+ \frac1{N^3}\sum_{j,j',j''<N}\omega^{-(j\gamma+j'\mu+j''\nu)}
+ \sum_{z\notin\{0,u,v\}}\psi\bigl(z^{\,j}(z-u)^{j'}(z-v)^{j''}\bigr).
+\]
+The triple $(j,j',j'')=(0,0,0)$ contributes $q-3$. For any other triple the
+polynomial $X^j(X-u)^{j'}(X-v)^{j''}$ has at most three distinct roots and
+is not an $N$-th power, because $0,u,v$ are distinct and $j,j',j''$ are not
+all zero;
+Weil's bound for multiplicative character sums
+\citep[Thm.~5.41]{lidl-niederreiter1997} then gives at most $2\sqrt q$ for
+the sum over all of $\mathbb F_q$, and hence at most $2\sqrt q+3$ for the
+sum displayed. The count is therefore at least
+\[
+ \frac{q-3}{N^3}-2\sqrt q-3,
+\]
+which is positive at $q=6N^6$ for every $N\ge2$ and increasing in $q$ for
+$q>N^6$. Property (b) follows from (a). For $N=2$ the coloring is the Paley
+graph on $\mathbb F_q$.
+\end{proof}
+
+Using \eqref{eq:size-threshold} with $L=(q-1)/N$, the closed-form structure
+has $n_0(N)=N+q$. This is still polynomial in $N$, but only as $N^{O(1)}$
+with the exponent supplied by Linnik's theorem, in place of the explicit
+$O(N^3\log N)$ of the probabilistic construction. Only the size threshold of
+Section~\ref{sec:robustness} changes, and it remains $2^{O(k)}$.
+
+Neither construction brings the cells below $\Theta(N^2)$, and that is not an
+accident.
+\begin{remark}[How small the cells can be]\label{rem:covering}
+Property~(a) of Lemma~\ref{lem:palette} says that for each cell
+$\cell\lambda$ the array with rows indexed by $z\in\cell\lambda$, columns by
+$u\in\cell\Col\setminus\cell\lambda$ and entries $\colr(u,z)$, all of which
+are defined because $u\ne z$, is a \emph{covering array of strength two}:
+any two columns take all $N^2$ pairs of values, since a witness supplied
+by~(a) for two such columns lies in $\cell\lambda$ and is therefore distinct
+from both. This alone forces $L\ge N^2+1$. Fix a column $u$; its $N$ value classes partition the
+rows, and every other column must take all $N$ values inside each class, so
+each class holds at least $N$ rows and $L\ge N^2$. If $L=N^2$ then each
+class holds exactly $N$ rows and each pair of values occurs exactly once, so
+the array is an orthogonal array of index one, with $N^2$ rows, $N$ symbols
+and strength two; such an array has at most $N+1$ columns, the classical
+bound for orthogonal arrays of index unity
+\citep{bush1952,hedayat-sloane-stufken1999}, whereas this one has
+$(N-1)L=(N-1)N^2$ of them, which is more for every $N\ge2$.
+
+We know of no better lower bound, and Lemma~\ref{lem:palette} is within
+a logarithmic factor of this one. The factor is not forced by the
+covering-array condition alone: for a prime power $N$, concatenating four
+copies of an orthogonal array with $N^2$ rows, $N+1$ columns, $N$ symbols
+and strength two --- one exists for every prime power
+\citep{hedayat-sloane-stufken1999} --- and giving the columns
+distinct label vectors in
+$\{1,\ldots,N+1\}^4$, yields a strength-two covering array with only $4N^2$
+rows and $(N+1)^4$ columns, more than the $4N^2(N-1)$ that are needed. Such
+an array does not by itself give a
+coloring, since $\colr$ must also be symmetric and a single $\colr$ must
+serve all $N$ cells at once; we have not tried to close the gap, because $L$
+enters the results only through the threshold \eqref{eq:size-threshold}.
+\end{remark}

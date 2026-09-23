@@ -1,0 +1,178 @@
+\section{The two formulas}\label{sec:logical}
+We now interpret the relation symbols of $\Psi_k$ and $\Phi_k$ on the
+structure of Section~\ref{sec:preservation} so that every color is
+detectable at a read-off pair, following the pattern of
+Section~\ref{ov:structure}: the anchor supplies a \emph{label}, the hub
+supplies the \emph{color} of the witness's cell, and the formula must
+recognize a single color; here labels and colors are subsets of $[k]$.
+$\Psi_k$ tests an inclusion between the label and the color, so the labels
+are chosen to be of equal size, which turns inclusion into equality;
+$\Phi_k$ tests agreement directly, which allows every subset of $[k]$ to
+serve as a label.
+
+\subsection{Disjunctive clauses}\label{sec:psi}
+We take as colors the $\lfloor k/2\rfloor$-element subsets of $[k]$, that
+is, $\Col=\binom{[k]}{\lfloor k/2\rfloor}$, with one anchor $x_A$ for each
+color $A$, and interpret each $R_i$ as the type-constant relation with
+\begin{equation}\label{eq:omega-inputs}
+ R_i(\tpl{x_A})=1\iff i\in A,\qquad
+ R_i(\ctype B)=1\iff i\notin B\quad(B\in\Col),
+\end{equation}
+and with $R_i$ false on every other type.
+
+At the pair $(x_A,h)$, a cell witness $z\in\cell B$ satisfies all $k$
+clauses iff $B\subseteq A$, that is, iff $B=A$, since $A$ and $B$ have the
+same size; the hub and the anchors are not witnesses, since $R_i$ is false
+on $(h,h)$ and on $(x_A,x_B)$ while neither $A$ nor $B$ is all of $[k]$
+(see Section~\ref{ov:formula} for the details). Hence, for every nonempty
+$J\subseteq\Col$ and every $A\in\Col$,
+\begin{equation}\label{eq:omega-decoder}
+ \Psi_k^{\M\res J}(x_A,h)\ \text{holds}\iff A\in J.
+\end{equation}
+
+\begin{proof}[Proof of Theorem~\ref{main:omega}]
+By \eqref{eq:omega-decoder}, deleting the cell of color $A$ changes $\Psi_k$
+at the surviving pair $(x_A,h)$, so every color is detectable and
+$\Det=\Col$. A term or circuit that agrees with $\Psi_k$ on all finite
+structures agrees with it in particular on $\M$ and on the $N$ structures
+$\M\res(\Col\setminus\{A\})$, so Corollary~\ref{cor:detectable} gives
+$m\ge\lceil N/2\rceil$ for its number $m$ of compositions, where
+$N=\binom{k}{\lfloor k/2\rfloor}$. Equation~\eqref{eq:tree-size} gives
+$|t|\ge2m+1\ge N+1$.
+\end{proof}
+
+\paragraph{Why the middle layer.}
+The central binomial coefficient in Theorem~\ref{main:omega} is not an
+artifact of the interpretation \eqref{eq:omega-inputs}. Each clause of
+$\Psi_k$ is a disjunction, so at a witness the $k$ clauses amount to a
+disjointness test between two subsets of $[k]$, and detecting a color turns
+into a cross-intersecting condition on pairs of such subsets; Bollob\'as's
+set-pair inequality then shows that no type-constant interpretation of
+$\Psi_k$, over any set of colors and with any number of anchors, makes more
+than $\binom{k}{\lfloor k/2\rfloor}$ colors detectable
+(Proposition~\ref{prop:middle-layer} in Appendix~\ref{app:optimality}).
+The interpretation \eqref{eq:omega-inputs} is thus optimal, and the loss of
+a factor $\Theta(\sqrt k)$ against \eqref{eq:omega-upper} is inherent to
+$\Psi_k$ together with this construction; whether $\Psi_k$ itself needs
+$2^k$ compositions we do not determine.
+
+\subsection{Profile agreement}\label{sec:phi}
+For a pair $(u,v)$ and an index $i\in[k]$ write
+\[
+ c_i(u,v)=\bigl(P_i(u,v),Q_i(u,v)\bigr)\in\bool^2
+\]
+for the \emph{code} of $i$ at $(u,v)$. The $i$-th clause of \eqref{eq:phi}
+at a witness $z$ is the \emph{agreement test}
+\begin{equation}\label{eq:eta}
+ \eta\bigl((p,q),(p',q')\bigr)=(p\land p')\lor(q\land q')
+\end{equation}
+applied to $c_i(x,z)$ and $c_i(z,y)$. Writing
+\[
+ \cd1=(1,0),\qquad \cd0=(0,1),\qquad \cdb=(0,0),
+\]
+for $e,e'$ among these three codes, $\eta(e,e')=1$ holds exactly when
+$e=e'\in\{\cd0,\cd1\}$; the \emph{invalid} code $\cdb$ agrees with no code,
+not even with itself.
+
+Say that a type $\tau$ \emph{carries the label} $A\subseteq[k]$ if
+$c_i(\tau)=\cd1$ for every $i\in A$ and $c_i(\tau)=\cd0$ for every
+$i\notin A$, and that it \emph{carries no label} if $c_i(\tau)=\cdb$ for
+some $i$. The interpretation below gives every type one of the three codes
+at every $i$, so these two cases are exhaustive. A witness $z$ then
+satisfies all $k$ clauses at $(u,v)$ precisely
+when the types of its two edges carry labels and the two labels are equal.
+
+Take $\Col=2^{[k]}$, the set of \emph{all} subsets of $[k]$, with one anchor
+$x_A$ for every $A\in\Col$, and interpret the $2k$ symbols by the
+type-constant arrays with
+\begin{equation}\label{eq:phi-inputs}
+ \tpl{x_A}\ \text{carries}\ A,\qquad
+ \ctype B\ \text{carries}\ B\quad(B\in\Col),
+\end{equation}
+and every other type carrying no label, that is $\tpeq$, each $\tpr{x}$ and
+each $\tpa{x}{x'}$. In terms of the symbols: on $\tpl{x_A}$, $P_i$ holds iff
+$i\in A$ and $Q_i$ iff $i\notin A$; on $\ctype B$, $P_i$ holds iff $i\in B$
+and $Q_i$ iff $i\notin B$; and $P_i=Q_i=0$ everywhere else.
+
+Consider the pair $(x_A,h)$ and a witness $z$.
+\begin{itemize}[nosep]
+\item $z\in\cell B$: the two edges carry the labels $A$ and $B$, so $z$ is a
+ witness exactly when $B=A$.
+\item $z=h$: the second edge is the loop $(h,h)$, of type $\tpeq$, which
+ carries no label, so no clause holds.
+\item $z=x'$, an anchor, possibly $x_A$ itself: the first edge has type
+ $\tpa{x_A}{x'}$, which carries no label, so again no clause holds.
+\end{itemize}
+Hence, for every nonempty $J\subseteq\Col$ and every $A\in\Col$,
+\begin{equation}\label{eq:phi-decoder}
+ \Phi_k^{\M\res J}(x_A,h)\ \text{holds}\iff A\in J.
+\end{equation}
+
+\begin{proof}[Proof of Theorem~\ref{main:phi}]
+By \eqref{eq:phi-decoder} all $N=2^k$ colors are detectable, so
+Corollary~\ref{cor:detectable} gives $2m\ge2^k$ for the number $m$ of
+compositions, that is $m\ge2^{k-1}$, and \eqref{eq:tree-size} gives
+$|t|\ge2m+1\ge2^k+1$. The matching term is \eqref{eq:phi-upper} below.
+\end{proof}
+
+The hub and the anchors are
+excluded as witnesses not because their labels go unused but because they
+carry no label at all; this third code is exactly what the independence of
+$P_i$ and $Q_i$ provides, since the two symbols are complementary on the
+types that carry a label and both false elsewhere. The interpretation
+\eqref{eq:phi-inputs} is Boolean only in its values, and
+Section~\ref{semi:weighted-section} reuses it verbatim over an arbitrary
+semiring.
+
+The matching upper bound is built like \eqref{eq:omega-upper}, from one
+composition for each subset of $[k]$:
+\begin{equation}\label{eq:phi-upper}
+ \CoR_{\Phi_k}:=\bigcup_{A\subseteq[k]}\bigl(H_A;H_A\bigr),
+ \qquad
+ H_A=\Bigl(\bigcap_{i\in A}P_i\Bigr)\cap\Bigl(\bigcap_{i\notin A}Q_i\Bigr).
+\end{equation}
+It has $2^k$ compositions: a witness satisfies clause $i$ either through
+$P_i$ or through $Q_i$, and collecting the indices of the first kind into a
+set $A$ says precisely that both of its edges lie in $H_A$. The subset $A$
+plays the same role as $I$ in \eqref{eq:omega-upper}, with one difference:
+there $I$ distributes the symbols between the two edges of the witness,
+whereas here $A$ selects a single relation that both edges must satisfy.
+Hence $\Phi_k\equiv\CoR_{\Phi_k}$ on all structures, and
+\eqref{eq:phi-upper} again has $2^k$ compositions and $O(k2^k)$ nodes.
+
+\paragraph{Optimality and the factor of two.}
+Appendix~\ref{app:optimality} shows that no type-constant interpretation of
+$\Phi_k$ makes more than $2^k$ colors detectable
+(Proposition~\ref{prop:all-labels}), so on this structure
+Corollary~\ref{cor:detectable} cannot yield more than the $2^{k-1}$
+compositions of Theorem~\ref{main:phi}. The remaining factor of two against
+\eqref{eq:phi-upper} is therefore not a loss in the choice of labels but the
+support number $\wid\land=2$ of Lemma~\ref{lem:and-width}: a single
+composition can monitor two colors at once, and the family in the proof of
+that lemma shows that this cannot be improved per gate. Closing the factor
+would require a different invariant, not a different interpretation.
+
+The interpretations \eqref{eq:omega-inputs} and \eqref{eq:phi-inputs} also
+make sense for a computation over an arbitrary $S$, with inputs and outputs
+encoded by two fixed distinct elements of $S$ and arbitrary intermediate
+values; Corollary~\ref{cor:detectable} then gives
+\[
+ \wid{\Comp}\ \ge\ \binom{k}{\lfloor k/2\rfloor}\ \text{ for }\Psi_k,
+ \qquad
+ \wid{\Comp}\ \ge\ 2^k\ \text{ for }\Phi_k.
+\]
+The only role of conjunction in Theorems~\ref{main:omega} and~\ref{main:phi}
+is its support number two.
+
+One feature of both families should be recorded, since it is what makes
+$|\varphi|=\Theta(k)$.
+
+\begin{remark}[The vocabulary grows with $k$]\label{rem:vocabulary}
+$\Psi_k$ uses $k$ relation symbols and $\Phi_k$ uses $2k$; the size
+$|\varphi|$ counts the nodes of the syntax tree and charges an occurrence of
+a symbol one node, so $|\varphi|=\Theta(k)$ in both cases and
+Corollary~\ref{cor:gap} holds as stated. Over a vocabulary \emph{fixed} in
+advance the question is a different one, and we leave it open: we do not
+know whether an exponential succinctness gap holds for a family of
+\FOthree\ formulas over, say, a single binary relation symbol.
+\end{remark}

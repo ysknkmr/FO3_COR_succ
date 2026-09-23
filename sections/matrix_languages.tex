@@ -1,0 +1,312 @@
+\section{Non-Boolean aggregation and matrix query languages}\label{sec:matrix}
+The preservation theorem of Section~\ref{sec:preservation} was proved for
+an arbitrary kernel. We now compute the support number of semiring
+multiplication and apply the theorem to arity elimination.
+
+\subsection{The support number of semiring multiplication}\label{semi:width-section}
+An idempotent semiring is a tuple
+$\mathbb S=(S,\vee,\otimes,0_{\mathbb S},1_{\mathbb S})$: addition is a
+commutative idempotent monoid, multiplication is a monoid, $0_{\mathbb S}$
+is an annihilator, and multiplication distributes over finite joins on both
+sides. Assume $0_{\mathbb S}\ne1_{\mathbb S}$; multiplication need not be
+commutative unless stated. The \emph{join breadth}
+$\breadth(\mathbb S)$ is the least $\breadth$ such that every finite join is
+the join of at most $\breadth$ of its summands, or $\infty$. An idempotent
+semiring whose addition orders $S$ totally --- $a\le b$ when $a\vee b=b$ ---
+has breadth one, since a finite join is then its largest summand.
+
+Semiring matrix multiplication is precisely the aggregation
+\eqref{eq:aggregation} with kernel $\otimes$; we write $P\star Q$ for
+$P\agg\otimes Q$. The equality array is the usual identity matrix $I_D$. The
+model includes arbitrary uniform pointwise functions, constant-valued
+matrices, transpose, and shared intermediates.
+
+For this kernel the support number is governed by the join breadth.
+\begin{proposition}[Semiring responses]\label{prop:semiring-width}
+For semiring multiplication, the join of Definition~\ref{def:width} being
+the semiring addition $\vee$,
+\[
+ \breadth(\mathbb S)\le\wid\otimes\le3\breadth(\mathbb S).
+\]
+In particular, if $\breadth<\infty$, then every computation with $m$
+products has a preserving support of at most $3\breadth m$ colors, both
+under restriction and under recoloring.
+\end{proposition}
+\begin{proof}
+Distributivity gives
+\[
+ \ell_J(s)=\Bigl(\bigvee_{\lambda\in J}p_\lambda\Bigr)\otimes s,
+ \qquad r_J(s)=s\otimes\Bigl(\bigvee_{\lambda\in J}q_\lambda\Bigr),
+\]
+and evaluation at $1_{\mathbb S}$ recovers the two marginal joins. The
+triple of responses is therefore equivalent to the three scalar values
+\[
+ \bigvee_{\lambda\in J}p_\lambda,\qquad
+ \bigvee_{\lambda\in J}q_\lambda,\qquad
+ \bigvee_{\lambda\in J}p_\lambda\otimes q_\lambda,
+\]
+and it suffices to choose at most $\breadth$ colors for each of them. For
+the lower bound on $\wid\otimes$, set every $q_\lambda=1_{\mathbb S}$; then
+the paired response becomes $d_J=\bigvee_{\lambda\in J}p_\lambda$, so a
+support $K$ must already satisfy
+$\bigvee_{\lambda\in K}p_\lambda=\bigvee_{\lambda\in\Col}p_\lambda$, and a
+finite family $(p_\lambda)$ whose join is not the join of fewer than
+$\breadth$ of its summands therefore needs $\breadth$ colors. The
+preservation statements are those of Theorems~\ref{thm:preservation}
+and~\ref{thm:transport}, and require no new closure or witness calculation.
+\end{proof}
+The lower inequality also shows that, for these unital kernels, a finite
+support number is equivalent to finite join breadth. Neither inequality is
+tight in general: Boolean conjunction has $\breadth=1$ but $\wid\land=2$, by
+Lemma~\ref{lem:and-width}, whereas over max-plus, min-plus and max-min the
+upper bound is attained, $\wid\otimes=3$ (Appendix~\ref{app:kernels}), so
+over these semirings the factor $3\breadth$ in Theorems~\ref{thm:weighted}
+and~\ref{main:matrix} is the support number itself. Under restriction the
+scalar maps are always held fixed; size-specific maps are allowed in the
+recoloring comparison, which takes place on a single domain.
+
+\subsection{Profile agreement over a semiring}\label{semi:weighted-section}
+A general semiring has no Boolean equivalence, but the agreement test
+\eqref{eq:eta} of Section~\ref{sec:phi} is already algebraic. We read the
+three codes in $\mathbb S$,
+\[
+ \cd1=(1_{\mathbb S},0_{\mathbb S}),\quad
+ \cd0=(0_{\mathbb S},1_{\mathbb S}),\quad
+ \cdb=(0_{\mathbb S},0_{\mathbb S}),
+\]
+and let $\eta\bigl((p,q),(p',q')\bigr)=(p\otimes p')\vee(q\otimes q')$. Then
+$\eta(e,e')=1_{\mathbb S}$ if $e=e'\in\{\cd0,\cd1\}$ and $0_{\mathbb S}$ if
+$e\ne e'$, while the invalid code $\cdb$ matches nothing. The codes are
+pairs of input values, not an extension of the scalar state space.
+
+For a commutative idempotent semiring, we use the $2k$ independent inputs
+$P_1,Q_1,\ldots,P_k,Q_k$ and define
+\begin{equation}\label{eq:weighted-query}
+ F_k(x,y)=\bigvee_z\bigotimes_{i=1}^k
+ \bigl(P_i(x,z)\otimes P_i(z,y)\ \vee\
+       Q_i(x,z)\otimes Q_i(z,y)\bigr),
+\end{equation}
+whose clause is $\eta$ applied to the codes of the two edges. Over the
+Boolean semiring, \eqref{eq:weighted-query} is literally $\Phi_k$. Over a
+general $\mathbb S$ the pairs $(P_i,Q_i)$ remain independent, and
+\eqref{eq:weighted-query} defines an algebraic query on arbitrary
+semiring-valued inputs rather than a Boolean equivalence.
+
+An annotated relation assigns a scalar to each tuple. In positive annotated
+relational algebra, union adds annotations, natural join multiplies them,
+projection sums over removed coordinates, and renaming changes attribute
+names. Following \citet{brijder2022}, ARA(3) denotes this algebra restricted
+to expressions all of whose intermediate relations have at most three
+attributes. The query $F_k$ has an ARA(3) expression of size $O(k)$: for
+each $i$, join copies of $P_i$ renamed to $(x,z)$ and $(z,y)$, do the same
+for $Q_i$, and take their union; then join the $k$ ternary results and
+project away $z$. Every intermediate has at most three attributes.
+
+The interpretation of Section~\ref{sec:phi} and Proposition~\ref{prop:semiring-width}
+now give the lower bound.
+\begin{theorem}[Weighted-query lower bound]\label{thm:weighted}
+Let $\mathbb S$ be a nontrivial commutative idempotent semiring of finite
+join breadth $\breadth$, and let $\Comp$ be a square-matrix computation of
+$F_k$ on all finite inputs in which \emph{every} aggregation gate carries
+the kernel $\otimes$. Writing $m$ for the number of these gates, the
+\emph{products} of $\Comp$, we have
+\[
+ m\ \ge\ \frac{2^k}{3\breadth}\qquad(k\ge1).
+\]
+Conversely, $2^k$ products suffice, with $O(k2^k)$ tree nodes or $O(2^k)$
+nodes with sharing. The same lower bound holds separately at every fixed
+size $n\ge n_0(2^k)$, even with size-specific scalar maps and wiring.
+\end{theorem}
+\begin{proof}
+Use the interpretation \eqref{eq:phi-inputs} of Section~\ref{sec:phi} with
+the codes read in $\mathbb S$: all $N=2^k$ subsets of $[k]$ serve as colors,
+$\Col=2^{[k]}$, with one anchor $x_A$ per color; the type $\tpl{x_A}$
+carries the label $A$, the type $\ctype B$ carries $B$, and every other type
+carries no label. All inputs are type-constant. At $(x_A,h)$ a cell witness
+succeeds exactly when its color is $A$, while an anchor witness and the hub
+have an unlabelled type on one of their edges, so, for every nonempty
+$J\subseteq\Col$, every $f:\Col\to\Col$ and every $A\in\Col$,
+\begin{equation}\label{eq:weighted-decoder}
+ F_k^{\M\res J}(x_A,h)=1_{\mathbb S}\iff A\in J,\qquad
+ F_k^{\M_f}(x_A,h)=1_{\mathbb S}\iff A\in f(\Col),
+\end{equation}
+and the value is $0_{\mathbb S}$ otherwise. All $N$ labels are detectable.
+
+Every aggregation gate of $\Comp$ costs at most $3\breadth$ support colors
+by Proposition~\ref{prop:semiring-width}, and there are $m$ of them, so
+$\wid\Comp\le3\breadth m$ and the set $K$ of
+Theorem~\ref{thm:preservation} has $|K|\le3\breadth m$. If $3\breadth m<N$
+then $K$ misses some color $A$, and deleting the cell $\cell A$ leaves the
+output at $(x_A,h)$ unchanged, whereas $F_k$ changes there by
+\eqref{eq:weighted-decoder}. For the
+fixed-size claim, pad with anchors carrying no label on any incident type
+and apply Proposition~\ref{prop:fixed-test}. All
+intermediate values may be arbitrary scalars, not just encoded bits.
+
+For the upper bound let
+$H_A=\bigotimes_{i\in A}P_i\otimes\bigotimes_{i\notin A}Q_i$ entrywise.
+Distributivity and commutativity give
+\begin{equation}\label{eq:weighted-upper}
+ F_k=\bigvee_{A\subseteq[k]}H_A\star H_A,
+\end{equation}
+which is \eqref{eq:phi-upper} with $\otimes$ for $\cap$ and $\star$ for the
+composition. There are $2^k$ products and $O(k2^k)$ tree nodes; sharing
+prefix products gives $O(2^k)$ nodes.
+\end{proof}
+The lower-bound interpretation uses only the two valid codes and the invalid
+one, so it also works with noncommutative multiplication if the source
+product is given its displayed order; commutativity is used only for the
+upper bound on general scalar inputs.
+
+The hypothesis that every aggregation gate carries the kernel $\otimes$ is
+not merely cosmetic. A computation in the sense of
+Section~\ref{sec:responses} may use a different kernel at each gate, and the
+support number of a computation is the sum over \emph{all} of its
+aggregation gates (Definition~\ref{def:width}); a gate carrying some other
+kernel therefore contributes its own support number to this sum, and a
+kernel of infinite support number defeats the count altogether.
+Appendix~\ref{app:kernels} exhibits such a kernel, together with a single
+aggregation that uses it to compute $\Phi_k$ outright. What the
+theorem counts is the number of products in a computation whose only
+aggregations are products, and this is exactly the form needed for
+Theorem~\ref{main:matrix}: by Lemma~\ref{lem:broadcast}, a MATLANG
+computation translates into such a computation, its products contracting
+the dimension $1$ having become free entrywise gates.
+
+The following examples all have breadth one.
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lcccc}
+\toprule
+Semiring & Scalars & $\vee$ & $\otimes$ & $(0_{\mathbb S},1_{\mathbb S})$\\
+\midrule
+Max--plus & $\mathbb R\cup\{-\infty\}$ & $\max$ & $+$ & $(-\infty,0)$\\
+Min--plus & $\mathbb R\cup\{+\infty\}$ & $\min$ & $+$ & $(+\infty,0)$\\
+Max--min & $[0,1]$ & $\max$ & $\min$ & $(0,1)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+For instance the min-plus query is
+\[
+ \min_z\sum_{i=1}^k
+ \min\{P_i(x,z)+P_i(z,y),\ Q_i(x,z)+Q_i(z,y)\},
+\]
+and the minimum number of min-plus products needed to compute it lies
+between $2^k/3$ and $2^k$. These are not ordinary arithmetic matrix
+products; the latter, combined with arbitrary decoding functions, are not
+covered by this theorem.
+
+\subsection{Typed MATLANG and arity elimination}\label{semi:typed-section}
+Semiring MATLANG \citep{brijder2022}, starting from square inputs of type
+$n\times n$, has intermediate types $n\times n$, $n\times1$, $1\times n$,
+and $1\times1$. Besides entrywise operations and transpose it has
+ones-vectors, column diagonalization, and conformable matrix
+multiplication. We allow arbitrary uniform entrywise functions.
+
+Typed MATLANG is not literally the model of Section~\ref{sec:responses}, but
+it embeds into that model at no cost.
+\begin{lemma}[Broadcasting typed intermediates]\label{lem:broadcast}
+A typed MATLANG computation can be represented in the square-matrix model
+without increasing its number of products, preserving sharing. Products
+contracting dimension $n$ become one square product, and those contracting
+dimension $1$ become entrywise operations.
+\end{lemma}
+\begin{proof}
+Encode matrices, columns, rows, and scalars, respectively, as
+\[
+ \widehat A(u,v)=A(u,v),\quad \widehat p(u,v)=p(u),\quad
+ \widehat w(u,v)=w(v),\quad \widehat s(u,v)=s,
+\]
+where the letters $A,p,w,s$ are local to this proof.
+The scalar encoding stores the computed scalar at every entry; it is not an
+input-independent free constant. Transpose and pointwise operations respect
+the encodings. A ones-vector becomes the constant matrix $1_{\mathbb S}$.
+Diagonalization of a column multiplies its encoding entrywise by $I_D$;
+diagonalization of a scalar leaves its encoding unchanged. A product
+contracting $n$ sums over the common coordinate and is one square semiring
+product. A product contracting $1$ has one summand at each entry and is
+entrywise $\otimes$. These identities cover all conformable type
+combinations and keep the factor order. Translating each node once preserves
+sharing.
+\end{proof}
+
+ARA(3) allows annotated relations of intermediate arity at most three,
+whereas MATLANG uses matrices, vectors, and scalars. The following is the
+precise form of Theorem~\ref{main:matrix-informal}.
+\begin{theorem}[Exponential cost of arity elimination]\label{main:matrix}
+Fix a nontrivial commutative idempotent semiring of finite join breadth
+$\breadth$. For every $k\ge1$ there is a binary-output positive ARA(3)
+expression of size $O(k)$ such that every equivalent MATLANG computation,
+even with arbitrary uniform entrywise functions and sharing, uses at least
+$2^k/(3\breadth)$ matrix products that contract the dimension $n$; an
+equivalent MATLANG expression with $2^k$ products exists. Equivalence is on
+all finite inputs over the fixed semiring.
+\end{theorem}
+\begin{proof}
+Use the ARA(3) expression for $F_k$ and apply Lemma~\ref{lem:broadcast} to
+any equivalent MATLANG computation. The translated computation has $\otimes$
+at every aggregation gate, as Theorem~\ref{thm:weighted} requires, because
+every product contracting the dimension $1$ has become a free entrywise
+gate; that theorem then gives the lower bound, which counts only the
+products contracting the dimension $n$, as stated.
+Expansion~\eqref{eq:weighted-upper} is already a MATLANG expression and
+gives the upper bound. The same proof applies at every fixed
+$n\ge n_0(2^k)$, even when the scalar constants and entrywise maps are
+chosen for that size, since they remain uniform across entries.
+\end{proof}
+\citet{brijder2022} establish the corresponding expressive equivalence, and
+the remark following Corollary~8 in the earlier version
+\citep[p.~9]{brijder2019} asks whether the exponential blow-up in arity
+elimination is necessary. The theorem shows that it is, for every fixed
+nontrivial commutative idempotent semiring of finite breadth, including the
+three examples above, and even for the enlarged target language.
+
+\subsection{Positive computations over further semirings}\label{semi:positive-section}
+A separate transfer argument does not require idempotence. Here
+\emph{positive} MATLANG uses only entrywise semiring addition and
+multiplication, transpose, ones-vectors, diagonalization, and matrix
+multiplication; scalar constants must lie in the subsemiring generated by
+$0_{\mathbb S}$ and $1_{\mathbb S}$, and arbitrary entrywise functions are
+not allowed.
+
+On Boolean inputs such a computation is a Boolean one in disguise.
+\begin{corollary}[Positive transfer]\label{cor:positive}
+Let $\mathbb S$ be a nontrivial commutative semiring with
+$r\cdot1_{\mathbb S}\ne0_{\mathbb S}$ for every positive integer $r$.
+Interpret \eqref{eq:weighted-query} using its sums and products. Every
+positive MATLANG computation of this query has at least $2^{k-1}$ products.
+This holds with sharing, on all finite inputs, and separately at every fixed
+size $n\ge n_0(2^k)$.
+\end{corollary}
+\begin{proof}
+Consider the subsemiring $S_0=\{r\cdot1_{\mathbb S}:r\ge0\}$ and the map
+$S_0\to\bool$, $a\mapsto[a\ne0_{\mathbb S}]$. It sends $0_{\mathbb S}$ to
+$0$ and, by the assumption on $\mathbb S$, it sends $r\cdot1_{\mathbb S}$ to
+$1$ for every $r\ge1$; without that assumption a positive multiple of
+$1_{\mathbb S}$ could equal $0_{\mathbb S}$ and the two clauses would
+conflict. The identities for integer sums and products then show that this
+map is a semiring homomorphism.
+
+On Boolean inputs all intermediate values lie in $S_0$, so applying the
+homomorphism entrywise Booleanizes the computation without changing its
+number of products. After Lemma~\ref{lem:broadcast} this is a Boolean
+relational computation of the Boolean version of $F_k$, which is $\Phi_k$
+itself. Theorem~\ref{main:phi}, or Theorem~\ref{thm:fixed-size} at a fixed
+dimension, gives the bound. All transformations preserve sharing.
+\end{proof}
+This includes $\mathbb N,\mathbb Z,\mathbb R,\mathbb C$ with the specified
+positive operations and constants, but not negative constants, subtraction,
+or arbitrary decoding functions. Expansion~\eqref{eq:weighted-upper} still
+uses $2^k$ products: it needs distributivity and commutativity, not
+idempotence.
+
+\paragraph{Wider scalars and other kernels.}
+The invariant also measures what wider scalars and other kernels can buy.
+Appendix~\ref{app:kernels} shows that $b$-bit scalars with coordinatewise
+Boolean operations reduce the number of products needed for $\Phi_k$ by a
+factor of $b$ and no more (Proposition~\ref{prop:width}); that every kernel
+on $[0,1]$ that is monotone in each argument has support number at most
+three, so the lower bounds persist with a factor $1/3$; and that a kernel of
+unbounded support number, bitwise AND on the nonnegative integers, computes
+$\Phi_k$ with a single aggregation. What a finite support number limits is
+the way in which encoded states can interact through a witness.

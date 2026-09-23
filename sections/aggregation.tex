@@ -1,0 +1,82 @@
+\section{Preliminaries}\label{sec:aggregation}
+\paragraph{Structures and formulas.}
+A vocabulary is a finite set of binary relation symbols. A structure $\A$
+interprets each symbol $R$ as a binary relation $R^{\A}$ on a nonempty
+domain $D$; all structures in this paper are finite. \FOthree\ is
+first-order logic with equality restricted to the three variable names
+$x,y,z$; a name may be quantified repeatedly. For a formula $\varphi$ whose
+free variables are among $x,y$, write $\varphi^{\A}\subseteq D^2$ for the
+relation that it defines in $\A$ and $\varphi^{\A}(u,v)\in\{0,1\}$ for its
+value
+at a pair. A formula with at most two free variables can be brought to this
+form by permuting the three names, which changes neither its size nor the
+relation it defines. The size $|\varphi|$ is the number of nodes of the
+syntax tree,
+so that $|\Psi_k|=\Theta(k)$ and $|\Phi_k|=\Theta(k)$.
+
+\paragraph{The calculus of relations.}
+\CoR\ terms are built from the relation symbols and the constants
+$\zero=\varnothing$, $\one=D^2$, and $\id=\Delta_D$ (the identity relation) by
+union, intersection, complement relative to $D^2$, converse
+$P^\smile=\{(v,u):(u,v)\in P\}$, and composition
+\[
+ (P;Q)(u,v)\iff\exists z\in D\,[P(u,z)\land Q(z,v)].
+\]
+The endpoints and the witness need not be distinct. We write $t^{\A}$ for
+the relation defined by $t$ in $\A$, $|t|$ for the number of nodes of the
+syntax tree of $t$, and $\cost{t}$ for its number of composition nodes. In a
+syntax tree all of whose nodes have arity at most two, the leaves outnumber
+the binary nodes by exactly one; since the compositions are among the
+binary nodes, a term has at least $\cost{t}+1$ leaves, and counting the
+leaves and the compositions alone already gives
+\begin{equation}\label{eq:tree-size}
+ |t|\ge2\cost{t}+1.
+\end{equation}
+A \emph{relational circuit} $\Comp$ is a directed acyclic graph whose gates
+carry the same operations, whose sources are relation symbols and constants,
+and which has one designated output gate. It is evaluated in topological
+order, and an intermediate relation may be used by several gates. We write
+$\gcost{\Comp}$ for the number of composition gates and $|\Comp|$ for the
+\emph{size}, the number of nodes of the graph, sources and gates together;
+this is the analogue for circuits of the node count $|t|$ of a term.
+Neither the depth nor the number of gates of other kinds is bounded, so the
+only relation between the two measures is $|\Comp|\ge\gcost{\Comp}$. A term
+is a circuit
+in which every gate is used once, so every statement about circuits below
+applies to terms.
+
+A term or circuit is fixed once and for all and is evaluated on every finite
+structure over its vocabulary. It contains no constants beyond $\zero$,
+$\one$ and $\id$, which are interpreted in each structure; in particular, it
+contains no constant chosen for a particular domain or domain size.
+Section~\ref{sec:robustness} shows that the lower bounds persist even when
+the circuit may depend on the domain size. We write
+$t\equiv_{\rm fin}\varphi$ if $t^{\A}=\varphi^{\A}$ for every finite
+structure $\A$, and use the same notation for circuits.
+
+\paragraph{Notation.}
+$[k]=\{1,\ldots,k\}$, $2^{[k]}$ is the set of all subsets of $[k]$ and
+$\binom{[k]}{r}$ the set of its $r$-element subsets. Blackboard bold is
+reserved for number systems and for scalars: $\mathbb N$, $\mathbb Z$,
+$\mathbb R$, $\mathbb C$, the field $\mathbb F_q$, the truth values
+$\bool$, and $\mathbb S$ for a semiring; these never clash with the
+italic $N$ for a number of colors or with $\Comp$ for a computation. From
+Section~\ref{sec:preservation} on, $u,v$ denote vertices of the finite
+structure, $z$ a witness, $h$ its hub and $x$ one of its anchors. Colors are
+written $\lambda,\mu,\nu$ where the set $\Col$ is left abstract, and $A$ or
+$B$ where $\Col$ is a concrete family of subsets of $[k]$;
+Section~\ref{sec:preservation} uses only the first convention and
+Section~\ref{sec:logical} only the second, while
+Sections~\ref{sec:robustness} and~\ref{sec:matrix} use both. Cells are
+written
+$C_\lambda$, $C_J$, $C_\Col$,
+always with a subscript, so that the unsubscripted $\Comp$ is unambiguously
+a circuit or a computation. The letters $P,Q$ without a subscript are the
+two operands of an aggregation; $P_i,Q_i$ with a subscript are the input
+symbols of \eqref{eq:phi}. For
+$\varnothing\ne D'\subseteq D$, the substructure $\A\res D'$ has domain $D'$
+and relations $R^{\A}\cap D'^2$, and for a relation $P$ on $D$ we write
+$P\res D'=P\cap D'^2$. Every \CoR\ operation commutes with this restriction
+except composition, whose witnesses are confined to $D'$:
+$(P;Q)\res D'\supseteq(P\res D');(Q\res D')$, and the inclusion can be
+strict. Controlling this defect is the subject of the next section.
