@@ -164,6 +164,14 @@ values; Corollary~\ref{cor:detectable} then gives
 The only role of conjunction in Theorems~\ref{main:omega} and~\ref{main:phi}
 is its support number two.
 
+\begin{remark}[Bounds without anchors]\label{rem:anchor-free}
+The anchors are needed because $\Psi_k$ and $\Phi_k$ are witness queries
+(Lemma~\ref{lem:where}). If the body may also read the pair $(x,y)$, the
+bounds of Theorems~\ref{main:omega} and~\ref{main:phi}, and those of
+Section~\ref{sec:matrix}, follow on $\M$ without anchors; see
+Appendix~\ref{app:anchor-free}.
+\end{remark}
+
 One feature of both families should be recorded, since it is what makes
 $|\varphi|=\Theta(k)$.
 
@@ -172,7 +180,9 @@ $\Psi_k$ uses $k$ relation symbols and $\Phi_k$ uses $2k$; the size
 $|\varphi|$ counts the nodes of the syntax tree and charges an occurrence of
 a symbol one node, so $|\varphi|=\Theta(k)$ in both cases and
 Corollary~\ref{cor:gap} holds as stated. Over a vocabulary \emph{fixed} in
-advance the question is a different one, and we leave it open: we do not
-know whether an exponential succinctness gap holds for a family of
-\FOthree\ formulas over, say, a single binary relation symbol.
+advance the question is a different one. Addressing the $2k$ symbols by
+paths of length $O(\log k)$ in a single binary relation gives a gap of
+$2^{\Omega(n/\log n)}$ (Theorem~\ref{thm:af-fixed}), with positive
+formulas, at the price of quantifier depth $O(\log k)$. We do not know whether a gap of
+$2^{\Omega(n)}$ holds over a fixed vocabulary.
 \end{remark}

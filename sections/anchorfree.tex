@@ -1,0 +1,707 @@
+\section{The same bounds without anchors}\label{app:anchor-free}
+This appendix proves the bounds of Theorems~\ref{main:omega},
+\ref{main:phi}, \ref{thm:weighted} and~\ref{main:matrix} for variants of
+the hard queries, on a structure with no anchors. The lower-bound argument
+is self-contained. It uses only the definitions of
+Section~\ref{sec:aggregation}; Section~\ref{app:af-semiring} also uses the
+semiring notions, ARA(3), and Lemma~\ref{lem:broadcast} of
+Section~\ref{sec:matrix}, none of which involves the structure. For
+$k\ge1$ let
+\begin{align*}
+ \widehat\Psi_k(x,y)&:=\exists z\bigwedge_{i=1}^k
+ \bigl(R_i(x,y)\lor R_i(x,z)\bigr),\\
+ \widehat\Phi_k(x,y)&:=\exists z\bigwedge_{i=1}^k
+ \Bigl(\bigl(P_i(x,y)\land Q_i(x,z)\bigr)\lor
+       \bigl(Q_i(x,y)\land P_i(x,z)\bigr)\Bigr).
+\end{align*}
+Both are positive \FOthree\ formulas with one quantifier and of size
+$\Theta(k)$, over $k$ and $2k$ symbols respectively. They arise from
+$\Psi_k$ and $\Phi_k$ by replacing the atoms at $(z,y)$ with atoms at
+$(x,y)$, so that the body reads the pair itself; in $\widehat\Phi_k$ the
+symbols $P_i$ and $Q_i$ are also exchanged in one conjunct, which turns the
+agreement test into a complementation test.
+
+\begin{theorem}[Anchor-free bounds]\label{thm:anchor-free}
+Let $\kappa=2\lfloor k/2\rfloor$. For $k\ge2$, every relational circuit
+$\Comp\equiv_{\rm fin}\widehat\Psi_k$ has
+$\gcost{\Comp}\ge\bigl\lceil\frac12\binom{\kappa}{\kappa/2}\bigr\rceil$.
+For $k\ge1$, every relational circuit $\Comp\equiv_{\rm fin}\widehat\Phi_k$
+has $\gcost{\Comp}\ge2^{k-1}$. A term $t$ obeys the same bounds on
+$\cost t$, and $|t|\ge2\cost t+1$. Conversely,
+\begin{equation}\label{eq:af-upper}
+ \widehat\Psi_k\equiv\bigcup_{I\subseteq[k]}
+ \Bigl(\bigcap_{i\in I}R_i\Bigr)\cap
+ \Bigl(\bigcap_{i\notin I}R_i;\one\Bigr),
+ \qquad
+ \widehat\Phi_k\equiv\bigcup_{A\subseteq[k]}H_A\cap
+ \bigl(H_{[k]\setminus A};\one\bigr),
+\end{equation}
+where $H_A=\bigcap_{i\in A}P_i\cap\bigcap_{i\notin A}Q_i$ and an empty
+intersection is $\one$. Each of these terms has $2^k$ compositions.
+\end{theorem}
+For even $k$ the first bound is that of Theorem~\ref{main:omega}, and the
+second is that of Theorem~\ref{main:phi} for every $k$. For odd $k$ the
+first bound is that of Theorem~\ref{main:omega} for $k-1$, which is smaller
+by a factor of about two. The semiring counterpart is
+Theorem~\ref{thm:af-weighted}.
+
+\paragraph{The idea.}
+In Section~\ref{sec:logical} a read-off pair $(x_A,h)$ plays two roles: the
+anchor supplies a \emph{label} $A$ that does not depend on the witness, and
+the hub reads off the color of the witness's cell. The anchor is needed only
+because the bodies of $\Psi_k$ and $\Phi_k$ reach the label through the edge
+$(x,z)$, whose type must therefore be the same for every witness $z$. A body
+that reads $(x,y)$ reaches the label without passing through $z$, and a hub
+edge already carries one: for $u\in\cell A$ the pair $(h,u)$ has color $A$.
+Reading it off at $(h,u)$ puts the hub at $x$, so the edge $(x,z)$ now
+reveals the color of the witness's cell, which is the job that $(z,y)$ did
+in Section~\ref{sec:logical}. So the anchors can be dropped, at the cost of
+one adjustment. The vertex $u$ lies in the cell $\cell A$, and deleting that
+cell deletes $u$, so the pair $(h,u)$ cannot witness the deletion of its own
+color. The query therefore
+matches the label $A$ against the complementary color $\bar A=[k]\setminus
+A$, and complementation has no fixed points.
+
+\paragraph{What is proved, and how.}
+The argument is that of Section~\ref{sec:preservation}, with fewer cases.
+It has the same three independent ingredients: the interpretation of the
+query (here for $\widehat\Psi_k$, $\widehat\Phi_k$ and $\widehat F_k$), the
+perturbation (deletion of a single cell), and the counted operation (an
+aggregation with an arbitrary kernel, specialized to conjunction and to a
+semiring product at the end). The support number couples them, and it is
+the only place where the kernel enters. As in the main text, the bound is
+proved against a fixed family of $|\Col|+1$ finite structures, chosen
+before the candidate circuit, and a shared gate is charged once. Without
+anchors the structure has $N+1$ types instead of
+$|X|^2+2|X|+1+N$, the table of Lemma~\ref{lem:af-local} has four entries
+instead of nine, and only three of them depend on the retained colors.
+
+Section~\ref{app:af-structure} builds the structure, and
+Section~\ref{app:af-preservation} proves the preservation theorem for an
+arbitrary kernel. Section~\ref{app:af-proof} proves
+Theorem~\ref{thm:anchor-free}, and Section~\ref{app:af-semiring} treats
+semirings and MATLANG. Section~\ref{app:af-fixed} passes to a single
+binary relation symbol, keeping the formulas positive, at the cost of a
+logarithmic factor in the exponent.
+
+\subsection{The structure}\label{app:af-structure}
+Fix a finite set $\Col$ of colors with $N=|\Col|\ge2$, and let
+$L=\lceil12N^2\ln(2N)\rceil$. The structure $\M^\circ$ has a \emph{hub}
+$h$ and, for each $\lambda\in\Col$, a \emph{cell} $\cell\lambda$ of $L$
+vertices; the cells are disjoint, $\cell J=\bigcup_{\lambda\in J}\cell\lambda$
+for $J\subseteq\Col$, and the domain is $D=\{h\}\cup\cell\Col$. Every pair of
+distinct vertices $\{u,v\}$ carries a color $\colr(u,v)=\colr(v,u)\in\Col$:
+\begin{equation}\label{eq:af-hub}
+ \colr(h,u)=\lambda\qquad(u\in\cell\lambda),
+\end{equation}
+and the edges between cell vertices are colored so that
+\begin{enumerate}[nosep,label=(\alph*)]
+\item for all distinct $u,v\in\cell\Col$, all $\mu,\nu\in\Col$ and every
+ $\lambda\in\Col$, some $z\in\cell\lambda\setminus\{u,v\}$ has
+ $\colr(u,z)=\mu$ and $\colr(z,v)=\nu$;
+\item for every $u\in\cell\Col$, every $\mu\in\Col$ and every
+ $\lambda\in\Col$, some $z\in\cell\lambda\setminus\{u\}$ has
+ $\colr(u,z)=\mu$.
+\end{enumerate}
+Such a coloring exists. Property (b) follows from (a) by choosing any
+$v\ne u$. For (a), color the edges between cell vertices independently and
+uniformly at random. There are fewer than $N^5L^2$ choices of
+$(\lambda,u,v,\mu,\nu)$, and for each of them the $L-2$ or more candidates
+$z$ succeed independently with probability $N^{-2}$. Hence the probability
+that some choice fails is at most
+$N^5L^2(1-N^{-2})^{L-2}<1$, by the calculation in the proof of
+Lemma~\ref{lem:palette}. Figure~\ref{fig:af-structure} shows the structure.
+
+The coloring is the one of Lemma~\ref{lem:palette}; the anchors played
+no role there. In particular, the explicit constructions of
+Proposition~\ref{prop:explicit} apply verbatim, and the closed form becomes
+especially simple without anchors. Take the hub to be $0\in\mathbb F_q$.
+Then $\colr(h,u)=\ind(u-0)=\ind(u)$, which is the index of the cell of
+$u$, so \eqref{eq:af-hub} holds automatically. The whole structure
+$\M^\circ$ is the complete graph on $\mathbb F_q$ with edge colors
+$\colr(u,v)=\ind(u-v)$, and the cells are the classes of $\ind$ on
+$\mathbb F_q^\times$. The size of the cells matters only through
+properties (a) and (b), and (a) already forces $L\ge N^2+1$
+(Remark~\ref{rem:covering}).
+
+As in Section~\ref{sec:structure}, only the hub distinguishes cells. Seen
+from a cell vertex, every retained cell looks the same: by (a) and (b) it
+realizes every color, and every pair of colors, on the edges to it.
+Seen from the hub, the cell $\cell\lambda$ is the set of vertices joined to
+$h$ by an edge of color $\lambda$. This asymmetry is the whole mechanism:
+a deletion is invisible except through the hub.
+
+For $\varnothing\ne J\subseteq\Col$ let $D_J=\{h\}\cup\cell J$, and write
+$\M^\circ\res J$ and $P\res J$ for the restrictions to $D_J$. The hub is
+never deleted, and neither is any vertex of a retained cell.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  cellnode/.style={draw,ellipse,minimum width=2.1cm,minimum height=1.0cm,thick},
+  vtx/.style={circle,fill=black,inner sep=1.1pt}
+]
+ % ---------- hub ----------
+ \node[vtx,label={[label distance=1pt]above:{hub $h$}}] (hub) at (0.4,3.6) {};
+ % ---------- cells ----------
+ \node[cellnode] (c1) at (-3.0,0) {};
+ \node[cellnode] (c2) at ( 0.4,0) {};
+ \node[cellnode] (c3) at ( 3.8,0) {};
+ \node[below=2pt of c1,font=\footnotesize] {$\cell{\{1,2\}}$};
+ \node[below=2pt of c2,font=\footnotesize] {$\cell{\{1,3\}}$};
+ \node[below=2pt of c3,font=\footnotesize] {$\cell{\{3,4\}}$};
+ \node[font=\footnotesize] at (6.1,0) {$\cdots$};
+ \foreach \c in {1,2,3}{
+   \node[vtx] (c\c a) at ($(c\c)+(-0.58,0.12)$) {};
+   \node[vtx] (c\c b) at ($(c\c)+(0.0,-0.22)$) {};
+   \node[vtx] (c\c c) at ($(c\c)+(0.58,0.12)$) {};
+ }
+ \node[font=\footnotesize,below=0pt of c1a] {$u$};
+ \node[font=\footnotesize,below=0pt of c3c] {$z$};
+ % ---------- hub edges: one line style per color ----------
+ \foreach \d in {b,c}{ \draw[thick]         (hub) -- (c1\d); }
+ \foreach \d in {a,b,c}{ \draw[thick,dashed]  (hub) -- (c2\d); }
+ \foreach \d in {a,b}{ \draw[thick,dotted]  (hub) -- (c3\d); }
+ % ---------- the read-off pair and the witness ----------
+ \draw[line width=1.6pt] (c1a) -- (hub);
+ \draw[line width=1.6pt,dotted] (c3c) -- (hub);
+ \node[font=\footnotesize,fill=white,inner sep=1.5pt,align=center]
+      at (-3.35,2.35) {read-off pair $(h,u)$\\label $A=\{1,2\}$};
+ \node[font=\footnotesize,fill=white,inner sep=1.5pt,align=center]
+      at (4.45,2.35) {witness $z$\\color $\bar A=\{3,4\}$};
+ % ---------- random colors among cell vertices ----------
+ \draw[gray] (c1c) -- (c2a);
+ \draw[gray] (c2c) -- (c3a);
+ \draw[gray] (c1b) to[bend right=30] (c3b);
+ \draw[gray] (c2a) to[bend right=45] (c2c);
+ \node[gray,font=\footnotesize] at (-1.3,-1.92)
+      {random colors, inside and between cells};
+ % ---------- the deletion ----------
+ \draw[thick,densely dashed,rounded corners=3pt]
+      ($(c3)+(-1.40,0.72)$) rectangle ($(c3)+(1.40,-1.08)$);
+ \node[font=\footnotesize,align=center] at (3.8,-1.92)
+      {deleted in\\$\M^\circ\res(\Col\setminus\{\bar A\})$};
+\end{tikzpicture}
+\caption{The structure $\M^\circ$ for $\widehat\Psi_4$, with three of the
+six colors $\Col=\binom{[4]}{2}$ drawn. As in Figure~\ref{fig:structure},
+the hub is joined to each vertex of $\cell\lambda$ by an edge of color
+$\lambda$ (solid, dashed and dotted here), and the edges between cell
+vertices carry random colors (gray). There are no anchors. The read-off
+pair is the hub edge $(h,u)$ itself, whose color $A$ serves as the label;
+the formula accepts a witness $z$ whose hub edge has the complementary
+color $\bar A$. Deleting $\cell{\bar A}$ removes every such witness but
+leaves $u$ and $h$ in place, because $u$ lies in the different cell
+$\cell A$.}
+\label{fig:af-structure}
+\end{figure}
+
+\subsection{Aggregations and preservation}\label{app:af-preservation}
+Let $(S,\vee,0)$ be a join-semilattice with least element $0$, and let
+$\odot$ be any binary operation on $S$, the \emph{kernel}. For arrays
+$P,Q:D'^2\to S$ on a domain $D'$, the \emph{aggregation}
+$P\agg\odot Q$ is the array
+$(u,v)\mapsto\bigvee_{z\in D'}P(u,z)\odot Q(z,v)$. For $S=\bool$, with
+disjunction as the join and $\odot=\land$, this is composition. A
+\emph{computation} is a circuit whose gates are aggregations, possibly
+with different kernels, and \emph{free} gates: functions $S^r\to S$ applied
+entry by entry, transpose, constant arrays, and the equality array, which
+takes two fixed distinct values on and off the diagonal. Every relational
+circuit is a computation over $\bool$. Free gates commute with
+restriction to a subdomain.
+
+The \emph{type} of a pair is $\tp(u,v)=\tpeq$ if $u=v$ and
+$\tp(u,v)=\ctype{\colr(u,v)}$ otherwise, so there are $N+1$ types, however
+large the cells are. An array is \emph{type-constant} if it is constant on
+each type, and we then write $P(\tau)$ for its value on $\tau$.
+A cell is not a type, and neither is $\{h\}$: the hub edges into
+$\cell\lambda$ belong to $\ctype\lambda$ together with every other edge of
+color $\lambda$. Type-constancy therefore cannot tell the hub apart from a
+cell vertex. The point of the next lemma is that aggregation cannot either,
+because a witness is seen only through the types of its two edges.
+
+\begin{lemma}[Homogeneity]\label{lem:af-profile}
+For every type $\tau$, the set
+$W_\tau=\{(\tp(u,z),\tp(z,v)):z\in D\}$ is the same for all
+$(u,v)\in\tau$. Consequently, the value of every gate of a computation on
+type-constant inputs is type-constant, and an aggregation satisfies
+$(P\agg\odot Q)(\tau)=\bigvee_{(\tau_1,\tau_2)\in W_\tau}P(\tau_1)\odot
+Q(\tau_2)$.
+\end{lemma}
+\begin{proof}
+Let $(u,v)\in\ctype\lambda$. The witness $z=u$ gives
+$(\tpeq,\ctype\lambda)$, and $z=v$ gives $(\ctype\lambda,\tpeq)$. The other
+witnesses realize every $(\ctype\mu,\ctype\nu)$. For $u,v\in\cell\Col$ this
+is (a). For $u=h$, pick $z\in\cell\mu\setminus\{v\}$ with
+$\colr(z,v)=\nu$ by (b); then $\colr(h,z)=\mu$ by \eqref{eq:af-hub}. The
+case $v=h$ is symmetric. Now let $u=v$. The witness $z=u$ gives
+$(\tpeq,\tpeq)$, and the others realize exactly the $(\ctype\mu,\ctype\mu)$,
+every $\mu$ occurring by (b) or by \eqref{eq:af-hub}. A witness contributes
+$P(\tp(u,z))\odot Q(\tp(z,v))$, and the join is idempotent, so the value
+depends only on $W_\tau$. The free gates act entrywise, map types onto
+types, or are constant on types.
+\end{proof}
+Thus every array computed on $\M^\circ$ from type-constant inputs is a
+table with $N+1$ entries, one per type. Only the idempotence of the join
+was used, not any law of the kernel.
+
+\paragraph{Where the retained colors enter.}
+A deletion keeps every type nonempty, so the danger lies elsewhere: it
+removes witnesses. A cell witness $z\in\cell\lambda$ is seen from the hub
+through $p_\lambda$ or $q_\lambda$, and from a cell vertex through a value
+that every retained cell also realizes. So a deletion can change an
+aggregation only at pairs with a hub endpoint, and there only through the
+following three quantities.
+
+For type-constant $P,Q$ write $p_\lambda=P(\ctype\lambda)$ and
+$q_\lambda=Q(\ctype\lambda)$. The \emph{responses} of $(P,Q)$ to
+$I\subseteq\Col$ are
+\[
+ \ell_I(s)=\bigvee_{\lambda\in I}p_\lambda\odot s,\qquad
+ r_I(s)=\bigvee_{\lambda\in I}s\odot q_\lambda,\qquad
+ d_I=\bigvee_{\lambda\in I}p_\lambda\odot q_\lambda\qquad(s\in S).
+\]
+A set $K\subseteq\Col$ \emph{supports} $(P,Q)$ if
+$(\ell_K,r_K,d_K)=(\ell_\Col,r_\Col,d_\Col)$. Every superset of a support
+is a support, since the responses grow with $I$. The \emph{support
+number} $\wid\odot$ is the least $c$ such that every pair has a support of
+size at most $c$, or $\infty$. The support number $\wid\Comp$ of a
+computation is the sum of $\wid{\odot_g}$ over its aggregation gates $g$.
+The support number depends only on the kernel and on the join. A support
+may be empty, when all three responses to $\Col$ vanish; this causes no
+trouble, since it is the retained set $J$ that must be nonempty, not the
+support.
+
+\begin{lemma}[One aggregation]\label{lem:af-local}
+Let $P,Q$ be type-constant and let $K$ support $(P,Q)$. For every
+nonempty $J$ with $K\subseteq J\subseteq\Col$,
+$(P\agg\odot Q)\res J=(P\res J)\agg\odot(Q\res J)$.
+\end{lemma}
+\begin{proof}
+Let $u,v\in D_J$. Both sides are joins over witnesses, over $D$ and over
+$D_J$ respectively. The witnesses $h$, $u$ and $v$ occur on both sides.
+The cell witnesses $z\in\cell I\setminus\{u,v\}$, for $I=\Col$ and $I=J$,
+contribute the following by (a), (b) and \eqref{eq:af-hub}:
+\[
+\renewcommand{\arraystretch}{1.3}
+\begin{array}{c|cc}
+ & v=h & v\in\cell J\\\hline
+ u=h & d_I & \bigvee_{\mu\in\Col}\ell_I(q_\mu)\\
+ u\in\cell J & \bigvee_{\mu\in\Col}r_I(p_\mu)
+     & \bigvee_{\mu}p_\mu\odot q_\mu\ \text{if }u=v,\quad
+       \bigvee_{\mu,\nu}p_\mu\odot q_\nu\ \text{if }u\ne v
+\end{array}
+\]
+At $(h,h)$ the two edges of $z\in\cell\lambda$ both have color $\lambda$.
+At $(h,v)$ the first edge has color $\lambda\in I$, while the second edge
+takes every color already inside a single cell, by (b); the entry at
+$(u,h)$ is symmetric. At two cell vertices, a single retained cell
+realizes every relevant profile, by (a) and (b). So only the three entries
+involving $I$ depend on $I$, and they are equal for $I=J$ and $I=\Col$
+because $J$ supports $(P,Q)$.
+\end{proof}
+The lemma applies to any type-constant operands, not only to inputs, and
+Lemma~\ref{lem:af-profile} makes it available at every gate. It says that
+an aggregation cannot distinguish $J$ from $\Col$ unless its three
+responses do. Compared with Lemma~\ref{lem:local}, the rows and columns of
+the anchors are gone; they were exactly the entries at which the label
+entered.
+
+\begin{theorem}[Preservation without anchors]\label{thm:af-preservation}
+Let $\Comp$ be a computation whose inputs are type-constant arrays on
+$\M^\circ$. There is a set $K\subseteq\Col$ with $|K|\le\wid\Comp$ such
+that for every nonempty $J$ with $K\subseteq J\subseteq\Col$, every gate
+of $\Comp$ evaluated on $\M^\circ\res J$ equals its value on $\M^\circ$
+restricted to $D_J$.
+\end{theorem}
+\begin{proof}
+If $\wid\Comp=\infty$, take $K=\Col$. Otherwise evaluate $\Comp$ on
+$\M^\circ$; by Lemma~\ref{lem:af-profile} every gate is type-constant. For
+each aggregation gate $g$ choose a support of its two operands of size at
+most $\wid{\odot_g}$, and let $K$ be the union of these supports. Fix
+$J\supseteq K$ and argue along the evaluation order. The inputs agree by
+definition, and free gates commute with restriction. At an aggregation
+gate the operands agree by induction, $J$ contains a support of their
+values on $\M^\circ$, and Lemma~\ref{lem:af-local} applies.
+\end{proof}
+Two remarks are in order. First, only the values on $\M^\circ$ were used
+to choose $K$; nothing is assumed about the restricted values, so a single
+$K$ serves every $J\supseteq K$. Second, complement gates and other
+non-monotone free gates need no separate treatment, because the theorem
+asserts an equality of values, not an inequality.
+
+Call a color $\lambda$ \emph{detectable} for a query $\varphi$ if
+$\varphi^{\M^\circ\res(\Col\setminus\{\lambda\})}(u,v)\ne\varphi^{\M^\circ}(u,v)$
+for some $u,v\in D_{\Col\setminus\{\lambda\}}$. For a non-Boolean $S$, a
+computation agrees with a query if its output encodes the two truth values
+by two fixed distinct elements of $S$.
+
+\begin{corollary}\label{cor:af-detectable}
+If the inputs of $\varphi$ are interpreted by type-constant arrays on
+$\M^\circ$ and $\Det$ is a set of detectable colors, then every
+computation agreeing with $\varphi$ on $\M^\circ$ and on the structures
+$\M^\circ\res(\Col\setminus\{\lambda\})$, $\lambda\in\Det$, has
+$\wid\Comp\ge|\Det|$.
+\end{corollary}
+\begin{proof}
+If $\wid\Comp<|\Det|$, the set $K$ of Theorem~\ref{thm:af-preservation}
+misses some $\lambda\in\Det$. For $J=\Col\setminus\{\lambda\}$, which is
+nonempty, the output on $\M^\circ\res J$ is the restriction of the output
+on $\M^\circ$, whereas $\varphi$ changes at a pair of $D_J$.
+\end{proof}
+The corollary reduces lower bounds to counting detectable colors, and all
+that remains is to interpret the queries so that many colors are
+detectable. Here, unlike in Section~\ref{sec:logical}, the pairs at which
+the query is read off are hub--cell pairs $(h,u)$, and a single color is
+detected at many such pairs at once.
+
+It remains to bound the support numbers of the two kernels that we need.
+For an idempotent semiring $\mathbb S$, the join breadth
+$\breadth(\mathbb S)$ is the least $\breadth$ such that every finite join
+is the join of at most $\breadth$ of its summands.
+
+\begin{lemma}[Two support numbers]\label{lem:af-width}
+\begin{enumerate}[nosep,label=(\roman*)]
+\item For $S=\bool$ and $\odot=\land$, one has $\wid\land\le2$.
+\item For an idempotent semiring $\mathbb S$ and $\odot=\otimes$, one has
+ $\wid\otimes\le3\breadth(\mathbb S)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+By distributivity, $\ell_I(s)=\bigl(\bigvee_{\lambda\in I}p_\lambda\bigr)
+\otimes s$ and $r_I(s)=s\otimes\bigl(\bigvee_{\lambda\in I}q_\lambda\bigr)$.
+So $K$ is a support as soon as it attains the three joins
+$\bigvee_\lambda p_\lambda$, $\bigvee_\lambda q_\lambda$ and
+$\bigvee_\lambda p_\lambda\otimes q_\lambda$. Choosing at most $\breadth$
+colors for each gives (ii). For (i), a color with
+$p_\lambda=q_\lambda=1$ attains all three joins alone if there is one;
+otherwise a color with $p_\lambda=1$ and a color with $q_\lambda=1$, each
+if there is one, attain them.
+\end{proof}
+Neither bound depends on the structure. Both are attained. The Boolean
+family $(p_\lambda,q_\lambda)=(1,0),(0,1)$ needs both colors, and over
+max-plus, min-plus and max-min one has $\wid\otimes=3$
+(Appendix~\ref{app:kernels}). Boolean conjunction has breadth one, so (i)
+is sharper than (ii) there.
+
+\subsection{Proof of Theorem~\ref{thm:anchor-free}}\label{app:af-proof}
+Throughout, $\bar A=[k]\setminus A$. Since there are no anchors, the label
+must come from the read-off pair itself. For $u\in\cell A$ we have
+$\tp(h,u)=\ctype A$ by \eqref{eq:af-hub}. The pair $(h,u)$ does not survive
+the deletion of $\cell A$, so it is used to detect the color $\bar A$
+instead.
+
+Two constraints shape the interpretations. First, the correspondence
+$A\mapsto\bar A$ must have no fixed points, since otherwise the pair used
+to detect a color would lie in the deleted cell. The equivalence query
+$\exists z\bigwedge_i(P_i(x,y)\leftrightarrow P_i(x,z))$ fails for exactly
+this reason: its correspondence is the identity, so the endpoint $u$ is
+itself a witness, and the pair $(h,u)$ is deleted with the only other
+witnesses. Second, the endpoints $h$ and $u$ are witnesses at $(h,u)$ that
+survive every deletion, so they must fail. For $\widehat\Psi_k$ this is
+ensured by the sizes of the labels; for $\widehat\Phi_k$ by giving the loop
+no label.
+
+\begin{proof}[Proof of Theorem~\ref{thm:anchor-free}]
+By Lemma~\ref{lem:af-width}(i), a relational circuit $\Comp$ has
+$\wid\Comp\le2\gcost\Comp$. By Corollary~\ref{cor:af-detectable} it
+therefore suffices to exhibit $\binom{k}{k/2}$ and $2^k$ detectable colors.
+
+\emph{Upper bounds.} A witness satisfies clause $i$ of $\widehat\Psi_k$
+through $R_i(x,y)$ or through $R_i(x,z)$. Collecting into $I$ the indices
+of the first kind says that $(x,y)\in\bigcap_{i\in I}R_i$ and that some $z$
+has $(x,z)\in\bigcap_{i\notin I}R_i$; the latter is
+$\bigl(\bigcap_{i\notin I}R_i;\one\bigr)(x,y)$. For $\widehat\Phi_k$,
+collect into $A$ the indices at which $P_i(x,y)\land Q_i(x,z)$ holds; then
+$(x,y)\in H_A$ and $(x,z)\in H_{\bar A}$.
+
+\emph{$\widehat\Psi_k$.} If $k$ is odd, interpreting $R_k$ as $\one$
+reduces $\widehat\Psi_k$ to $\widehat\Psi_{k-1}$, so assume that $k$ is
+even. Take $\Col=\binom{[k]}{k/2}$, which is closed under complement and
+has $N\ge2$ elements. Interpret $R_i$ by the type-constant relations with
+$R_i(\ctype B)=1\iff i\in B$ and $R_i(\tpeq)=0$. Fix
+$A\in J\subseteq\Col$ and $u\in\cell A$, and evaluate at $(h,u)$ in
+$\M^\circ\res J$:
+\begin{itemize}[nosep]
+\item a witness $z\in\cell B\setminus\{u\}$ satisfies all $k$ clauses iff
+ $A\cup B=[k]$, that is, iff $B=\bar A$, since $|A|=|B|=k/2$;
+\item $z=u$ fails, since $A\cup A=A\ne[k]$;
+\item $z=h$ fails, since $R_i(\tpeq)=0$ for all $i$ and $A\ne[k]$.
+\end{itemize}
+Hence
+\[
+ \widehat\Psi_k^{\M^\circ\res J}(h,u)\ \text{holds}\iff\bar A\in J .
+\]
+A color $B$ is therefore detected at the pairs $(h,u)$ with
+$u\in\cell{\bar B}$. These pairs survive the deletion of $\cell B$ because
+$\bar B\ne B$. So all $N=\binom{k}{k/2}$ colors are detectable.
+
+\emph{$\widehat\Phi_k$.} Take $\Col=2^{[k]}$ and interpret the symbols by
+the type-constant relations with
+\begin{equation}\label{eq:af-phi-inputs}
+ P_i(\ctype B)=1\iff i\in B,\qquad Q_i(\ctype B)=1\iff i\notin B,\qquad
+ P_i(\tpeq)=Q_i(\tpeq)=0 .
+\end{equation}
+Clause $i$ holds at $z$ iff exactly one of $(x,y)$ and $(x,z)$ has $P_i$,
+the other has $Q_i$. Fix $A\in J\subseteq\Col$ and $u\in\cell A$, and
+evaluate at $(h,u)$:
+\begin{itemize}[nosep]
+\item a witness $z\in\cell B\setminus\{u\}$ succeeds iff $i\in A$ is
+ equivalent to $i\notin B$ for every $i$, that is, iff $B=\bar A$;
+\item $z=u$ fails, since $A\ne\bar A$;
+\item $z=h$ fails, since $P_i$ and $Q_i$ are both false on $(h,h)$.
+\end{itemize}
+As before, every color $B$ is detected at the pairs $(h,u)$ with
+$u\in\cell{\bar B}$, so all $2^k$ colors are detectable.
+
+\emph{Terms.} A term is a circuit, so the bounds hold for $\cost t$. A
+syntax tree with $m$ binary composition nodes has at least $m+1$ leaves,
+so $|t|\ge2\cost t+1$.
+\end{proof}
+\paragraph{Where the colors are detected.}
+In both interpretations the colors are detected only at hub--cell pairs
+$(h,u)$. Nothing else could do much better. At a cell--hub pair $(v,h)$,
+a witness $z\in\cell\lambda$ is seen through the edges $(v,z)$ and
+$(z,h)$. For the queries of this appendix only $(v,z)$ matters, and that
+edge takes every color inside each retained cell, so no color is detected
+there. The single pair $(h,h)$ has a fixed label and can detect at most
+one color. The same reasoning explains why the witness must be read
+through $(x,z)$ when the pair is $(h,u)$: the edge $(z,u)$ takes every
+color, and only $(h,z)$ reveals the cell of $z$. The mirror image, with
+the atom at $(z,y)$ and read-off pairs $(u,h)$, works equally well; it is
+obtained by replacing every input by its converse and taking the converse
+of the output, which costs no composition.
+
+\paragraph{Why the middle layer.}
+The clause $R_i(x,y)\lor R_i(x,z)$ is a covering condition: a witness in
+$\cell B$ succeeds at a pair with label $A$ iff $A\cup B=[k]$. On labels of
+equal size $k/2$ this is equivalent to $B=\bar A$, which is why the colors
+form the middle layer. Without equal sizes, a label may be covered by
+several colors, and then deleting any one of them leaves the query
+unchanged at the pairs with that label. We have not determined whether $\binom{k}{\lfloor k/2\rfloor}$ is the
+largest number of colors that a type-constant interpretation of
+$\widehat\Psi_k$ can make detectable, as Proposition~\ref{prop:middle-layer}
+does for $\Psi_k$. For $\widehat\Phi_k$ the clause is an exact test, so all
+$2^k$ subsets serve.
+
+Negation buys nothing here, but it does save symbols. Replacing $Q_i$ by
+$\overline{P_i}$ gives
+$\exists z\bigwedge_i\bigl(P_i(x,y)\oplus P_i(x,z)\bigr)$ over $k$
+symbols. With $P_i$ interpreted as above, $\tpeq$ now carries the label
+$\varnothing$, so $z=h$ succeeds at $(h,u)$ exactly when $A=[k]$, and only
+the color $\varnothing$ is lost. The bound
+$\lceil(2^k-1)/2\rceil=2^{k-1}$ is unchanged.
+
+\subsection{Semirings and MATLANG}\label{app:af-semiring}
+Let $\mathbb S$ be a nontrivial commutative idempotent semiring, and
+write $P\star Q$ for the matrix product $P\agg\otimes Q$. The semiring
+counterpart of $\widehat\Phi_k$ is
+\begin{equation}\label{eq:af-weighted}
+ \widehat F_k(x,y)=\bigvee_z\bigotimes_{i=1}^k
+ \bigl(P_i(x,y)\otimes Q_i(x,z)\ \vee\ Q_i(x,y)\otimes P_i(x,z)\bigr),
+\end{equation}
+which over the Boolean semiring is $\widehat\Phi_k$. It has an ARA(3)
+expression of size $O(k)$: for each $i$, join $P_i$ on $(x,y)$ with $Q_i$
+renamed to $(x,z)$, do the same with the roles of $P_i$ and $Q_i$
+exchanged, and take the union; then join the $k$ ternary results and
+project away $z$.
+Over min-plus, for instance, the query is
+\[
+ \min_z\sum_{i=1}^k
+ \min\{P_i(x,y)+Q_i(x,z),\ Q_i(x,y)+P_i(x,z)\}.
+\]
+
+\begin{theorem}[Anchor-free weighted bounds]\label{thm:af-weighted}
+Let $\mathbb S$ have finite join breadth $\breadth$. Every square-matrix
+computation of $\widehat F_k$ on all finite inputs in which every
+aggregation gate carries the kernel $\otimes$ has at least
+$2^k/(3\breadth)$ products. Consequently, every MATLANG computation
+equivalent to the ARA(3) expression for $\widehat F_k$, even with
+arbitrary uniform entrywise functions and sharing, uses at least
+$2^k/(3\breadth)$ products contracting the dimension $n$. Conversely,
+\[
+ \widehat F_k=\bigvee_{A\subseteq[k]}H_A\otimes
+ \bigl(H_{[k]\setminus A}\star\mathbf 1\bigr),\qquad
+ H_A=\bigotimes_{i\in A}P_i\otimes\bigotimes_{i\notin A}Q_i
+ \ \text{entrywise},
+\]
+where $\mathbf 1$ is the constant matrix $1_{\mathbb S}$; this is a
+MATLANG expression with $2^k$ products.
+\end{theorem}
+\begin{proof}
+Interpret the inputs by \eqref{eq:af-phi-inputs}, with the values read as
+$0_{\mathbb S}$ and $1_{\mathbb S}$. At $(h,u)$ with $u\in\cell A$, clause
+$i$ at a witness is $1_{\mathbb S}$ if exactly one of $(h,u)$ and $(h,z)$
+has $P_i$ equal to $1_{\mathbb S}$ and the other has $Q_i$ equal to
+$1_{\mathbb S}$, and $0_{\mathbb S}$ otherwise. The case analysis in the
+proof of Theorem~\ref{thm:anchor-free} applies verbatim, since
+$0_{\mathbb S}$ annihilates the product over $i$. So
+$\widehat F_k^{\M^\circ\res J}(h,u)=1_{\mathbb S}$ if $\bar A\in J$ and
+$0_{\mathbb S}$ otherwise, and all $2^k$ colors are detectable. A
+computation with $m$ products has $\wid\Comp\le3\breadth m$ by
+Lemma~\ref{lem:af-width}(ii), and Corollary~\ref{cor:af-detectable}
+gives $3\breadth m\ge2^k$. By Lemma~\ref{lem:broadcast}, a MATLANG
+computation becomes a computation of this kind, in which its products
+contracting the dimension $1$ are free gates; this gives the second
+statement. For the upper bound, expand the product over $i$ by
+distributivity and commutativity. Collecting into $A$ the indices at which
+the first summand is chosen gives $H_A(x,y)\otimes H_{\bar A}(x,z)$, and
+the join over $z$ of the second factor is
+$(H_{\bar A}\star\mathbf 1)(x,y)$.
+\end{proof}
+The hypothesis that every aggregation gate carries $\otimes$ is not
+cosmetic. The support number of a computation is summed over all of its
+aggregation gates, so a gate with another kernel adds its own support
+number, and a kernel of infinite support number defeats the count;
+Appendix~\ref{app:kernels} exhibits such a kernel. The hypothesis holds
+after Lemma~\ref{lem:broadcast}, because the MATLANG products contracting
+the dimension $1$ have become entrywise gates. The lower-bound
+interpretation uses only the values $0_{\mathbb S}$ and $1_{\mathbb S}$,
+so it also works for noncommutative multiplication if the source product
+is taken in its displayed order; commutativity is used only for the upper
+bound on general inputs.
+
+In MATLANG, the product $H\star\mathbf 1$ is the product of $H$ with
+the ones vector, which contracts the dimension $n$ and produces the row
+joins of $H$. Theorem~\ref{thm:af-weighted} therefore says that
+$2^k/(3\breadth)$ products contracting $n$ are needed even though the
+upper bound uses only products of this special form.
+The positive transfer of Corollary~\ref{cor:positive} carries over
+unchanged: on Boolean inputs, a positive MATLANG computation of
+$\widehat F_k$ over a semiring with $r\cdot1_{\mathbb S}\ne0_{\mathbb S}$
+for all $r\ge1$ Booleanizes to a relational computation of
+$\widehat\Phi_k$, and Theorem~\ref{thm:anchor-free} gives at least
+$2^{k-1}$ products.
+
+\subsection{A single relation symbol}\label{app:af-fixed}
+The formula $\widehat\Phi_k$ uses $2k$ symbols. Replacing each of them by a
+positive formula of size $O(\log k)$ over one symbol $a$ gives a gap of
+$2^{\Omega(n/\log n)}$ over a fixed vocabulary. The lower bound is inherited
+from Theorem~\ref{thm:anchor-free} by a simulation, so no new structure is
+needed.
+
+\paragraph{The formula.}
+Let $k\ge8$, let $\sigma=\{P_1,Q_1,\ldots,P_k,Q_k\}$ and
+$d=\lceil\log_2(2k)\rceil\ge4$, and let $T$ be the complete binary tree of
+depth $d$, whose nodes are the binary words of length at most $d$, with
+root the empty word $\varepsilon$; it has $m=2^{d+1}-1<8k$ nodes. Assign to
+each $X\in\sigma$ its own leaf $\ell_X$, and let
+$w_X\in\{\mathsf L,\mathsf R\}^d$ be the path from the root to $\ell_X$.
+The two steps are the positive terms
+\[
+ \mathsf L=a\cap(a;a),\qquad \mathsf R=a\cap(a;a;a),
+\]
+and $t_X$ is the composition of the $d$ steps of $w_X$ followed by one
+$\mathsf R$, a term of size $O(\log k)$. The standard translation of \CoR\
+into \FOthree\ is positive and linear, so $t_X$ becomes a positive
+\FOthree\ formula $\theta_X(s,t)$ of size $O(\log k)$, for any two distinct
+variables $s,t$. Let $\varphi'_k$ be $\widehat\Phi_k$ with every atom
+$X(s,t)$ replaced by $\theta_X(s,t)$; then $\varphi'_k$ is positive and
+$|\varphi'_k|=O(k\log k)$.
+
+\paragraph{The blow-up.}
+The levels are the nodes of $T$ together with auxiliary levels: $\mu_c$ for
+every left child $c$, $\mu^1_c,\mu^2_c$ for every right child $c$, and
+$\nu^1_X,\nu^2_X$ for every $X\in\sigma$. Write $V$ for the set of levels;
+$M=|V|<3m+4k<28k$.
+For a $\sigma$-structure $\A$ with domain $D$, the $\{a\}$-structure
+$\A^\sharp$ has domain $D\times V$, and $a$ is given by blocks: for a node
+$p$ with left child $c$ and right child $c'$ the blocks
+$p\to c,\ p\to\mu_c\to c$ and
+$p\to c',\ p\to\mu^1_{c'}\to\mu^2_{c'}\to c'$ are $\id$; for $X\in\sigma$
+the blocks $\ell_X\to\varepsilon$ and $\ell_X\to\nu^1_X$ are $X^{\A}$, and
+$\nu^1_X\to\nu^2_X\to\varepsilon$ are $\id$; all other blocks are $\zero$. So every
+edge of $T$ is doubled by a walk of length $2$ if it leads to a left child
+and of length $3$ if it leads to a right child, and the return edge from
+$\ell_X$ to the root is doubled by a walk of length $3$.
+
+\begin{lemma}\label{lem:af-steps}
+Let $u\in D$. If $p$ is not a leaf, the $\mathsf L$-successors of $(u,p)$ in
+$\A^\sharp$ are exactly $(u,\text{left child of }p)$ and its
+$\mathsf R$-successors are exactly $(u,\text{right child of }p)$. The
+$\mathsf R$-successors of $(u,\ell_X)$ are exactly the $(v,\varepsilon)$ with
+$X^{\A}(u,v)$. Consequently
+\begin{equation}\label{eq:af-theta}
+ \theta_X^{\A^\sharp}\bigl((u,\varepsilon),(v,c)\bigr)\iff c=\varepsilon\
+ \text{and}\ X^{\A}(u,v).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Give a node of depth $t$ the height $6t$, and $\mu_c$, $\mu^1_c$,
+$\mu^2_c$ the heights $6t_c-3$, $6t_c-4$, $6t_c-2$, where $t_c$ is the
+depth of $c$. An edge between tree levels and their auxiliary levels
+raises the height by $6$, $3$ or $2$, and the pieces of height $3$ and $2$
+occur only on the walks $p\to\mu_c\to c$ and
+$p\to\mu^1_c\to\mu^2_c\to c$. Let $p$ be a non-leaf node. Its
+$a$-successors lie $6$, $3$ or $2$ above it, and a walk of length $2$ or
+$3$ that avoids the return edges rises by at least $4$. So it ends at a
+successor only if it rises by exactly $6$, which forces $3+3$, that is
+$p\to\mu_c\to c$ with $c$ the left child, or $2+2+2$, that is the walk to
+the right child. A walk of length at most $3$ from $(u,p)$ that uses a
+return edge must reach a leaf within two steps, so $p$ has depth at least
+$d-2\ge2$ and its successors have height at least $14$; after the return
+edge the walk has at most two steps left and ends at a $\nu$-level or at
+height at most $12$, never at a successor of $p$. For $(u,\ell_X)$ the
+$a$-successors are the $(v,\varepsilon)$ and $(v,\nu^1_X)$ with
+$X^{\A}(u,v)$. The walk $\ell_X\to\nu^1_X\to\nu^2_X\to\varepsilon$ reaches exactly the first of these,
+no other walk of length $3$ returns to the root, and none reaches
+$\nu^1_X$, which is entered only from $\ell_X$. Along $t_X$ the walk from
+$(u,\varepsilon)$ therefore stays at $u$ until it reaches $(u,\ell_X)$, and its last
+step gives \eqref{eq:af-theta}.
+\end{proof}
+In $\varphi'_k$ both disjuncts of every clause contain an atom at $(x,z)$,
+so by \eqref{eq:af-theta} only witnesses $(w,\varepsilon)$ can succeed at a
+pair $((u,\varepsilon),(v,\varepsilon))$, and
+$\varphi'^{\,\A^\sharp}_k((u,\varepsilon),(v,\varepsilon))=\widehat\Phi_k^{\A}(u,v)$.
+
+\begin{theorem}[One relation symbol]\label{thm:af-fixed}
+For $k\ge8$, every relational circuit $\Comp'\equiv_{\rm fin}\varphi'_k$
+over $\{a\}$ has $\gcost{\Comp'}\ge2^{k-1}/M^3>2^{k-1}/(28k)^3$. Hence for
+$n=|\varphi'_k|$ every such circuit has size $2^{\Omega(n/\log n)}$,
+whereas Proposition~\ref{prop:upper-translation} gives an equivalent term
+of size $2^{O(n)}$.
+\end{theorem}
+\begin{proof}
+Replace every gate $g$ of $\Comp'$ by $M^2$ gates $g_{bc}$ over $\sigma$,
+$b,c\in V$, so that $g_{bc}^{\A}$ is the block $\{(u,v):((u,b),(v,c))\in
+g^{\A^\sharp}\}$ for every $\A$. The source $a$ has blocks $\id$, $X$ or
+$\zero$ as listed above. The constants $\zero$ and $\one$ have all blocks
+$\zero$ and $\one$, and $\id$ has blocks $\id$ on the diagonal and $\zero$
+off it. Union, intersection and complement act blockwise, converse gives
+$(g^\smile)_{bc}=(g_{cb})^\smile$, and composition gives
+$(g;g')_{bc}=\bigcup_{e\in V}g_{be};g'_{ec}$, which costs $M^3$ compositions
+per composition gate. The gate $g_{\varepsilon\varepsilon}$ at the output of $\Comp'$
+computes, on every $\A$, the block $(\varepsilon,\varepsilon)$ of $\varphi'^{\,\A^\sharp}_k$, which is
+$\widehat\Phi_k^{\A}$. Theorem~\ref{thm:anchor-free} gives
+$M^3\gcost{\Comp'}\ge2^{k-1}$. Finally $k=\Theta(n/\log n)$.
+\end{proof}
+The same simulation applies to $\Phi_k$ and Theorem~\ref{main:phi}, since
+every clause of $\Phi_k$ also has an atom at $(x,z)$. The logarithmic loss
+comes from the length of the address $w_X$; with addresses of length $i$,
+as in a unary encoding of the index, one gets only $2^{\Omega(\sqrt n)}$.
+
+\subsection{What the atom at $(x,y)$ costs}
+The shorter argument relies on the atom at $(x,y)$, and this has three
+consequences.
+
+First, the queries of this appendix are not witness queries in the sense
+of Appendix~\ref{app:optimality}. For witness queries, and hence for
+$\Psi_k$ and $\Phi_k$ themselves, Lemma~\ref{lem:where} bounds the number
+of detectable colors by $2|X|+2$, so on $\M$ the anchors cannot be
+dispensed with. The comparison shows what the anchors buy: a label that
+the edge $(x,z)$ can read, uniformly over all witnesses.
+
+Second, the witness $z$ never links $x$ to $y$. The body is a Boolean
+combination of atoms at $(x,y)$ and atoms at $(x,z)$, and the upper-bound
+terms \eqref{eq:af-upper} compose only with the full relation. The lower
+bound thus says that $\Omega\bigl(\binom{k}{k/2}\bigr)$ compositions of
+any kind are needed although projections $T;\one$, with $T$ an
+intersection of input symbols, suffice. For $\Psi_k$ the compositions of
+\eqref{eq:omega-upper} join two nontrivial relations.
+
+Third, we have not carried over the fixed-size and randomized statements
+of Section~\ref{sec:robustness} to these queries. There the perturbation
+recolors the hub edges, and here the read-off pair $(h,u)$ is itself a
+hub edge. The recolorings $f_\lambda$ of Section~\ref{sec:robustness} fix
+the color $\bar\lambda$ of the pairs that detect $\lambda$, which suggests
+that the argument goes through, but we have not checked the details.
