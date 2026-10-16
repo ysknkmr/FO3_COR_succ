@@ -1,0 +1,37 @@
+% Timing: 7:00--9:00
+\section{Main result}
+
+% ============================================================
+\begin{frame}{Main result}
+
+\begin{theorem}
+  For every $k \ge 1$, every relational circuit $C$ with $C \eqfin G_k$ has
+  \[
+    \#\text{composition gates of } C \;\ge\; 2^{k-1}.
+  \]
+\end{theorem}
+
+\vfill
+\begin{itemize}
+  \item circuit: shared subterms are counted once
+  \item $\cup, \cap$, complement, converse, $\zero, \one, \id$: unrestricted and not counted
+  \item $\eqfin$: equivalence on all \emph{finite} structures
+\end{itemize}
+
+\vfill
+\pause
+\begin{block}{Consequences}
+  \begin{itemize}
+    \item $2^k$ compositions suffice: the classical $2^{O(|\varphi|)}$ translation is optimal.
+    \item Evaluating \FOthree{} through \CoR{} needs $2^{\Omega(|\varphi|)}$ Boolean matrix products.
+  \end{itemize}
+\end{block}
+\NOTE{This bounds whole-matrix operations, not the running time of arbitrary algorithms
+($G_k$ is directly evaluable in $O(k n^3)$).}
+
+\note{
+- Even if every operation except composition is free, and intermediate results can be shared,
+  2^{k-1} compositions are needed; 2^k suffice.
+- So the single exponential of the classical translation is necessary.
+}
+\end{frame}

@@ -1,0 +1,30 @@
+% Timing: 23:00--25:00
+\section{Conclusion}
+
+% ============================================================
+\begin{frame}{Summary}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{@{}l@{\quad}p{.78\textwidth}@{}}
+  \KEY{Question} & \CoR{} evaluates \FOthree{} by matrix multiplication;
+                   is the $2^{O(|\varphi|)}$ translation necessary? \\
+  \KEY{Answer}   & Yes: $G_k$ (size $O(k)$) needs $\ge 2^{k-1}$ compositions,
+                   even for circuits with complement and converse. \\
+  \KEY{Difficulty} & Complement reverses inclusion; symmetric counter-models are infinite. \\
+  \KEY{Method}   & A finite colored graph with two witnesses per color pair;
+                   $2^k$ recolorings at one vertex; compare gate values by equality;
+                   each composition breaks the equality for $\le 2$ recolorings.
+\end{tabular}
+\end{center}
+
+\vfill
+\NOTE{Further results in the paper: size-specific and randomized bounds; \FOthree{} vs.\ $\mathrm{FO}^2$ sentences;
+matrix query languages over semirings.\\
+Open: a superpolynomial gap over a fixed signature.}
+
+\note{
+- Recap.
+- The same counting gives further results listed here; see the paper.
+}
+\end{frame}

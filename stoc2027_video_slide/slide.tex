@@ -1,0 +1,148 @@
+% !TEX program = lualatex
+% STOC 2027 author video (20--30 min, for PC members and subreviewers)
+%   Story: main result -> why it is hard -> how we solve it (details are in the paper)
+%   Rules: https://acm-stoc.org/stoc2027/stoc2027-video-instructions.pdf
+%   Style: follows ../../PCORTC_derivative/lics2026_slide/slide.tex
+\documentclass[unicode,11pt,aspectratio=169]{beamer}
+
+\usetheme[numbering=fraction,sectionpage=progressbar,subsectionpage=progressbar]{moloch}
+\molochset{block=transparent}
+\setbeamercovered{invisible}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{--}
+\setbeamertemplate{enumerate item}{\insertenumlabel.}
+\setbeamertemplate{enumerate subitem}{\insertsubenumlabel.}
+\setbeamertemplate{bibliography item}{}
+
+\usefonttheme[onlymath]{serif}
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb,mathtools,stmaryrd,amsthm}
+\usepackage{color}
+\usepackage{booktabs,array,colortbl}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{arrows.meta,positioning,fit,calc,backgrounds,decorations.pathreplacing,shapes.callouts,shapes.geometric}
+
+\usepackage[backend=biber, uniquelist=false, maxcitenames = 2, maxbibnames=8, style=authoryear-comp,sorting = none, firstinits=true, sortcites=false]{biblatex}
+\DeclareNameAlias{sortname}{given-family}
+\DeclareNameAlias{default}{given-family}
+\addbibresource{references.bib}
+
+% Plain, monochrome style: black text, gray structure, a single dark accent.
+\definecolor{chiba}{RGB}{96,39,40}
+\colorlet{chibasub}{chiba}
+\colorlet{logicblue}{black}
+\colorlet{logicgreen}{black}
+\colorlet{logicorange}{black!55}
+
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{alerted text}{fg=chiba}
+\setbeamercolor{title separator}{fg=black!60,bg=black!60}
+\setbeamercolor{progress bar}{fg=black!60,bg=black!15}
+\setbeamercolor{frametitle}{bg=white,fg=black}
+\setbeamercolor{block title}{fg=black,bg=}
+\setbeamercolor{block body}{fg=black,bg=}
+\setbeamercolor{block title alerted}{fg=black,bg=}
+\setbeamercolor{block body alerted}{fg=black,bg=}
+\setbeamercolor{block title example}{fg=black,bg=}
+\setbeamercolor{block body example}{fg=black,bg=}
+\setbeamerfont{block title}{series=\bfseries}
+\setbeamertemplate{frametitle}{%
+  \vspace*{.6em}\hspace*{-.2em}{\usebeamerfont{frametitle}\bfseries\insertframetitle}\par
+  \vspace*{-.3em}{\color{black!40}\rule{\linewidth}{.4pt}}\par}
+
+\makeatletter
+\setlength{\moloch@progressonsectionpage@linewidth}{2pt}
+\makeatother
+
+\newtheorem{proposition}[theorem]{Proposition}
+
+\AtBeginSection[]{}
+
+\AtBeginDocument{
+  \abovedisplayskip=.5\abovedisplayskip
+  \abovedisplayshortskip=.5\abovedisplayshortskip
+  \belowdisplayskip=.5\belowdisplayskip
+  \belowdisplayshortskip=.5\belowdisplayshortskip
+}
+
+\renewcommand{\emph}[1]{\textbf{\textup{#1}}}
+\newcommand{\EMPH}[1]{\textbf{#1}}
+\newcommand{\KEY}[1]{\textbf{#1}}
+\newcommand{\NOTE}[1]{{\footnotesize\textcolor{black!55}{#1}}}
+\newcommand{\fcite}[2][]{{\textcolor{gray!50!black!80}{\footnotesize(\cite[#1]{#2})}}}
+\newcommand{\HP}[1]{$\Rightarrow$\quad
+  \begin{minipage}[t]{\dimexpr\linewidth-2.2em\relax}#1\end{minipage}}
+
+% ==== notation (same as the paper ../main.tex) ====
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\CoR}{\ensuremath{\mathrm{CoR}}}
+\newcommand{\FOthree}{\ensuremath{\mathrm{FO}^{3}}}
+\newcommand{\FOfour}{\ensuremath{\mathrm{FO}^{4}}}
+\newcommand{\zero}{\mathbf{0}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\id}{\mathbf{1}'}
+\newcommand{\conv}{\smile}
+\newcommand{\cost}[1]{\#_{;}(#1)}
+\newcommand{\gcost}[1]{g_{;}(#1)}
+\newcommand{\wid}[1]{\mathsf{sn}(#1)}
+\newcommand{\Col}{\Lambda}
+\newcommand{\colr}{\chi}
+\newcommand{\cell}[1]{C_{#1}}
+\newcommand{\ctype}[1]{\tau_{#1}}
+\newcommand{\tpl}[1]{\tau_{#1,\ast}}
+\newcommand{\tpr}[1]{\tau_{\ast,#1}}
+\newcommand{\tpeq}{\tau_{=}}
+\newcommand{\tp}{\operatorname{tp}}
+\newcommand{\res}{\mathord{\restriction}}
+\newcommand{\M}{\mathfrak M}
+\newcommand{\eqfin}{\mathrel{\equiv_{\mathrm{fin}}}}
+\newcommand{\cbinom}{\tbinom{k}{\lfloor k/2 \rfloor}}
+
+% colours of the three cells in the figure of M
+\colorlet{colA}{logicblue}
+\colorlet{colB}{logicorange}
+\colorlet{colC}{logicgreen}
+
+\tikzset{
+  cellvert/.style={circle,fill=black!75,inner sep=0pt,minimum size=4pt},
+  anchor vert/.style={circle,draw=black!60,fill=white,thick,inner sep=0pt,minimum size=8pt},
+  hubvert/.style={circle,fill=black,inner sep=0pt,minimum size=10pt},
+  cellshape/.style={ellipse,draw=black!45,fill=black!3,minimum width=2.6cm,minimum height=1.7cm},
+  stepbox/.style={draw=#1,thick,fill=#1!6,rounded corners=2pt,align=left,
+    text width=4.15cm,minimum height=2.6cm,inner sep=6pt,anchor=north},
+  ev/.style={circle,fill=#1,draw=white,thick,minimum size=.32cm,inner sep=0pt},
+  lbl/.style={align=left,font=\small,anchor=west,text width=11.5cm},
+  logicrow/.style={draw=black,thin,rounded corners=2pt,minimum height=.75cm,minimum width=3.2cm,align=center},
+}
+
+\hypersetup{colorlinks=false}
+
+\title{An Exponential Succinctness Gap between\\Three-Variable Logic and the Calculus of Relations}
+\author{Yuya Uezato \and Yoshiki Nakamura}
+\institute{CyberAgent, Inc. \qquad Chiba University}
+\date{STOC 2027 submission \quad\NOTE{(author video for the PC)}}
+
+\begin{document}
+\maketitle
+
+\input{sections/introduction}
+\input{sections/results}
+\input{sections/difficulty}
+\input{sections/proof}
+\input{sections/conclusion}
+
+\appendix
+\setbeamertemplate{page number in head/foot}{}
+\AtBeginSection[]{}
+\begingroup
+\AtNextBibliography{\small}
+\begin{frame}[allowframebreaks,noframenumbering]{References}
+  \printbibliography[heading=none]
+\end{frame}
+\endgroup
+
+\end{document}

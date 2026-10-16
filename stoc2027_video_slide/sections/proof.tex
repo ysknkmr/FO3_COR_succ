@@ -1,0 +1,245 @@
+% Timing: 12:00--23:00
+\section{How we prove it}
+
+% ============================================================
+\begin{frame}{Proof outline}
+
+\begin{enumerate}
+  \item A finite structure $\M_0$ and $2^k$ structures $\M_A$ \ ($A \subseteq [k]$) on the same domain, with
+    \[
+      G_k^{\M_0}(h, v_A) = 1, \qquad G_k^{\M_A}(h, v_A) = 0,
+    \]
+    where $\M_A$ differs from $\M_0$ only on edges incident to $h$, and not on $(h, v_A)$.
+  \vfill
+  \pause
+  \item For a circuit $C$, compare each gate on $\M_A$ with a value computed from $\M_0$,
+    by \emph{equality}.
+  \vfill
+  \pause
+  \item Each composition gate breaks this equality for at most \emph{two} sets $A$.
+\end{enumerate}
+
+\vfill
+\pause
+\[
+  2^k \;\le\; 2 \cdot \#\text{composition gates of } C.
+\]
+
+\note{
+- Fix one finite structure M_0 and 2^k modifications of it, all on the same domain.
+- Each modification changes only edges at one vertex h, but G_k changes at an edge (h, v_A) that is not modified.
+- We compare by equality, which complement preserves.
+- The key point: a single composition can be responsible for at most two of the modifications.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{A finite colored complete graph}
+
+\begin{columns}[c]
+\begin{column}{.32\textwidth}
+\centering
+\begin{tikzpicture}[every node/.style={font=\small},scale=.75]
+  \node[cellvert,label=left:$u$] (u) at (0,0) {};
+  \node[cellvert,label=right:$v$] (v) at (3.2,0) {};
+  \node[cellvert,label=above:$z$] (z1) at (1.6,1.4) {};
+  \node[cellvert,label=below:$z'$] (z2) at (1.6,-1.4) {};
+  \draw[thick] (u) -- node[above left] {$\lambda$} (z1);
+  \draw[thick] (z1) -- node[above right] {$\mu$} (v);
+  \draw[thick] (u) -- node[below left] {$\lambda$} (z2);
+  \draw[thick] (z2) -- node[below right] {$\mu$} (v);
+\end{tikzpicture}
+\end{column}
+\begin{column}{.64\textwidth}
+\begin{lemma}
+  For $n \ge O(N^2 \log N)$ there is a coloring $\colr$ of the edges of $K_n$ with $N$ colors such that
+  for all $u \ne v$ and all colors $\lambda, \mu$, at least two $z \notin \set{u, v}$ satisfy
+  $\colr(u, z) = \lambda$ and $\colr(z, v) = \mu$.
+\end{lemma}
+\NOTE{Random coloring and a union bound; cf.\ \fcite{jmt1995}.}
+\end{column}
+\end{columns}
+
+\vfill
+\pause
+A \emph{color table} $p = (p_{\id}, (p_\lambda)_{\lambda})$ denotes the relation
+that is $p_{\id}$ on the diagonal and $p_{\colr(u, v)}$ at $(u, v)$, $u \ne v$.
+
+\begin{lemma}
+  Color tables are closed under all \CoR{} operations. For $\lambda$,
+  \[
+    (p \mathbin{;} q)_\lambda \;=\; (p_{\id} \land q_\lambda) \lor (p_\lambda \land q_{\id})
+    \lor \Bigl(\textstyle\bigvee_{\mu} p_\mu\Bigr) \land \Bigl(\textstyle\bigvee_{\nu} q_\nu\Bigr).
+  \]
+\end{lemma}
+
+\note{
+- Color a complete graph randomly. With quadratically many vertices in the number of colors,
+  every pair of colors is realized between any two vertices, twice.
+- Then every relation a circuit computes on this graph is a color table: one bit per color and one for the diagonal.
+- Boolean operations and converse act per color. For composition, all color pairs have witnesses,
+  so the result depends only on which colors the operands contain.
+- This replaces the infinite symmetric structure; no automorphisms are needed.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{The structures $\M_0$ and $\M_A$}
+
+\begin{columns}[c]
+\begin{column}{.52\textwidth}
+Colors $= 2^{[k]}$. \ On an edge of color $\mu$:
+\[
+  P_i \iff i \in \mu, \qquad Q_i \iff i \notin \mu.
+\]
+\NOTE{On loops, all $P_i, Q_i$ are false.}
+
+\vspace{.3em}
+At $(x, y)$ of color $A^c$, a witness $z$ for $G_k$ must have $\colr(x, z) = A$.
+
+\vspace{.6em}
+\onslide<2->{$\M_A$: fix a vertex $h$ and recolor every edge $\set{h, w}$ of color $A$ to $A^c$.}
+\end{column}
+\begin{column}{.44\textwidth}
+\centering
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \begin{scope}
+    \node[cellvert,label=below:$h$] (h) at (0,0) {};
+    \node[cellvert,label=above:$w$] (w) at (.2,2.0) {};
+    \node[cellvert,label=right:$v_A$] (v) at (1.7,1.0) {};
+    \draw[thick] (h) -- node[left] {$A$} (w);
+    \draw[thick] (h) -- node[below right] {$A^c$} (v);
+    \node at (1.0,-.8) {$\M_0$};
+  \end{scope}
+  \onslide<2->{
+  \begin{scope}[xshift=3.0cm]
+    \node[cellvert,label=below:$h$] (h) at (0,0) {};
+    \node[cellvert,label=above:$w$] (w) at (.2,2.0) {};
+    \node[cellvert,label=right:$v_A$] (v) at (1.7,1.0) {};
+    \draw[thick,dashed] (h) -- node[left] {$A^c$} (w);
+    \draw[thick] (h) -- node[below right] {$A^c$} (v);
+    \node at (1.0,-.8) {$\M_A$};
+  \end{scope}}
+\end{tikzpicture}
+\end{column}
+\end{columns}
+
+\vfill
+\onslide<3->{%
+\begin{lemma}
+  $G_k^{\M_0}(h, v_A) = 1$ and $G_k^{\M_A}(h, v_A) = 0$; \ $\colr(h, v_A) = A^c$ in both.
+\end{lemma}}
+
+\note{
+- Use all subsets of [k] as colors; the color of an edge is its profile.
+- An edge of color A^c is satisfied exactly by witness edges of color A.
+- M_A: at one vertex h, recolor all A-colored edges to A^c.
+- Then h has no edge of color A, so G_k fails at (h, v_A), but the edge (h, v_A) keeps its color.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Comparing the two computations}
+
+For a color table $p$, let $T_A p$ be the relation on $\M_A$ given by the same table:
+\[
+  (T_A p)(u, v) \defeq p_{\colr_A(u, v)} \ \ (u \ne v), \qquad (T_A p)(u, u) \defeq p_{\id},
+\]
+where $\colr_A$ is the coloring of $\M_A$.
+
+\vfill
+\pause
+\begin{itemize}
+  \item Each input relation of $\M_A$ is $T_A$ of the same input relation of $\M_0$.
+  \item $T_A$ commutes with $\cup$, $\cap$, complement, converse, $\zero, \one, \id$.
+  \item $T_A$ need not commute with composition.
+\end{itemize}
+
+\vfill
+\pause
+\begin{lemma}
+  Let $C$ be a circuit. If $(T_A X) \mathbin{;} (T_A Y) = T_A(X \mathbin{;} Y)$ for the values $X, Y$ on $\M_0$
+  of the operands of every composition gate, then $C(\M_A) = T_A\, C(\M_0)$.
+  In particular $C(\M_A)(h, v_A) = C(\M_0)(h, v_A)$.
+\end{lemma}
+
+\note{
+- T_A reads a color table of M_0 on the recolored graph.
+- Inputs on M_A are exactly T_A of the inputs on M_0.
+- Boolean operations, complement included, and converse commute with T_A, since they act per color.
+- If every composition also commutes, induction gives C(M_A) = T_A C(M_0),
+  and at the unchanged edge (h, v_A) both answers coincide, so C is wrong on M_0 or on M_A.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Key lemma}
+
+\begin{lemma}
+  For all color tables $p, q$: \quad
+  $\bigl|\set{A : (T_A p) \mathbin{;} (T_A q) \ne T_A(p \mathbin{;} q)}\bigr| \le 2$.
+\end{lemma}
+
+\vfill
+\pause
+Let $J = \text{colors} \setminus \set{A}$ (the colors at $h$ in $\M_A$) and
+$\exists_S\, r \defeq \bigvee_{\lambda \in S} r_\lambda$.
+The two sides can differ only at
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}lll@{}}
+  \toprule
+  pair & $(T_A p) \mathbin{;} (T_A q)$ & $T_A(p \mathbin{;} q)$ \\
+  \midrule
+  $(h, v)$, $v \ne h$ & $\exists_J\, p \land \exists_{\mathrm{all}}\, q$ & $\exists_{\mathrm{all}}\, p \land \exists_{\mathrm{all}}\, q$ \\
+  $(u, h)$, $u \ne h$ & $\exists_{\mathrm{all}}\, p \land \exists_J\, q$ & $\exists_{\mathrm{all}}\, p \land \exists_{\mathrm{all}}\, q$ \\
+  $(h, h)$ & $\exists_J\, (p \land q)$ & $\exists_{\mathrm{all}}\, (p \land q)$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+\NOTE{Other terms coincide; away from $h$, the second witness avoids $h$.}
+
+\vfill
+\pause
+Removing one color $A$ changes $\exists_S$ only if $A$ is the unique $\lambda$ with $r_\lambda = 1$.
+If some $\lambda$ has $p_\lambda = q_\lambda = 1$, only $A = \lambda$ matters;
+otherwise only the unique $p$-color and the unique $q$-color.
+
+\note{
+- Away from h, the recoloring is invisible because the second witness avoids h.
+- At the row of h, the column of h, and the entry (h,h), the composition only evaluates three existential questions over the colors present at h.
+- Removing one color A can change such a question only if A was its unique true term.
+- If one color is in both tables, it is the only candidate; otherwise there are at most two candidates.
+- The bound depends only on the tables on M_0, not on how the circuit computed them.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Counting}
+
+For each composition gate $g$ with operand values $X_g, Y_g$ on $\M_0$, let
+\[
+  D_g \defeq \set{A : (T_A X_g) \mathbin{;} (T_A Y_g) \ne T_A(X_g \mathbin{;} Y_g)}, \qquad |D_g| \le 2.
+\]
+
+\pause
+\begin{theorem}
+  If $C$ is correct on $\M_0$ and on every $\M_A$, then every $A \subseteq [k]$ lies in some $D_g$. Hence
+  \[
+    2^k \;\le\; \Bigl|\bigcup_g D_g\Bigr| \;\le\; 2 \cdot \#\text{composition gates of } C.
+  \]
+\end{theorem}
+
+\vfill
+\pause
+\begin{itemize}
+  \item Complement: the invariant is an equality, preserved by every Boolean operation.
+  \item Sharing: $D_g$ is defined per gate, so a shared gate is counted once.
+\end{itemize}
+
+\note{
+- D_g is defined from the computation on M_0 only.
+- Every A must be covered by some D_g, and each D_g has at most two elements.
+- This gives the 2^{k-1} lower bound for circuits.
+}
+\end{frame}

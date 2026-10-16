@@ -1,0 +1,270 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{Codd1970}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=575e6ec8dab1a34c19f7021664baaccc}{%
+           family={Codd},
+           familyi={C\bibinitperiod},
+           given={E.\bibnamedelimi F.},
+           giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{575e6ec8dab1a34c19f7021664baaccc}
+      \strng{fullhash}{575e6ec8dab1a34c19f7021664baaccc}
+      \strng{fullhashraw}{575e6ec8dab1a34c19f7021664baaccc}
+      \strng{bibnamehash}{575e6ec8dab1a34c19f7021664baaccc}
+      \strng{authorbibnamehash}{575e6ec8dab1a34c19f7021664baaccc}
+      \strng{authornamehash}{575e6ec8dab1a34c19f7021664baaccc}
+      \strng{authorfullhash}{575e6ec8dab1a34c19f7021664baaccc}
+      \strng{authorfullhashraw}{575e6ec8dab1a34c19f7021664baaccc}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Communications of the ACM}
+      \field{number}{6}
+      \field{title}{A Relational Model of Data for Large Shared Data Banks}
+      \field{volume}{13}
+      \field{year}{1970}
+      \field{pages}{377\bibrangedash 387}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1145/362384.362685
+      \endverb
+    \endentry
+    \entry{brijder2019tods}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=6ffff81718fa5716286d5eaacf4ef126}{%
+           family={Brijder},
+           familyi={B\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6ee35c03c19a5179c882807e2090d149}{%
+           family={Geerts},
+           familyi={G\bibinitperiod},
+           given={Floris},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f0d3c7ce1ccb3e454cc84ea1cff1f935}{%
+           family={{Van den Bussche}},
+           familyi={V\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b101f0961e5a267e850d0101e14bec3b}{%
+           family={Weerwag},
+           familyi={W\bibinitperiod},
+           given={Timmy},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2702371be1d9483de81b784bea50f084}
+      \strng{fullhash}{7b461ddd3259d5fabdc64087ae1b9acb}
+      \strng{fullhashraw}{7b461ddd3259d5fabdc64087ae1b9acb}
+      \strng{bibnamehash}{7b461ddd3259d5fabdc64087ae1b9acb}
+      \strng{authorbibnamehash}{7b461ddd3259d5fabdc64087ae1b9acb}
+      \strng{authornamehash}{2702371be1d9483de81b784bea50f084}
+      \strng{authorfullhash}{7b461ddd3259d5fabdc64087ae1b9acb}
+      \strng{authorfullhashraw}{7b461ddd3259d5fabdc64087ae1b9acb}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{ACM Transactions on Database Systems}
+      \field{number}{4}
+      \field{title}{On the Expressive Power of Query Languages for Matrices}
+      \field{volume}{44}
+      \field{year}{2019}
+      \field{pages}{15:1\bibrangedash 15:31}
+      \range{pages}{-1}
+    \endentry
+    \entry{tarski-givant1987}{book}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=1d9d32785708836ac3a223ad31f277fe}{%
+           family={Tarski},
+           familyi={T\bibinitperiod},
+           given={Alfred},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8ba79600802aeb9d3845289785156e9b}{%
+           family={Givant},
+           familyi={G\bibinitperiod},
+           given={Steven},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Providence, RI}%
+      }
+      \list{publisher}{1}{%
+        {American Mathematical Society}%
+      }
+      \strng{namehash}{bb8742a4cb64362ec48dc5317ac68eda}
+      \strng{fullhash}{bb8742a4cb64362ec48dc5317ac68eda}
+      \strng{fullhashraw}{bb8742a4cb64362ec48dc5317ac68eda}
+      \strng{bibnamehash}{bb8742a4cb64362ec48dc5317ac68eda}
+      \strng{authorbibnamehash}{bb8742a4cb64362ec48dc5317ac68eda}
+      \strng{authornamehash}{bb8742a4cb64362ec48dc5317ac68eda}
+      \strng{authorfullhash}{bb8742a4cb64362ec48dc5317ac68eda}
+      \strng{authorfullhashraw}{bb8742a4cb64362ec48dc5317ac68eda}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{series}{Colloquium Publications}
+      \field{title}{A Formalization of Set Theory without Variables}
+      \field{volume}{41}
+      \field{year}{1987}
+      \verb{doi}
+      \verb 10.1090/coll/041
+      \endverb
+    \endentry
+    \entry{nakamura-uezato2027}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=7cae1ccedecf28ca30970e3cb6bb83d7}{%
+           family={Nakamura},
+           familyi={N\bibinitperiod},
+           given={Yoshiki},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0c50548d4af24563cbe0431ff1e49e1e}{%
+           family={Uezato},
+           familyi={U\bibinitperiod},
+           given={Yuya},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{797280dfde18c1741f75c1af95f4d1ed}
+      \strng{fullhash}{797280dfde18c1741f75c1af95f4d1ed}
+      \strng{fullhashraw}{797280dfde18c1741f75c1af95f4d1ed}
+      \strng{bibnamehash}{797280dfde18c1741f75c1af95f4d1ed}
+      \strng{authorbibnamehash}{797280dfde18c1741f75c1af95f4d1ed}
+      \strng{authornamehash}{797280dfde18c1741f75c1af95f4d1ed}
+      \strng{authorfullhash}{797280dfde18c1741f75c1af95f4d1ed}
+      \strng{authorfullhashraw}{797280dfde18c1741f75c1af95f4d1ed}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings of the ACM on Management of Data}
+      \field{note}{PODS 2027}
+      \field{number}{5 (PODS)}
+      \field{title}{A Fine-Grained Dichotomy for Bounded-Variable Query Evaluation: The Calculus of Relations, a Boolean Modal Logic, and One-Variable Counting Logic}
+      \field{volume}{4}
+      \field{year}{2026}
+      \field{pages}{295:1\bibrangedash 295:27}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1145/3850130
+      \endverb
+    \endentry
+    \entry{nakamura2022}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=7cae1ccedecf28ca30970e3cb6bb83d7}{%
+           family={Nakamura},
+           familyi={N\bibinitperiod},
+           given={Yoshiki},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7cae1ccedecf28ca30970e3cb6bb83d7}
+      \strng{fullhash}{7cae1ccedecf28ca30970e3cb6bb83d7}
+      \strng{fullhashraw}{7cae1ccedecf28ca30970e3cb6bb83d7}
+      \strng{bibnamehash}{7cae1ccedecf28ca30970e3cb6bb83d7}
+      \strng{authorbibnamehash}{7cae1ccedecf28ca30970e3cb6bb83d7}
+      \strng{authornamehash}{7cae1ccedecf28ca30970e3cb6bb83d7}
+      \strng{authorfullhash}{7cae1ccedecf28ca30970e3cb6bb83d7}
+      \strng{authorfullhashraw}{7cae1ccedecf28ca30970e3cb6bb83d7}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Logical and Algebraic Methods in Programming}
+      \field{title}{Expressive Power and Succinctness of the Positive Calculus of Binary Relations}
+      \field{volume}{127}
+      \field{year}{2022}
+      \field{pages}{100760}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.jlamp.2022.100760
+      \endverb
+    \endentry
+    \entry{jmt1995}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=b07300862ffdc19ad618a5dd65f8a139}{%
+           family={Jipsen},
+           familyi={J\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f3fe4cc824da648d10d2fd763f33143e}{%
+           family={Maddux},
+           familyi={M\bibinitperiod},
+           given={Roger\bibnamedelima D.},
+           giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=36ce0718292cd832c56a611b5fa14cd5}{%
+           family={Tuza},
+           familyi={T\bibinitperiod},
+           given={Zsolt},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{309faec43b1b373405a5ebef184845c1}
+      \strng{fullhash}{d598d95fa03369132afdefafb2725804}
+      \strng{fullhashraw}{d598d95fa03369132afdefafb2725804}
+      \strng{bibnamehash}{d598d95fa03369132afdefafb2725804}
+      \strng{authorbibnamehash}{d598d95fa03369132afdefafb2725804}
+      \strng{authornamehash}{309faec43b1b373405a5ebef184845c1}
+      \strng{authorfullhash}{d598d95fa03369132afdefafb2725804}
+      \strng{authorfullhashraw}{d598d95fa03369132afdefafb2725804}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Algebra Universalis}
+      \field{title}{Small Representations of the Relation Algebra {$E_{n+1}(1,2,3)$}}
+      \field{volume}{33}
+      \field{year}{1995}
+      \field{pages}{136\bibrangedash 139}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1007/BF01190770
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

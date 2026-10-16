@@ -1,0 +1,230 @@
+% Timing: 0:00--7:00
+\section{The question}
+
+% ============================================================
+\begin{frame}{The calculus of relations (\CoR)}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \node[cellvert,minimum size=6pt,label=below:$u$] (x) at (0,0) {};
+  \node[cellvert,minimum size=6pt,label=above:$w$] (z) at (1.4,.9) {};
+  \node[cellvert,minimum size=6pt,label=below:$v$] (y) at (2.8,0) {};
+  \draw[-{Stealth},thick] (x) -- node[above left] {$X$} (z);
+  \draw[-{Stealth},thick] (z) -- node[above right] {$Y$} (y);
+  \draw[-{Stealth},line width=1.5pt,black!40] (3.5,.3) -- (4.7,.3);
+  \node[cellvert,minimum size=6pt,label=below:$u$] (x2) at (5.4,0) {};
+  \node[cellvert,minimum size=6pt,label=below:$v$] (y2) at (8.2,0) {};
+  \draw[-{Stealth},thick] (x2) -- node[above] {$X \mathbin{;} Y$} (y2);
+\end{tikzpicture}
+\end{center}
+\[
+  X \mathbin{;} Y \;\defeq\; \set{(u, v) : (u, w) \in X \text{ and } (w, v) \in Y \text{ for some } w}
+\]
+
+\vfill
+\pause
+Terms over binary relation symbols, built from
+\[
+  \cup, \quad \cap, \quad \overline{\,\cdot\,} \ \text{\NOTE{(complement)}}, \quad {}^{\conv} \ \text{\NOTE{(converse)}}, \quad
+  \zero, \ \one, \ \id, \quad \text{and} \quad \EMPH{$;$}
+\]
+\NOTE{Every intermediate result is a \emph{binary} relation.}
+
+\vfill
+\pause
+\begin{columns}[T]
+\begin{column}{.48\textwidth}
+\begin{block}{As a matrix program}
+  $;$ \ = Boolean matrix product\\
+  ${}^{\conv}$ = transpose, \ others entrywise
+\end{block}
+\end{column}
+\begin{column}{.48\textwidth}
+\begin{block}{As a query plan}
+  $;$ \ = join followed by projection\\
+  \NOTE{\fcite{Codd1970}, \fcite{brijder2019tods}}
+\end{block}
+\end{column}
+\end{columns}
+
+\note{
+- CoR is the variable-free algebra of binary relations.
+- Composition X;Y keeps the pairs (u,v) connected through some middle vertex w;
+  the middle vertex is eliminated.
+- Read as Boolean matrices, composition is matrix multiplication; converse is transpose;
+  the other operations are entrywise.
+- So a CoR term is a program over whole matrices, and every intermediate result is a matrix.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Three-variable logic and \CoR}
+
+\begin{columns}[c]
+\begin{column}{.40\textwidth}
+\centering
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \node[cellvert,minimum size=7pt,label=left:$x$] (x) at (0,0) {};
+  \node[cellvert,minimum size=7pt,label=right:$y$] (y) at (2.4,0) {};
+  \node[cellvert,minimum size=7pt,label=above:$z$] (z) at (1.2,1.6) {};
+  \draw[thick] (x) -- (y) -- (z) -- (x);
+\end{tikzpicture}
+
+\vspace{.3em}
+\emph{\FOthree}: first-order logic with\\the variables $x, y, z$ only
+\end{column}
+\begin{column}{.16\textwidth}
+\centering
+\Large $\equiv$
+\end{column}
+\begin{column}{.40\textwidth}
+\centering
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \foreach \i/\x in {0/0,1/1.2,2/2.4}{\node[cellvert,minimum size=7pt] (a\i) at (\x,.8) {};}
+  \draw[-{Stealth},thick] (a0) -- (a1);
+  \draw[-{Stealth},thick] (a1) -- (a2);
+  \draw[-{Stealth},thick] (a0) to[bend right=40] (a2);
+\end{tikzpicture}
+
+\vspace{.3em}
+\emph{\CoR}: binary relations only
+\end{column}
+\end{columns}
+
+\vfill
+\begin{theorem}[Tarski; \ \fcite{tarski-givant1987}]
+  \FOthree{} formulas $\varphi(x, y)$ and \CoR{} terms define the same binary queries.
+\end{theorem}
+
+\vfill
+\pause
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lll@{}}
+  $\CoR \to \FOthree$ & size $O(|T|)$ & \NOTE{composition $\mapsto$ $\exists z$} \\
+  $\FOthree \to \CoR$ & size \EMPH{$2^{O(|\varphi|)}$} & \NOTE{classical translation}
+\end{tabular}
+\end{center}
+
+\note{
+- An FO3 formula can keep three vertices in scope and constrain all three edges among them.
+- A CoR term sees only binary relations.
+- Tarski showed that nevertheless they define exactly the same binary queries.
+- The translation from CoR to FO3 is linear; the classical one back is single exponential.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Why translate: fast evaluation \ \NOTE{\fcite{nakamura-uezato2027}}}
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \node[logicrow] (k4) at (0,1.2) {$\mathrm{FO}^{k}$, \ $k \ge 4$};
+  \node[logicrow] (k3) at (0,0) {\FOthree};
+  \node[logicrow] (k2) at (0,-1.2) {$\mathrm{FO}^{2}$};
+  \node[anchor=west] at (2,1.2) {no $O(m^{k-\varepsilon})$ algorithm \ \NOTE{(under Sparse MAX-3-SAT)}};
+  \node[anchor=west] at (2,0) {$\xrightarrow{\ \text{translate}\ }$ \ \CoR{} \ $\xrightarrow{\ \text{matrix mult.}\ }$ \
+    \EMPH{$2^{O(|\varphi|)}$} $\cdot\, n^{\omega}$};
+  \node[anchor=west] at (2,-1.2) {$O(|\varphi| \cdot m)$};
+\end{tikzpicture}
+\end{center}
+\NOTE{\hfill $n$: domain size, \ $m$: number of tuples, \ naive evaluation of $\mathrm{FO}^k$: \ $O(|\varphi| \cdot n^k)$}
+
+\vfill
+\pause
+\begin{center}
+  A \CoR{} term $T$ is evaluated in $O(|T| \cdot n^{\omega})$:\\
+  one matrix product per composition.
+\end{center}
+
+\vfill
+\pause
+\begin{alertblock}{}
+  \centering
+  The factor $2^{O(|\varphi|)}$ comes only from the translation $\FOthree \to \CoR$.\\
+  Is it necessary?
+\end{alertblock}
+
+\note{
+- Why do we care about this translation? Because it gives fast evaluation.
+- In our PODS 2027 paper: with four or more variables, the naive bound cannot be improved
+  under a fine-grained hypothesis. With three variables, translating into CoR and multiplying
+  matrices beats the naive n^3.
+- The exponential factor is entirely due to the translation. So: is it necessary?
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Where the exponential comes from}
+
+\[
+  G_k(x, y) \defeq \exists z \bigwedge_{i=1}^{k}
+  \bigl[(P_i(x, y) \land Q_i(x, z)) \lor (Q_i(x, y) \land P_i(x, z))\bigr]
+  \qquad \text{\NOTE{size $O(k)$}}
+\]
+
+\vfill
+\begin{columns}[c]
+\begin{column}{.42\textwidth}
+\centering
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \node[cellvert,minimum size=7pt,label=left:$x$] (x) at (0,0) {};
+  \node[cellvert,minimum size=7pt,label=right:$y$] (y) at (3,0) {};
+  \node[cellvert,minimum size=7pt,label=above:$z$] (z) at (1.2,1.8) {};
+  \draw[thick] (x) -- node[below] {read edge: profile $A$} (y);
+  \draw[thick] (x) -- node[above left] {$A^c$} (z);
+  \node at (1.0,2.5) {witness edge};
+\end{tikzpicture}
+
+\NOTE{profile of an edge $=$ $\set{i : P_i \text{ holds}}$\\
+(on inputs where exactly one of $P_i, Q_i$ holds)}
+\end{column}
+\pause
+\begin{column}{.54\textwidth}
+The witness edge must have the\\
+\emph{complementary} profile of the read edge.
+
+\vspace{.5em}
+Composition accesses the witness edge separately,\\
+so the classical translation \emph{fixes} the read profile:
+\[
+  G_k \;\equiv\; \bigcup_{A \subseteq [k]} \bigl[\, H_A \cap (H_{A^c} \mathbin{;} \one) \,\bigr]
+\]
+\NOTE{$H_A \defeq \bigcap_{i \in A} P_i \cap \bigcap_{i \notin A} Q_i$} \qquad
+\EMPH{$2^k$ compositions}
+\end{column}
+\end{columns}
+
+\note{
+- Think of each edge as having a k-bit profile: the set of i with P_i.
+- G_k asks for a witness z whose edge from x has exactly the complementary profile of the edge (x,y).
+- In FO3 this is a size-O(k) formula, because x, y, z are all in scope and the clauses compare the two edges coordinatewise.
+- In CoR, the witness edge is accessed only through a composition, separately from the read edge.
+  The classical translation therefore enumerates the 2^k possible read profiles.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Is the blow-up necessary?}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{@{}lll@{}}
+  \toprule
+  target & complement & exponential lower bound \\
+  \midrule
+  positive \CoR{} & none & known \ \fcite{nakamura2022} \\
+  $\Sigma_1$\CoR{} & on inputs only & known \ \fcite{nakamura2022} \\
+  \textbf{full \CoR{}} & anywhere & \only<1>{open}\only<2->{\textbf{this work}} \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\vfill
+\NOTE{Full \CoR{} = Boolean matrix programs with arbitrary Boolean operations, transpose, and products.}
+
+\note{
+- Previously, exponential lower bounds were known when complement does not appear above a composition.
+- The question for full CoR, i.e., arbitrary Boolean matrix programs, was open.
+}
+\end{frame}
