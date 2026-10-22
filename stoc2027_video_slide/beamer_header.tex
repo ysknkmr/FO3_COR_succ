@@ -1,0 +1,296 @@
+% ============================================================
+% House style: copied from
+%   ../../PCORTC_derivative/20260920_karuizawa_seminar_slide/beamer_header.tex
+% with the header colours left at the moloch defaults and without LuaTeX-ja.
+% ============================================================
+\usetheme[numbering=fraction,sectionpage=progressbar, subsectionpage=progressbar]{moloch}
+\molochset{block=fill}
+\setbeamercovered{transparent}
+\setbeamertemplate{items}[square]
+\definecolor{chiba}{RGB}{96,39,40}
+\definecolor{chibasub}{RGB}{199,0,43}
+% Header colours (frame title, title separator, progress bar): moloch defaults.
+\setbeamercolor{block title}{
+  % use=palette primary,
+  % parent=palette primary,
+  fg = black,
+  bg = chibasub!20
+}
+\setbeamercolor{block body}{
+bg = block title.bg!20!normal text.bg
+}%
+\setbeamercolor{block title alerted}{
+  fg = black,
+  bg = chibasub!50
+}
+\setbeamercolor{block body alerted}{
+bg = block title alerted.bg!20!normal text.bg
+}
+\setbeamercolor{block title example}{
+  % use=palette primary,
+  % parent=palette primary,
+  fg = example text.fg!20!black,
+  bg = example text.fg!20!chibasub!30
+}
+\setbeamercolor{block body example}{
+  bg = block title example.bg!20!normal text.bg
+}
+\addtobeamertemplate{proof begin}{%
+  \setbeamercolor{block title}{
+    use=palette primary,
+    parent=palette primary,
+    fg = black,
+    bg = chibasub!50
+  }%
+  \setbeamercolor{block body}{
+    bg = block title.bg!20!normal text.bg
+  }%
+}{}%
+\AtBeginEnvironment{theorem}{%
+  \setbeamercolor{block title}{
+    fg = black, bg = chibasub!50
+  }%
+  \setbeamercolor{block body}{
+    bg = block title.bg!20!normal text.bg
+  }%
+}
+\AtBeginEnvironment{definition}{%
+  \setbeamercolor{block title}{
+    fg = black, bg = chibasub!50
+  }%
+  \setbeamercolor{block body}{
+    bg = block title.bg!20!normal text.bg
+  }%
+}
+\AtBeginEnvironment{lemma}{%
+  \setbeamercolor{block title}{
+    fg = black, bg = chibasub!30
+  }%
+  \setbeamercolor{block body}{
+    bg = block title.bg!20!normal text.bg
+  }%
+}
+\AtBeginEnvironment{corollary}{%
+  \setbeamercolor{block title}{
+    fg = black, bg = chibasub!30
+  }%
+  \setbeamercolor{block body}{
+    bg = block title.bg!20!normal text.bg
+  }%
+}
+\AtBeginEnvironment{proposition}{%
+  \setbeamercolor{block title}{
+    fg = black, bg = chibasub!30
+  }%
+  \setbeamercolor{block body}{
+    bg = block title.bg!20!normal text.bg
+  }%
+}
+\AtBeginEnvironment{problem}{%
+  \setbeamercolor{block title}{
+    fg = black, bg = chibasub!30!blue!50
+  }%
+  \setbeamercolor{block body}{
+    bg = block title.bg!20!normal text.bg
+  }%
+}
+
+\usefonttheme[onlymath]{serif}
+
+% begin bibliography icons
+\setbeamertemplate{bibliography item}{%
+  \ifboolexpr{ test {\ifentrytype{book}} or test {\ifentrytype{mvbook}}
+    or test {\ifentrytype{collection}} or test {\ifentrytype{mvcollection}}
+    or test {\ifentrytype{reference}} or test {\ifentrytype{mvreference}} }
+    {\setbeamertemplate{bibliography item}[book]}
+    {\ifentrytype{online}
+       {\setbeamertemplate{bibliography item}[online]}
+       {\setbeamertemplate{bibliography item}[article]}}%
+  \usebeamertemplate{bibliography item}}
+% end
+
+% begin enum icon
+\usepackage{enumitem}
+\newcommand{\labelitemi}{\textbullet}
+\newcommand{\labelitemii}{\textbullet}
+\newcommand{\labelenumi}{\arabic{enumi}.}
+% end
+
+% 吹き出し
+\newcommand{\tikzlabel}[1]{\resizebox{0pt}{!}{\begin{tikzpicture}[remember picture] \node(#1){}; \end{tikzpicture}}}
+\tikzstyle{mycallout}=[rectangle callout, white, fill=red!80, rounded corners]
+\tikzstyle{mycallouty}=[rectangle callout, black, fill=yellow!80, rounded corners]
+\tikzstyle{mycalloutnote}=[rectangle callout, black, draw=black, fill=lightgray!40, rounded corners]
+\tikzstyle{mycalloutnote2}=[rectangle, black, draw=black, fill=lightgray!40, rounded corners]
+%強調
+\usepackage[most]{tcolorbox}
+\tcbset{on line,
+    boxsep=2pt, left=0pt,right=0pt,top=0pt,bottom=0pt,
+    colframe=red!80,colback=red!80,
+    highlight math style={enhanced}
+}
+\newcommand{\superemph}[1]{\tcbox{\textcolor{white}{#1}}}
+%highlight
+\newcommand<>\hlbox[2]{\alt#3{\makebox[\dimexpr\width-2\fboxsep]{\colorbox{#1}{#2}}}{#2}}
+
+\makeatletter
+\setlength{\moloch@progressonsectionpage@linewidth}{2.pt}
+\makeatother
+\AtBeginSection[]
+{
+    \begin{frame}[plain, c, noframenumbering]
+        \frametitle{\faListUl \quad Outline}
+        \usebeamercolor[fg]{section title}
+        % \usebeamerfont{section title}
+        % \insertsectionhead\\[-1ex]
+        \tableofcontents[
+            currentsection,
+            sectionstyle=show/shaded,
+            subsectionstyle=show/shaded/hide,
+            subsubsectionstyle=show/shaded/hide
+        ]
+        \usebeamertemplate*{progress bar in section page}
+    \end{frame}
+}
+\AtBeginSubsection[]
+{
+    % \setbeamercolor{background canvas}{bg=white}
+    \begin{frame}[plain, c, noframenumbering]
+        \frametitle{\faListUl \quad Outline}
+        \tableofcontents[
+            currentsection,
+            sectionstyle=show/shaded,
+            subsectionstyle=show/shaded/hide,
+            subsubsectionstyle=show/shaded/hide
+        ]
+        \usebeamertemplate*{progress bar in section page}
+    \end{frame}
+}
+
+\AtBeginSubsubsection[]
+{
+    % \setbeamercolor{background canvas}{bg=white}
+    \begin{frame}<handout:0>[plain, c, noframenumbering]
+        \frametitle{\faListUl \quad Outline}
+        \tableofcontents[
+            currentsection,
+            sectionstyle=show/shaded,
+            subsectionstyle=show/shaded/hide,
+            subsubsectionstyle=show/shaded/hide
+        ]
+        \usebeamertemplate*{progress bar in section page}
+    \end{frame}
+}
+
+
+% align* 
+\AtBeginDocument{
+    \abovedisplayskip     =0.5\abovedisplayskip
+    \abovedisplayshortskip=0.5\abovedisplayshortskip
+    \belowdisplayskip     =0.5\belowdisplayskip
+    \belowdisplayshortskip=0.5\belowdisplayshortskip}
+
+
+\usepackage{fontspec, fontawesome5}
+
+\newcommand{\myIconCoffeeBreak}{\textcolor{green}{\faIcon{mug-hot}}}
+\newcommand{\myIconCaution}{\textcolor{yellow}{\faIcon{exclamation-triangle}}}
+\newcommand{\myIconTask}{\textcolor{cyan}{\faIcon{list}}}
+\newcommand{\myIconVertical}{\raisebox{-.15ex}{\rotatebox{90}{\faIcon{minus}}}}
+\newcommand{\myIconQuestion}{\textcolor{cyan}{\scalebox{1}[1]{\faIcon{question}}}}
+\newcommand{\myIconQuestionLine}{\textcolor{cyan}{\myIconVertical}}
+
+
+\def\proofname{\translate{Proof}}
+\newtheorem{proposition}{\translate{Proposition}}
+\newtheorem{notation}{\translate{Notation}}
+\newtheorem{task}{\translate{Task}}
+\theoremstyle{example}
+\newtheorem{exampleproblem}{\translate{Example Problem}}
+\theoremstyle{remark}
+\newtheorem{remark}{\translate{Remark}}
+\newtheorem{conjecture}{\translate{Conjecture}}
+
+\uselanguage{english}
+\languagepath{english}
+\deftranslation[to=japanese]{Theorem}{\textcolor{red}{\myIconVertical}定理}
+\deftranslation[to=english]{Theorem}{\textcolor{red}{\myIconVertical}Thm.}
+\deftranslation[to=japanese]{Lemma}{\textcolor{red!50}{\myIconVertical}補題}
+\deftranslation[to=english]{Lemma}{\textcolor{red!50}{\myIconVertical}Lem.}
+\deftranslation[to=japanese]{Proposition}{\textcolor{red!30}{\myIconVertical}命題}
+\deftranslation[to=english]{Proposition}{\textcolor{red!30}{\myIconVertical}Prop.}
+\deftranslation[to=japanese]{Corollary}{\textcolor{red!30}{\myIconVertical}系}
+\deftranslation[to=english]{Corollary}{\textcolor{red!30}{\myIconVertical}Cor.}
+\deftranslation[to=japanese]{Proof}{証明}
+\deftranslation[to=english]{Proof}{Proof}
+
+\deftranslation[to=japanese]{Definition}{\textcolor{black}{\myIconVertical}定義}
+\deftranslation[to=english]{Definition}{\textcolor{black}{\myIconVertical}Def.}
+\deftranslation[to=english]{Fact}{\textcolor{black}{\myIconVertical}Fact}
+\deftranslation[to=japanese]{Definitions}{\textcolor{black}{\myIconVertical}定義}
+\deftranslation[to=japanese]{Notation}{表記}
+\deftranslation[to=japanese]{Example}{例}
+\deftranslation[to=japanese]{Examples}{例}
+\deftranslation[to=japanese]{Problem}{\myIconQuestion 問題}
+\deftranslation[to=japanese]{Note}{\myIconCaution ノート}
+\deftranslation[to=japanese]{Remark}{\myIconCaution 注記}
+% \AtBeginEnvironment{task}{%
+%     \setbeamercolor{block body}{bg=normal text.bg!80!fg}
+%     \setbeamercolor{block title}{bg=red!80,fg=black!2}
+% }
+\deftranslation[to=japanese]{Task}{\myIconTask 課題}
+\deftranslation[to=japanese]{Example Problem}{\myIconQuestion 例題}
+\deftranslation[to=japanese]{Solution}{解}
+\deftranslation[to=japanese]{Fact}{事実}
+
+\usepackage[backend=biber, uniquelist=false, maxcitenames = 2, maxbibnames=8, style=authoryear-comp,sorting = none, firstinits=true, sortcites=false]{biblatex}
+\DeclareNameAlias{sortname}{given-family}
+\DeclareNameAlias{default}{given-family}
+
+% https://tex.stackexchange.com/questions/73136/make-specific-author-bold-using-biblatex
+\usepackage{xpatch}
+\makeatletter
+\newbibmacro*{name:bold}[2]{%
+  \edef\blx@tmp@name{\expandonce#1, \expandonce#2}%
+  \def\do##1{\ifdefstring{\blx@tmp@name}{##1}{\bfseries\listbreak}{}}%
+  \dolistloop{\boldnames}}
+\newcommand*{\boldnames}{}
+\makeatother
+\xpretobibmacro{name:family}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:given-family}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:family-given}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:delim}{\begingroup\normalfont}{}{}
+
+\xapptobibmacro{name:family}{\endgroup}{}{}
+\xapptobibmacro{name:given-family}{\endgroup}{}{}
+\xapptobibmacro{name:family-given}{\endgroup}{}{}
+\xapptobibmacro{name:delim}{\endgroup}{}{}
+
+% \usepackage{makeidx}
+% \makeindex
+% \usepackage[xcolor, hyperref, notion, makeidx]{knowledge}
+% ? -> ../header.tex
+
+
+\newcommand{\xmark}{%
+    \tikz[scale=0.23] {
+        \draw[line width=0.7,line cap=round] (0,0) to [bend left=6] (1,1);
+        \draw[line width=0.7,line cap=round] (0.2,0.95) to [bend right=3] (0.8,0.05);
+    }}
+\newcommand{\cmark}{%
+    \tikz[scale=0.23] {
+        \draw[line width=0.7,line cap=round] (0.25,0) to [bend left=10] (1,1);
+        \draw[line width=0.8,line cap=round] (0,0.35) to [bend right=1] (0.23,0);
+    }}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+        \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
+
+
+\newcommand{\defbox}[1]{\colorbox{blue!30}{#1}}
+\newcommand{\EMPH}[1]{\emph{\textcolor{orange}{#1}}}
+
+\usepackage{makecell}
+\usepackage{colortbl}
+
+\usepackage{annotate-equations}

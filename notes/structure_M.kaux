@@ -1,0 +1,352 @@
+
+\KAuxCommand \KAuxEOF {m}{Does nothing, useless empty argument, and is searched for knowing if the kaux file was written till the end.}
+\KAuxCommand \KAuxUndeclaredScopeTag {m}{Package scope: States that a labelname is used in a knowledge definition.}
+\KAuxCommand \KAuxDeclaredScopeTag {m}{Package scope: States that a labelname has been declared.}
+\KAuxCommand \KAuxNewLinkScopetagInstance {mm}{Package scope: Declares that a label is declared in an instance of a scope.}
+\KAuxCommand \KAuxScopeNewInstance {mmm}{Package scope: Declares a new instance of a scope.}
+\KAuxCommand \KAuxScopeTag {mm}{Package scope: Links a scopetag to an instance of a scope.}
+\KAuxCommand \KAuxKnowledge {mmmm}{Package knowledge: Declares a knowledge. Takes the {namespace}{instance}{knowledge}{directives}.}
+\KAuxCommand \KAuxErrorKnowledgeRecursive {mmmm}{Package 'knowledge: A knowledge has recursive definition. {namespace}{scope}{undefined knowledge}{base knowledge}}
+\KAuxCommand \KAuxErrorKnowledgeUnknown {mmmmm}{Package 'knowledge: A knowledge is not defined. {namespace}{scope/empty}{undefined knowledge}{base knowledge}{command}}
+\KAuxCommand \KAuxErrorLabelUnknown {m}{Package 'knowledge: A label is not defined. {label}}
+\KAuxCommand \KAuxAutoref {mmm}{Package knowledge: Declares an autoref knowledge. Arguments {namespace}{instance}{knowledge}.}
+\KAuxCommand \KAuxAutorefTarget {mmm}{Package knowledge: Declares the use of a target to an autoref knowledge. Arguments {namespace}{instance}{knowledge}.}
+\KAuxCommand \KAuxUseKnowledge {mmm}{Package knowledge: Identifies the use of some knowledge. Arguments {namespace}{instance}{knowledge}.}
+
+
+\KAuxFileAt {structure_M.tex}{12}
+
+\KAuxFileAt {structure_M.tex}{13}
+\KAuxAutoref {default}{base}{nsubstructure}
+
+\KAuxFileAt {structure_M.tex}{14}
+
+\KAuxFileAt {structure_M.tex}{15}
+\KAuxAutoref {default}{base}{ncircuit}
+
+\KAuxFileAt {structure_M.tex}{16}
+
+\KAuxFileAt {structure_M.tex}{17}
+\KAuxAutoref {default}{base}{nsource}
+
+\KAuxFileAt {structure_M.tex}{18}
+
+\KAuxFileAt {structure_M.tex}{19}
+\KAuxAutoref {default}{base}{ncompgate}
+
+\KAuxFileAt {structure_M.tex}{20}
+
+\KAuxFileAt {structure_M.tex}{21}
+\KAuxAutoref {default}{base}{nagree}
+
+\KAuxFileAt {structure_M.tex}{22}
+
+\KAuxFileAt {structure_M.tex}{23}
+\KAuxAutoref {default}{base}{nclause}
+
+\KAuxFileAt {structure_M.tex}{24}
+
+\KAuxFileAt {structure_M.tex}{25}
+\KAuxAutoref {default}{base}{nhub}
+
+\KAuxFileAt {structure_M.tex}{26}
+
+\KAuxFileAt {structure_M.tex}{27}
+\KAuxAutoref {default}{base}{ncell}
+
+\KAuxFileAt {structure_M.tex}{28}
+
+\KAuxFileAt {structure_M.tex}{29}
+\KAuxAutoref {default}{base}{nanchor}
+
+\KAuxFileAt {structure_M.tex}{30}
+
+\KAuxFileAt {structure_M.tex}{31}
+\KAuxAutoref {default}{base}{ncore}
+
+\KAuxFileAt {structure_M.tex}{32}
+
+\KAuxFileAt {structure_M.tex}{33}
+\KAuxAutoref {default}{base}{ncolour}
+
+\KAuxFileAt {structure_M.tex}{34}
+
+\KAuxFileAt {structure_M.tex}{35}
+\KAuxAutoref {default}{base}{nedge}
+
+\KAuxFileAt {structure_M.tex}{36}
+
+\KAuxFileAt {structure_M.tex}{37}
+\KAuxAutoref {default}{base}{nextax}
+
+\KAuxFileAt {structure_M.tex}{38}
+
+\KAuxFileAt {structure_M.tex}{39}
+\KAuxAutoref {default}{base}{ntype}
+
+\KAuxFileAt {structure_M.tex}{40}
+
+\KAuxFileAt {structure_M.tex}{41}
+\KAuxAutoref {default}{base}{ntypeunion}
+
+\KAuxFileAt {structure_M.tex}{42}
+
+\KAuxFileAt {structure_M.tex}{43}
+\KAuxAutoref {default}{base}{ndeletion}
+
+\KAuxFileAt {structure_M.tex}{44}
+
+\KAuxFileAt {structure_M.tex}{45}
+\KAuxAutoref {default}{base}{nwitness}
+
+\KAuxFileAt {structure_M.tex}{46}
+
+\KAuxFileAt {structure_M.tex}{47}
+\KAuxAutoref {default}{base}{nprofile}
+
+\KAuxFileAt {structure_M.tex}{48}
+
+\KAuxFileAt {structure_M.tex}{49}
+\KAuxAutoref {default}{base}{nsensitive}
+
+\KAuxFileAt {structure_M.tex}{50}
+
+\KAuxFileAt {structure_M.tex}{51}
+\KAuxAutoref {default}{base}{noutgate}
+
+\KAuxFileAt {structure_M.tex}{52}
+
+\KAuxFileAt {structure_M.tex}{53}
+\KAuxAutoref {default}{base}{ngate}
+
+\KAuxFileAt {structure_M.tex}{54}
+
+\KAuxFileAt {structure_M.tex}{55}
+\KAuxAutoref {default}{base}{nrestrict}
+
+\KAuxFileAt {structure_M.tex}{56}
+
+\KAuxFileAt {structure_M.tex}{57}
+\KAuxAutoref {default}{base}{ncomp}
+
+\KAuxFileAt {structure_M.tex}{58}
+
+\KAuxFileAt {structure_M.tex}{59}
+\KAuxAutoref {default}{base}{nendpoint}
+
+\KAuxFileAt {structure_M.tex}{60}
+
+\KAuxFileAt {structure_M.tex}{61}
+\KAuxAutoref {default}{base}{nstructure}
+
+\KAuxFileAt {structure_M.tex}{62}
+
+\KAuxFileAt {structure_M.tex}{63}
+\KAuxAutoref {default}{base}{ndomain}
+
+\KAuxFileAt {structure_M.tex}{65}
+\KAuxAutoref {default}{base}{\Col }
+
+\KAuxFileAt {structure_M.tex}{66}
+\KAuxAutoref {default}{base}{\colr }
+
+\KAuxFileAt {structure_M.tex}{67}
+\KAuxAutoref {default}{base}{\cell }
+
+\KAuxFileAt {structure_M.tex}{68}
+\KAuxAutoref {default}{base}{\M }
+
+\KAuxFileAt {structure_M.tex}{69}
+\KAuxAutoref {default}{base}{\res }
+
+\KAuxFileAt {structure_M.tex}{70}
+\KAuxAutoref {default}{base}{\ctype }
+
+\KAuxFileAt {structure_M.tex}{71}
+\KAuxAutoref {default}{base}{\tpa }
+
+\KAuxFileAt {structure_M.tex}{72}
+\KAuxAutoref {default}{base}{\tpl }
+
+\KAuxFileAt {structure_M.tex}{73}
+\KAuxAutoref {default}{base}{\tpr }
+
+\KAuxFileAt {structure_M.tex}{74}
+\KAuxAutoref {default}{base}{\tpeq }
+
+\KAuxFileAt {structure_M.tex}{75}
+\KAuxAutoref {default}{base}{\tp }
+
+\KAuxFileAt {structure_M.tex}{76}
+\KAuxAutoref {default}{base}{\zero }
+
+\KAuxFileAt {structure_M.tex}{77}
+\KAuxAutoref {default}{base}{\one }
+
+\KAuxFileAt {structure_M.tex}{78}
+\KAuxAutoref {default}{base}{\id }
+
+\KAuxFileAt {structure_M.tex}{79}
+\KAuxAutoref {default}{base}{\hub }
+
+\KAuxFileAt {structure_M.tex}{80}
+\KAuxAutoref {default}{base}{\Anch }
+
+\KAuxFileAt {structure_M.tex}{81}
+\KAuxAutoref {default}{base}{\Core }
+
+\KAuxFileAt {structure_M.tex}{82}
+\KAuxAutoref {default}{base}{\Jset }
+
+\KAuxFileAt {structure_M.tex}{83}
+\KAuxAutoref {default}{base}{\Lset }
+
+\KAuxFileAt {structure_M.tex}{84}
+\KAuxAutoref {default}{base}{\Rset }
+
+\KAuxFileAt {structure_M.tex}{85}
+\KAuxAutoref {default}{base}{\Pii }
+
+\KAuxFileAt {structure_M.tex}{86}
+\KAuxAutoref {default}{base}{\HH }
+
+\KAuxFileAt {structure_M.tex}{87}
+\KAuxAutoref {default}{base}{\Gam }
+
+\KAuxFileAt {structure_M.tex}{88}
+\KAuxAutoref {default}{base}{\Sset }
+
+\KAuxFileAt {structure_M.tex}{89}
+\KAuxAutoref {default}{base}{\Psik }
+
+\KAuxFileAt {structure_M.tex}{100}
+\KAuxScopeNewInstance {base}{base}{}
+\KAuxScopeNewInstance {document}{document}{base}
+
+\KAuxFileAt {structure_M.tex}{143}
+\KAuxAutorefTarget {default}{base}{nstructure}
+\KAuxAutorefTarget {default}{base}{ndomain}
+
+\KAuxFileAt {structure_M.tex}{145}
+\KAuxAutorefTarget {default}{base}{\res }
+\KAuxAutorefTarget {default}{base}{nrestrict}
+\KAuxAutorefTarget {default}{base}{nsubstructure}
+
+\KAuxFileAt {structure_M.tex}{149}
+\KAuxAutorefTarget {default}{base}{ncomp}
+
+\KAuxFileAt {structure_M.tex}{153}
+\KAuxAutorefTarget {default}{base}{\zero }
+\KAuxAutorefTarget {default}{base}{\one }
+\KAuxAutorefTarget {default}{base}{\id }
+
+\KAuxFileAt {structure_M.tex}{154}
+\KAuxAutorefTarget {default}{base}{ncircuit}
+\KAuxAutorefTarget {default}{base}{nsource}
+\KAuxAutorefTarget {default}{base}{ngate}
+\KAuxAutorefTarget {default}{base}{ncompgate}
+\KAuxAutorefTarget {default}{base}{noutgate}
+
+\KAuxFileAt {structure_M.tex}{160}
+\KAuxAutorefTarget {default}{base}{nagree}
+
+\KAuxFileAt {structure_M.tex}{167}
+\KAuxAutorefTarget {default}{base}{\Psik }
+
+\KAuxFileAt {structure_M.tex}{169}
+\KAuxAutorefTarget {default}{base}{nclause}
+
+\KAuxFileAt {structure_M.tex}{173}
+\KAuxAutorefTarget {default}{base}{\Col }
+
+\KAuxFileAt {structure_M.tex}{180}
+\KAuxAutorefTarget {default}{base}{nhub}
+\KAuxAutorefTarget {default}{base}{\hub }
+
+\KAuxFileAt {structure_M.tex}{181}
+\KAuxAutorefTarget {default}{base}{ncell}
+\KAuxAutorefTarget {default}{base}{\cell }
+
+\KAuxFileAt {structure_M.tex}{182}
+\KAuxAutorefTarget {default}{base}{nanchor}
+\KAuxAutorefTarget {default}{base}{\Anch }
+
+\KAuxFileAt {structure_M.tex}{185}
+\KAuxAutorefTarget {default}{base}{ncore}
+\KAuxAutorefTarget {default}{base}{\Core }
+
+\KAuxFileAt {structure_M.tex}{189}
+\KAuxAutorefTarget {default}{base}{ncolour}
+\KAuxAutorefTarget {default}{base}{\colr }
+\KAuxAutorefTarget {default}{base}{nedge}
+
+\KAuxFileAt {structure_M.tex}{192}
+\KAuxAutorefTarget {default}{base}{nextax}
+
+\KAuxFileAt {structure_M.tex}{202}
+\KAuxAutorefTarget {default}{base}{ntype}
+
+\KAuxFileAt {structure_M.tex}{204}
+\KAuxAutorefTarget {default}{base}{\tpa }
+\KAuxAutorefTarget {default}{base}{\tpl }
+\KAuxAutorefTarget {default}{base}{\tpr }
+
+\KAuxFileAt {structure_M.tex}{207}
+\KAuxAutorefTarget {default}{base}{\tpeq }
+\KAuxAutorefTarget {default}{base}{\ctype }
+
+\KAuxFileAt {structure_M.tex}{209}
+\KAuxAutorefTarget {default}{base}{\tp }
+
+\KAuxFileAt {structure_M.tex}{214}
+\KAuxAutorefTarget {default}{base}{ntypeunion}
+
+\KAuxFileAt {structure_M.tex}{221}
+\KAuxAutorefTarget {default}{base}{\M }
+
+\KAuxFileAt {structure_M.tex}{223}
+\KAuxAutorefTarget {default}{base}{\Jset }
+
+\KAuxFileAt {structure_M.tex}{224}
+\KAuxAutorefTarget {default}{base}{ndeletion}
+
+\KAuxFileAt {structure_M.tex}{229}
+\KAuxAutorefTarget {default}{base}{nwitness}
+
+\KAuxFileAt {structure_M.tex}{230}
+\KAuxAutorefTarget {default}{base}{nendpoint}
+\KAuxAutorefTarget {default}{base}{nprofile}
+
+\KAuxFileAt {structure_M.tex}{237}
+\KAuxAutorefTarget {default}{base}{\Lset }
+
+\KAuxFileAt {structure_M.tex}{238}
+\KAuxAutorefTarget {default}{base}{\Rset }
+\KAuxDeclaredScopeTag {f:P1}
+\KAuxNewLinkScopetagInstance {f:P1}{document}
+
+\KAuxFileAt {structure_M.tex}{261}
+\KAuxAutorefTarget {default}{base}{\Pii }
+\KAuxDeclaredScopeTag {f:closure}
+\KAuxNewLinkScopetagInstance {f:closure}{document}
+\KAuxDeclaredScopeTag {d:sens}
+\KAuxNewLinkScopetagInstance {d:sens}{document}
+
+\KAuxFileAt {structure_M.tex}{274}
+\KAuxAutorefTarget {default}{base}{nsensitive}
+
+\KAuxFileAt {structure_M.tex}{278}
+\KAuxAutorefTarget {default}{base}{\HH }
+\KAuxDeclaredScopeTag {f:local}
+\KAuxNewLinkScopetagInstance {f:local}{document}
+
+\KAuxFileAt {structure_M.tex}{287}
+\KAuxAutorefTarget {default}{base}{\Gam }
+
+\KAuxFileAt {structure_M.tex}{289}
+\KAuxAutorefTarget {default}{base}{\Sset }
+\KAuxDeclaredScopeTag {f:detect}
+\KAuxNewLinkScopetagInstance {f:detect}{document}
+\KAuxDeclaredScopeTag {f:thm}
+\KAuxNewLinkScopetagInstance {f:thm}{document}
+\KAuxEOF {}

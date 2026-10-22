@@ -1,0 +1,319 @@
+\documentclass[11pt,a4paper]{ltjsarticle}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,array}
+\usepackage{enumitem}
+\usepackage[margin=22mm]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{calc,shapes.geometric,positioning}
+\usepackage[hidelinks]{hyperref}
+\usepackage{mathcommand}
+\usepackage{knowledge}
+\knowledgeconfigure{notion}
+\knowledge{notion}
+ | nsubstructure
+\knowledge{notion}
+ | ncircuit
+\knowledge{notion}
+ | nsource
+\knowledge{notion}
+ | ncompgate
+\knowledge{notion}
+ | nagree
+\knowledge{notion}
+ | nclause
+\knowledge{notion}
+ | nhub
+\knowledge{notion}
+ | ncell
+\knowledge{notion}
+ | nanchor
+\knowledge{notion}
+ | ncore
+\knowledge{notion}
+ | ncolour
+\knowledge{notion}
+ | nedge
+\knowledge{notion}
+ | nextax
+\knowledge{notion}
+ | ntype
+\knowledge{notion}
+ | ntypeunion
+\knowledge{notion}
+ | ndeletion
+\knowledge{notion}
+ | nwitness
+\knowledge{notion}
+ | nprofile
+\knowledge{notion}
+ | nsensitive
+\knowledge{notion}
+ | noutgate
+\knowledge{notion}
+ | ngate
+\knowledge{notion}
+ | nrestrict
+\knowledge{notion}
+ | ncomp
+\knowledge{notion}
+ | nendpoint
+\knowledge{notion}
+ | nstructure
+\knowledge{notion}
+ | ndomain
+
+\knowledgenewmathcommandPIE\Col{\cmdkl{\Lambda}#1#2#3}
+\knowledgenewmathcommandPIE\colr{\cmdkl{\chi}#1#2#3}
+\knowledgenewmathcommandPIE\cell[1]{\cmdkl{C}_{#1}#2#3#4}
+\knowledgenewmathcommandPIE\M{\cmdkl{\mathfrak M}#1#2#3}
+\knowledgenewmathcommandPIE\res{\mathord{\cmdkl{\restriction}}#1#2#3}
+\knowledgenewmathcommandPIE\ctype[1]{\cmdkl{\tau}_{#1}#2#3#4}
+\knowledgenewmathcommandPIE\tpa[2]{\cmdkl{\tau}_{#1,#2}#3#4#5}
+\knowledgenewmathcommandPIE\tpl[1]{\cmdkl{\tau}_{#1,\ast}#2#3#4}
+\knowledgenewmathcommandPIE\tpr[1]{\cmdkl{\tau}_{\ast,#1}#2#3#4}
+\knowledgenewmathcommandPIE\tpeq{\cmdkl{\tau}_{=}#1#2#3}
+\knowledgenewmathcommandPIE\tp{\cmdkl{\operatorname{tp}}#1#2#3}
+\knowledgenewmathcommandPIE\zero{\cmdkl{\mathbf{0}}#1#2#3}
+\knowledgenewmathcommandPIE\one{\cmdkl{\mathbf{1}}#1#2#3}
+\knowledgenewmathcommandPIE\id{\cmdkl{\mathbf{1}'}#1#2#3}
+\knowledgenewmathcommandPIE\hub{\cmdkl{h}#1#2#3}
+\knowledgenewmathcommandPIE\Anch{\cmdkl{X}#1#2#3}
+\knowledgenewmathcommandPIE\Core{\cmdkl{U}#1#2#3}
+\knowledgenewmathcommandPIE\Jset{\cmdkl{J}#1#2#3}
+\knowledgenewmathcommandPIE\Lset{\cmdkl{L}#1#2#3}
+\knowledgenewmathcommandPIE\Rset{\cmdkl{R}#1#2#3}
+\knowledgenewmathcommandPIE\Pii{\cmdkl{\Pi}#1#2#3}
+\knowledgenewmathcommandPIE\HH{\cmdkl{H}#1#2#3}
+\knowledgenewmathcommandPIE\Gam{\cmdkl{\Gamma}#1#2#3}
+\knowledgenewmathcommandPIE\Sset{\cmdkl{S}#1#2#3}
+\knowledgenewmathcommandPIE\Psik{\cmdkl{\Psi}_k#1#2#3}
+\newcommand{\A}{\mathfrak A}
+\newcommand{\Comp}{\mathcal C}
+\newcommand{\FOthree}{\mathrm{FO}^3}
+
+\theoremstyle{definition}
+\newtheorem{definition}{定義}
+\newtheorem{fact}[definition]{事実}
+
+\title{構造 $\M$ のまとめ}
+\date{}
+\begin{document}
+\maketitle
+
+\section{直観（非形式的な説明）}
+この章だけは非形式的に述べる。
+\begin{itemize}[nosep]
+\item \textbf{\kl[ncell]{cell}s}：\kl[nhub]{hub} 以外のどの頂点との\kl[ntype]{型}を見ても、互いに区別できない頂点の集まり。
+\item \textbf{\kl[nhub]{hub}}：\kl[ncell]{cell} ごとに\kl[ntype]{型}が異なる唯一の頂点（\kl[nhub]{hub} との\kl[nedge]{辺}の\kl[ncolour]{色}が \kl[ncell]{cell} の\kl[ncolour]{色}）。
+\item \textbf{\kl[nanchor]{anchor}s}：どの \kl[ncore]{core} 頂点とも同じ\kl[ntype]{型}をもつ頂点。関係記号の値を通じてラベルを与える。
+\end{itemize}
+1つの \kl[ncell]{cell} を\kl[ndeletion]{削除}して\kl[ncomp]{合成}の値が変わるのは、\kl[nhub]{hub} を\kl[nendpoint]{端点}とするペアに限られる。\kl[nhub]{hub} は1点しかないので、1つの\kl[ncomp]{合成}が\kl[nsensitive]{感度をもつ}\kl[ncolour]{色}はたかだか2つになる（定義\ref{d:sens}、事実\ref{f:local}）。
+
+\begin{center}
+\begin{tikzpicture}[font=\small,
+  cellnode/.style={draw,ellipse,minimum width=2.0cm,minimum height=0.9cm,thick},
+  vtx/.style={circle,fill=black,inner sep=1.1pt},
+  anch/.style={draw,rectangle,thick,minimum size=6mm,fill=white,inner sep=1pt}]
+ \node[vtx,label=above:{hub $h$}] (hub) at (0.4,3.0) {};
+ \node[cellnode] (c1) at (-2.8,0) {}; \node[below=2pt] at (c1.south) {$\cell{\lambda_1}$};
+ \node[cellnode] (c2) at ( 0.4,0) {}; \node[below=2pt] at (c2.south) {$\cell{\lambda_2}$};
+ \node[cellnode] (c3) at ( 3.6,0) {}; \node[below=2pt] at (c3.south) {$\cell{\lambda_3}$};
+ \foreach \c in {1,2,3}{
+   \node[vtx] (c\c a) at ($(c\c)+(-0.5,0.1)$) {};
+   \node[vtx] (c\c b) at ($(c\c)+(0.0,-0.2)$) {};
+   \node[vtx] (c\c c) at ($(c\c)+(0.5,0.1)$) {};}
+ \foreach \d in {a,b,c}{\draw[thick] (hub)--(c1\d);}
+ \foreach \d in {a,b,c}{\draw[thick,dashed] (hub)--(c2\d);}
+ \foreach \d in {a,b,c}{\draw[thick,dotted] (hub)--(c3\d);}
+ \node[anch] (x1) at (-6.0,3.0) {$x_{A}$};
+ \node[anch] (x2) at (-6.0,2.0) {$x_{B}$};
+ \draw[very thick] (x1)--(hub);
+ \node[fill=white,inner sep=1pt] at (-2.8,3.25) {$(x_A,h)$};
+ \foreach \t in {c1,c2,c3}{\draw[lightgray] (x2)--(\t.north west);}
+ \draw[gray] (c1c)--(c2a); \draw[gray] (c2c)--(c3a); \draw[gray] (c1b) to[bend right=25] (c3b);
+ \node[gray] at (0.4,-1.3) {cell 間・cell 内の辺：extension axioms を満たすランダムな色};
+ \node[fill=white,inner sep=1pt] at (-1.9,1.2) {$\lambda_1$};
+ \node[fill=white,inner sep=1pt] at (0.4,1.2) {$\lambda_2$};
+ \node[fill=white,inner sep=1pt] at (2.7,1.2) {$\lambda_3$};
+\end{tikzpicture}
+\end{center}
+
+\section{前提（論文 Section 2 の記法）}
+\begin{definition}[構造・関係・部分構造]
+\AP\intro[nstructure]{構造} $\A$ は、有限集合 $D$（\intro[ndomain]{領域}）と、各二項関係記号 $R$ の解釈 $R^{\A}\subseteq D^2$ からなる。
+関係 $P\subseteq D^2$ に対し $P(u,v)\in\{0,1\}$ で $(u,v)\in P$ かどうかを表す。
+$D'\subseteq D$ に対し $P\intro*\res D':=P\cap D'^2$（$P$ の $D'$ への\intro[nrestrict]{制限}）とし、\kl[ndomain]{領域} $D'$ と関係 $R^{\A}\res D'$ からなる\kl[nstructure]{構造} $\A\res D'$ を\AP\intro[nsubstructure]{誘導部分構造}と呼ぶ。
+\end{definition}
+
+\begin{definition}[CoR と関係回路]
+CoR の演算は $\cup$、$\cap$、補集合 $\overline P=D^2\setminus P$、converse $P^\smile=\{(v,u):(u,v)\in P\}$、\intro[ncomp]{合成}
+\[
+ (P;Q)(u,v)=1\iff\text{ある }z\in D\text{ で }P(u,z)=Q(z,v)=1
+\]
+と、定数 $\intro*\zero=\varnothing$、$\intro*\one=D^2$、$\intro*\id=\{(u,u):u\in D\}$ である。
+\AP\intro[ncircuit]{関係回路}は有向非巡回グラフで、\AP\intro[nsource]{source}（関係記号または定数）と、上の演算を行う\intro[ngate]{ゲート}（Boolean \kl[ngate]{ゲート}、converse \kl[ngate]{ゲート}、\AP\intro[ncompgate]{合成ゲート}）からなり、\intro[noutgate]{出力ゲート}を1つもつ。
+\kl[nstructure]{構造} $\A$ 上で topological order に沿って評価した\kl[ngate]{ゲート} $g$ の値を $g^{\A}$ と書く。
+\end{definition}
+
+\begin{definition}[論理式の値と一致]
+自由変数が $x,y$ の中にある $\FOthree$ 論理式 $\varphi$ が\kl[nstructure]{構造} $\A$ 上で定める関係を $\varphi^{\A}\subseteq D^2$ と書く。
+\kl[ncircuit]{回路} $\Comp$ が $\A$ 上で $\varphi$ と\AP\intro[nagree]{一致する}とは、\kl[noutgate]{出力ゲート}の値が $\varphi^{\A}$ に等しいことをいう。
+$\Comp\equiv_{\rm fin}\varphi$ なら、すべての有限\kl[nstructure]{構造}上で\kl[nagree]{一致する}。
+\end{definition}
+
+\begin{definition}[$\Psik$]
+$k\ge2$、$[k]=\{1,\dots,k\}$ とし、関係記号 $R_1,\dots,R_k$ について
+\[
+ \intro*\Psik(x,y):=\exists z\ \bigwedge_{i=1}^k\bigl(R_i(x,z)\lor R_i(z,y)\bigr)
+\]
+とおく。$R_i(x,z)\lor R_i(z,y)$ を\AP\intro[nclause]{節} $i$ と呼ぶ。
+\end{definition}
+
+\section{構造の定義}
+\kl[ncolour]{色}の集合を $\intro*\Col:=\binom{[k]}{\lfloor k/2\rfloor}$（$[k]$ の $\lfloor k/2\rfloor$ 元部分集合の全体）とし、$N:=|\Col|\ge2$、$L:=\lceil12N^2\ln(2N)\rceil$ とする。\kl[ncolour]{色}を $\lambda,\alpha,A,B$ などで表す。
+
+\begin{definition}[頂点]
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+種類 & 記号 & 個数\\\midrule
+\intro[nhub]{hub} & $\intro*\hub$ & $1$\\
+\intro[ncell]{cell}（\kl[ncolour]{色} $\lambda$ ごとに1つ） & $\intro*\cell\lambda$ & 各 $L$ 頂点、合計 $NL$\\
+\intro[nanchor]{anchor} & $\intro*\Anch$ & \kl[ncolour]{色} $A$ ごとに1つ（$x_A$）、合計 $N$\\\bottomrule
+\end{tabular}
+\end{center}
+\AP\intro[ncore]{core} を $\intro*\Core=\{h\}\cup\cell\Col$（$\cell\Col=\bigcup_\lambda\cell\lambda$）、全体集合を $D=\Anch\cup \Core$ とする。
+\end{definition}
+
+\begin{definition}[色]
+\AP\intro[ncolour]{色}はペアを分類する補助的な関数である。相異なる \kl[ncore]{core} 頂点 $u,v$ に対し $\intro*\colr(u,v)=\colr(v,u)\in\Col$ を定め、このペア $\{u,v\}$ を\AP\intro[nedge]{辺}と呼ぶ。
+\begin{itemize}[nosep]
+\item $\colr(\hub,u)=\lambda$（$u\in\cell\lambda$）。
+\item \kl[ncell]{cell} 頂点どうしの\kl[nedge]{辺}は、次の \AP\intro[nextax]{extension axioms}（Lemma 3.1）を満たすように\kl[ncolour]{色}を付ける。
+ \begin{enumerate}[nosep,label=(\alph*)]
+ \item 相異なる $u,v\in\cell\Col$、$\alpha,\beta\in\Col$、$\lambda\in\Col$ に対し、$\colr(u,z)=\alpha$ かつ $\colr(z,v)=\beta$ となる $z\in\cell\lambda\setminus\{u,v\}$ が存在する。
+ \item $u\in\cell\Col$、$\alpha,\lambda\in\Col$ に対し、$\colr(u,z)=\alpha$ となる $z\in\cell\lambda\setminus\{u\}$ が存在する。
+ \end{enumerate}
+ このような彩色は存在する（一様ランダムな彩色と union bound による）。
+\end{itemize}
+\end{definition}
+
+\begin{definition}[型]
+$x,x'\in \Anch$（\kl[nanchor]{anchor}）、$\lambda\in\Col$ に対し、次の集合を\AP\intro[ntype]{型}と呼ぶ。
+\[
+ \intro*\tpa{x}{x'}=\{(x,x')\},\quad \intro*\tpl{x}=\{x\}\times \Core,\quad \intro*\tpr{x}=\Core\times\{x\},
+\]
+\[
+ \intro*\tpeq=\{(u,u):u\in \Core\},\quad \intro*\ctype\lambda=\{(u,v)\in \Core^2:u\ne v,\ \colr(u,v)=\lambda\}.
+\]
+\kl[ntype]{型}は $D^2$ を分割する。$(u,v)$ を含む\kl[ntype]{型}を $\intro*\tp(u,v)$ と書く。
+\end{definition}
+$(\hub,u)$（$u\in\cell\lambda$）と、\kl[ncolour]{色} $\lambda$ の \kl[ncell]{cell} 頂点どうしの\kl[nedge]{辺}は、同じ\kl[ntype]{型} $\ctype\lambda$ に属する。したがって \kl[ncell]{cell} の区別は\kl[ntype]{型}に現れず、\kl[nhub]{hub} との\kl[nedge]{辺}の\kl[ncolour]{色}としてのみ現れる。
+
+\begin{definition}[型の和集合と $P(\tau)$]
+関係 $P\subseteq D^2$ が\AP\intro[ntypeunion]{型の和集合}であるとは、$\tp(u,v)=\tp(u',v')$ ならば $P(u,v)=P(u',v')$ となることをいう。
+このとき\kl[ntype]{型} $\tau$ 上の共通の値を $P(\tau)\in\{0,1\}$ と書く：$P(\tau)=1\iff\tau\subseteq P$。
+\end{definition}
+
+\begin{definition}[関係記号の解釈と削除]
+関係記号 $R_i$ を次の\kl[ntypeunion]{型の和集合}として解釈する（Section 4 の (12)）：
+$R_i(\tpl{x_A})=1\iff i\in A$、$R_i(\ctype B)=1\iff i\notin B$、他の\kl[ntype]{型}では $0$。
+\kl[ndomain]{領域} $D$ とこの解釈からなる\kl[nstructure]{構造}を $\intro*\M$ とする。
+
+\kl[ncolour]{色} $\lambda$ に対し $\intro*\Jset_\lambda:=\Col\setminus\{\lambda\}$、$D_{\Jset_\lambda}:=D\setminus\cell\lambda$ とし、
+$\M\res \Jset_\lambda:=\M\res D_{\Jset_\lambda}$、$P\res \Jset_\lambda:=P\res D_{\Jset_\lambda}$ とする。$\M\res\Jset_\lambda$ は \kl[nsubstructure]{誘導部分構造}であり、これを $\cell\lambda$ の\AP\intro[ndeletion]{削除}という。\kl[nhub]{hub} と \kl[nanchor]{anchor} はすべての $D_{\Jset_\lambda}$ に属する。
+\end{definition}
+
+\section{witness, profile, 1つの cell から見た型}
+\begin{definition}[witness と profile]
+関係 $P,Q$ とペア $(u,v)$ に対し、$P(u,z)=Q(z,v)=1$ となる $z\in D$ を $P;Q$ の $(u,v)$ での \AP\intro[nwitness]{witness} という（$z\in\{u,v\}$ でもよい）。
+$u,v$ をペア $(u,v)$ の\intro[nendpoint]{端点}と呼ぶ。$z$ の $(u,v)$ での \AP\intro[nprofile]{profile} を $(\tp(u,z),\tp(z,v))$ とする。
+\end{definition}
+$P,Q$ が\kl[ntypeunion]{型の和集合}なら、$z$ が \kl[nwitness]{witness} であることは $P(\tp(u,z))=Q(\tp(z,v))=1$ と同値であり、\kl[nprofile]{profile} だけで決まる。
+
+\begin{definition}[1つの cell から見た型]
+頂点 $w$ と\kl[ncolour]{色} $\lambda$ に対し
+\[
+ \intro*\Lset_\lambda(w):=\{\tp(w,z):z\in\cell\lambda\setminus\{w\}\},\qquad
+ \intro*\Rset_\lambda(w):=\{\tp(z,w):z\in\cell\lambda\setminus\{w\}\}
+\]
+とおく。定義と \kl[nextax]{extension axiom} (b) より
+\[
+ \Lset_\lambda(w)=
+ \begin{cases}
+  \{\tpl{x}\}&(w=x\in \Anch),\\
+  \{\ctype\lambda\}&(w=\hub),\\
+  \{\ctype\alpha:\alpha\in\Col\}&(w\in\cell\Col),
+ \end{cases}
+ \qquad
+ \Rset_\lambda(w)=
+ \begin{cases}
+  \{\tpr{x}\}&(w=x\in \Anch),\\
+  \{\ctype\lambda\}&(w=\hub),\\
+  \{\ctype\alpha:\alpha\in\Col\}&(w\in\cell\Col).
+ \end{cases}
+\]
+$w\ne \hub$ なら $\Lset_\lambda(w),\Rset_\lambda(w)$ は $\lambda$ によらないので、それぞれ $\Lset(w),\Rset(w)$ と書く。
+\end{definition}
+
+\section{Proof of Theorem 1.2}
+\begin{fact}[Profiles in a cell; Lemma 3.4]\label{f:P1}
+$u,v\in D$、$\lambda\in\Col$ に対し、$z\in\cell\lambda\setminus\{u,v\}$ の $(u,v)$ での \kl[nprofile]{profile} 全体を $\intro*\Pii_\lambda(u,v)$ とおく。このとき
+$\Pii_\lambda(u,v)=\Lset_\lambda(u)\times \Rset_\lambda(v)$。ただし $u=v\in\cell\Col$ のときは $\{(\ctype\alpha,\ctype\alpha):\alpha\in\Col\}$。
+特に、これが $\lambda$ に依存するのは $\hub\in\{u,v\}$ のときだけである。
+\end{fact}
+（$\subseteq$ は定義から、$\supseteq$ は \kl[nextax]{extension axioms} (a)(b) から従う。）
+
+\begin{fact}[Closure; Lemma 3.2, Cor.~3.3]\label{f:closure}
+$(u,v)$ での \kl[nprofile]{profile} 全体は $\tp(u,v)$ だけで決まる。したがって\kl[ntypeunion]{型の和集合} $P,Q$ に対し $P;Q$ も\kl[ntypeunion]{型の和集合}であり、
+$\cup$、$\cap$、補集合、converse についても同様。定数 $\zero=\varnothing$、$\one=D^2$、$\id=\tpeq\cup\bigcup_x\tpa{x}{x}$ も\kl[ntypeunion]{型の和集合}。
+関係記号は\kl[ntypeunion]{型の和集合}で解釈するので、\kl[ncircuit]{回路}の\kl[nstructure]{構造}についての帰納法により、$\M$ 上のすべての\kl[ngate]{ゲート}の値は\kl[ntypeunion]{型の和集合}である。
+\end{fact}
+
+\begin{definition}[1色削除に対する感度]\label{d:sens}
+\kl[ntypeunion]{型の和集合} $P,Q$ と\kl[ncolour]{色} $\lambda$ について、\kl[ncomp]{合成} $P;Q$ が $\lambda$ に\AP\intro[nsensitive]{感度をもつ}とは
+\[
+ (P;Q)\res \Jset_\lambda\ \ne\ (P\res \Jset_\lambda);(Q\res \Jset_\lambda)
+\]
+（右辺の\kl[ncomp]{合成}は $D_{\Jset_\lambda}$ 上で計算）となることをいう。そのような $\lambda$ の集合を $\intro*\HH(P,Q)$ と書く。
+左辺は右辺を常に含むので、$\lambda\in \HH(P,Q)$ は「$D_{\Jset_\lambda}$ 内のあるペアの \kl[nwitness]{witness} がすべて $\cell\lambda$ に属する」ことと同値である。
+\end{definition}
+
+\begin{fact}[Local difference; Lemma 3.5]\label{f:local}
+\kl[ntypeunion]{型の和集合} $P,Q$ に対し $|\HH(P,Q)|\le2$。
+\end{fact}
+
+\paragraph{事実\ref{f:local}の証明.}
+$\intro*\Gam_P:=\{\alpha\in\Col:P(\ctype\alpha)=1\}$、$\Gam_Q$ も同様とする。ペア $(u,v)$ に対し
+\[
+ \intro*\Sset(u,v):=\{\alpha\in\Col:\cell\alpha\setminus\{u,v\}\text{ が }P;Q\text{ の }(u,v)\text{ での \kl[nwitness]{witness} を含む}\}
+\]
+とおく。$P,Q$ は\kl[ntypeunion]{型の和集合}なので、$\alpha\in \Sset(u,v)$ は「$P(\tau_1)=Q(\tau_2)=1$ となる $(\tau_1,\tau_2)\in\Pii_\alpha(u,v)$ が存在する」と同値である。事実\ref{f:P1}を各場合に当てはめると：
+\begin{itemize}[nosep]
+\item $\hub\notin\{u,v\}$：$\Pii_\alpha(u,v)$ が $\alpha$ によらないので、$\Sset(u,v)=\varnothing$ または $\Col$。
+\item $u=\hub\ne v$：$\Pii_\alpha(u,v)=\{\ctype\alpha\}\times \Rset(v)$。よって
+ $\alpha\in \Sset(u,v)\iff \alpha\in\Gam_P$ かつ「$Q(\tau_2)=1$ となる $\tau_2\in \Rset(v)$ が存在する」。後半は $\alpha$ によらないので、$\Sset(u,v)=\Gam_P$ または $\varnothing$。
+\item $v=\hub\ne u$：$\Pii_\alpha(u,v)=\Lset(u)\times\{\ctype\alpha\}$。同様に $\Sset(u,v)=\Gam_Q$ または $\varnothing$。
+\item $u=v=\hub$：$\Pii_\alpha(u,v)=\{(\ctype\alpha,\ctype\alpha)\}$。よって $\Sset(u,v)=\Gam_P\cap\Gam_Q$。
+\end{itemize}
+$\lambda\in \HH(P,Q)$ なら、あるペア $(u,v)\in D_{\Jset_\lambda}^2$ の \kl[nwitness]{witness} がすべて $\cell\lambda$ に属する。\kl[nhub]{hub}・\kl[nanchor]{anchor}・\kl[nendpoint]{端点}は $D_{\Jset_\lambda}$ に属するので \kl[nwitness]{witness} ではなく、したがって $\Sset(u,v)=\{\lambda\}$。
+$N\ge2$ より $\Col$ は1点集合でないから、$\{\lambda\}$ は $\Gam_P$、$\Gam_Q$、$\Gam_P\cap\Gam_Q$ のいずれかに等しい。
+$\Gam_P\cap\Gam_Q=\{\lambda\}$ なら、$\Gam_P,\Gam_Q$ のうち1点集合であるものは $\{\lambda\}$ に等しい。よってこの3集合に現れる1点集合はたかだか2種類であり、$|\HH(P,Q)|\le2$。\qed
+
+
+\begin{fact}[$\Psik$ の検出; Section 4 の (13)]\label{f:detect}
+$\Psik$ の $(x_A,\hub)$ での \kl[nwitness]{witness}（全\kl[nclause]{節} $R_i(x_A,z)\lor R_i(z,\hub)$ を満たす $z\in D$）は、ちょうど $\cell A$ の頂点である。
+したがって $\Psik^{\M}(x_A,\hub)=1$、$\Psik^{\M\res \Jset_A}(x_A,\hub)=0$。
+\end{fact}
+（$z\in\cell B$ の \kl[nprofile]{profile} は $(\tpl{x_A},\ctype B)$ で、\kl[nclause]{節} $i$ は $i\in A$ または $i\notin B$ のとき成り立つ。全\kl[nclause]{節}が成り立つのは $B\subseteq A$、すなわち $|A|=|B|$ より $B=A$ のとき。$z=\hub$ と $z\in \Anch$ は、$|A|,|B|<k$ より \kl[nwitness]{witness} にならない。）
+
+\begin{fact}[Theorem 1.2; Theorem 3.6 と Section 4]\label{f:thm}
+$\Comp\equiv_{\rm fin}\Psik$ となる\kl[ncircuit]{関係回路} $\Comp$ は、少なくとも $\lceil N/2\rceil$ 個の\kl[ncompgate]{合成ゲート}をもつ（$N=\binom{k}{\lfloor k/2\rfloor}$）。
+\end{fact}
+（$\M$ と各 $\M\res \Jset_\lambda$ は有限なので、$\Comp$ はそれらの上で $\Psik$ と\kl[nagree]{一致する}。
+各 $\lambda\in\Col$ に対し、事実\ref{f:detect}より\kl[noutgate]{出力ゲート}の $\M\res \Jset_\lambda$ での値は $\M$ での値の\kl[nrestrict]{制限}と $(x_\lambda,\hub)$ で異なる。
+そのような最初の\kl[ngate]{ゲート} $g_\lambda$ を取る。\kl[nsource]{source}、Boolean \kl[ngate]{ゲート}、converse \kl[ngate]{ゲート}は\kl[nrestrict]{制限}と可換なので、$g_\lambda$ は\kl[ncompgate]{合成ゲート}である。
+その入力の $\M$ での値を $P,Q$ とすると、事実\ref{f:closure}より $P,Q$ は\kl[ntypeunion]{型の和集合}で、$\lambda\in \HH(P,Q)$。
+$P,Q$ は $\lambda$ によらないので、事実\ref{f:local}より各\kl[ncompgate]{合成ゲート}に対応する $\lambda$ はたかだか2つ。）
+
+\end{document}

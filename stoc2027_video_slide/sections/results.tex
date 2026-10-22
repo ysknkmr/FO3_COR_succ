@@ -1,37 +1,113 @@
-% Timing: 7:00--9:00
-\section{Main result}
+% Timing: 6:00--11:00   (paper: Sec. 1.1)
+\section{Main results}
 
 % ============================================================
-\begin{frame}{Main result}
+\begin{frame}{The formula $G_k$}
 
-\begin{theorem}
-  For every $k \ge 1$, every relational circuit $C$ with $C \eqfin G_k$ has
-  \[
-    \#\text{composition gates of } C \;\ge\; 2^{k-1}.
-  \]
-\end{theorem}
+\[
+  G_k(x, y) \defeq \exists z \bigwedge_{i=1}^{k}
+  \bigl[(P_i(x, y) \land Q_i(x, z)) \lor (Q_i(x, y) \land P_i(x, z))\bigr]
+  \qquad \text{\NOTE{one quantifier, size $8k$}}
+\]
 
 \vfill
-\begin{itemize}
-  \item circuit: shared subterms are counted once
-  \item $\cup, \cap$, complement, converse, $\zero, \one, \id$: unrestricted and not counted
-  \item $\eqfin$: equivalence on all \emph{finite} structures
-\end{itemize}
+\begin{columns}[c]
+\begin{column}{.40\textwidth}
+\centering
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \node[cellvert,minimum size=7pt,label=left:$x^*$] (x) at (0,0) {};
+  \node[cellvert,minimum size=7pt,label=right:$y^*$] (y) at (3,0) {};
+  \node[cellvert,minimum size=7pt,label=above:$z^*$] (z) at (1.2,1.8) {};
+  \draw[thick] (x) -- node[below] {read edge} (y);
+  \draw[thick] (x) -- node[above left] {witness edge} (z);
+\end{tikzpicture}
+\end{column}
+\begin{column}{.56\textwidth}
+At every \emph{coordinate} $i$, one of the two edges \emph{meets} $P_i$
+and the other meets $Q_i$, in either order.
+\NOTE{Then the read edge \emph{accepts} the witness edge.}
+\end{column}
+\end{columns}
 
 \vfill
 \pause
-\begin{block}{Consequences}
-  \begin{itemize}
-    \item $2^k$ compositions suffice: the classical $2^{O(|\varphi|)}$ translation is optimal.
-    \item Evaluating \FOthree{} through \CoR{} needs $2^{\Omega(|\varphi|)}$ Boolean matrix products.
-  \end{itemize}
-\end{block}
-\NOTE{This bounds whole-matrix operations, not the running time of arbitrary algorithms
-($G_k$ is directly evaluable in $O(k n^3)$).}
+\emph{DNF}: fix the order at every coordinate. For $A \subseteq [k]$,
+$H_A \defeq \bigcap_{i \in A} P_i \cap \bigcap_{i \notin A} Q_i$; a read edge in $H_A$
+accepts every witness edge in $H_{A^c}$:
+\[
+  G_k \;\equiv\; \bigcup_{A \subseteq [k]} \bigl[\, H_A \cap (H_{A^c} \mathbin{;} \one) \,\bigr]
+  \qquad \text{\EMPH{$2^k$ compositions}}
+\]
+\NOTE{row projection: $X \mathbin{;} \one$ holds at $(x, y)$ iff $x$ has an outgoing edge in $X$}
 
 \note{
-- Even if every operation except composition is free, and intermediate results can be shared,
-  2^{k-1} compositions are needed; 2^k suffice.
-- So the single exponential of the classical translation is necessary.
+- Think of P_i and Q_i as two requirements at coordinate i.
+- At a read edge (x*,y*), G_k asks for a witness edge (x*,z*) such that, at every coordinate,
+  one edge meets P_i and the other meets Q_i, in either order.
+- The FO3 formula keeps both edges in scope and leaves the order at each coordinate open.
+- Fixing the order gives the DNF: one row projection for each of the 2^k sets A.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Main theorem}
+
+A \CoR{} \emph{term} $T$ is a syntax tree; \ $\cost{T}$: its compositions.\\
+A \emph{relational circuit} $C$ (DAG) shares subterms; \ $\gcost{C}$: its distinct composition gates.\\
+\NOTE{$\eqfin$: equivalence on all finite structures over the input signature.}
+
+\vfill
+\begin{theorem}[Exponential lower bounds for full \CoR]
+  For every $k \ge 1$, every relational circuit $C \eqfin G_k$ has $\gcost{C} \ge 2^{k-1}$,
+  and every \CoR{} term $T \eqfin G_k$ has $\cost{T} \ge 2^{k-1}$.
+\end{theorem}
+
+\vfill
+\pause
+\begin{itemize}
+  \item Since $G_k$ has $8k$ nodes: $2^{\Omega(k)}$ compositions from a source of size $O(k)$,
+    \emph{even when all other operations are free and arbitrarily numerous}.
+  \item Single exponential: sufficient and necessary for \FOthree-to-\CoR{} compilation,
+    even with sharing.
+  \item Counts \emph{whole-matrix products} rather than scalar operations
+    \NOTE{(on our structures, $G_k$ is evaluable in linear time)}.
+\end{itemize}
+
+\note{
+- Theorem 1.1: 2^{k-1} compositions are needed, for terms and even for circuits with sharing.
+- Complement, converse, union, intersection, and constants are free and unbounded.
+- The DNF uses 2^k, so it is optimal up to a factor of two.
+- The theorem counts whole-matrix products, not running time.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Term size, and where the blowup begins}
+
+\begin{theorem}[Term size]
+  Every \CoR{} term $T \eqfin G_k$ has at least $2k 2^k - 1$ nodes,
+  and $G_k$ is equivalent to a \CoR{} term with $(2k + 6) 2^k - 5$ nodes.
+\end{theorem}
+\NOTE{A finer count: singling out one of the $2^k$ sets $A$ examines all $k$ coordinates.}
+
+\vfill
+\pause
+$c_n(G_k)$: least $\gcost{C}$ of a circuit computing $G_k$ on all $n$-element structures;
+\ $n_0(N) \defeq \lceil 12 N^2 \ln(2N) \rceil + 3$.
+\begin{proposition}[Domain size]
+  \[
+    \max\set{2^{j-1} : 1 \le j \le k,\ n \ge n_0(2^j)} \;\le\; c_n(G_k) \;\le\; \min\set{2^k,\ 4kn}.
+  \]
+  In particular, $c_n(G_k) \ge 2^{k-1}$ for $n \ge n_0(2^k) = O(k 4^k)$,
+  and $c_n(G_k) < 2^{k-1}$ for $n < 2^k / (8k)$.
+\end{proposition}
+\NOTE{The blowup begins at domain size $2^{\Theta(k)}$.
+All these bounds follow from one lemma about a single composition on a single finite structure.}
+
+\note{
+- For terms, a finer count determines the optimal size up to a constant factor: Theta(k 2^k).
+- The next proposition locates the domain sizes on which the bound already applies.
+- Above n_0(2^k) = O(k 4^k) the full bound holds; below 2^k/(8k) fewer compositions suffice.
+- Everything comes from one lemma about a single composition.
 }
 \end{frame}

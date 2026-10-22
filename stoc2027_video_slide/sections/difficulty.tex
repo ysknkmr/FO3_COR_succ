@@ -1,87 +1,89 @@
-% Timing: 9:00--12:00
-\section{Why it is hard}
+% Timing: 11:00--14:00   (paper: Sec. 1.2)
+\section{Natural approaches that fail}
 
 % ============================================================
-\begin{frame}{The known method needs monotonicity}
+\begin{frame}{$\Sigma_1$\CoR{}: organized as a fooling-set argument}
 
-\begin{center}
-\begin{tikzpicture}[every node/.style={font=\small}]
-  \node[draw=black!40,rounded corners,minimum width=3.2cm,minimum height=2.2cm] (M) at (0,0) {};
-  \node[above] at (M.north) {$\M$};
-  \node[cellvert,minimum size=6pt,label=left:$u$] (u) at (-1,-.4) {};
-  \node[cellvert,minimum size=6pt,label=above:$w$] (w) at (0,.5) {};
-  \node[cellvert,minimum size=6pt,label=right:$v$] (v) at (1,-.4) {};
-  \draw[-{Stealth},thick] (u) -- (w);
-  \draw[-{Stealth},thick] (w) -- (v);
+Before this work, exponential lower bounds were known only for $\Sigma_1$\CoR, even with shared subterms
+\NOTE{(positive \CoR{} \cite{nakamura2020}; $\Sigma_1$\CoR{} \cite[Theorems 6.1 and 6.12]{nakamura2022})}.\\
+\NOTE{$\Sigma_1$\CoR: complement may be applied only to input relations and $\id$, and so never stands above a composition.}
 
-  \node at (2.5,0) {\Large $\sqsubseteq$};
-
-  \node[draw=black!40,rounded corners,minimum width=4.2cm,minimum height=2.2cm] (N) at (5.4,0) {};
-  \node[above] at (N.north) {$\M'$};
-  \node[cellvert,minimum size=6pt,label=left:$u$] (u2) at (4.0,-.4) {};
-  \node[cellvert,minimum size=6pt,label=above:$w$] (w2) at (5.0,.5) {};
-  \node[cellvert,minimum size=6pt,label=right:$v$] (v2) at (6.0,-.4) {};
-  \node[cellvert,minimum size=6pt] (e) at (4.6,-.75) {};
-  \node[cellvert,minimum size=6pt] (e2) at (6.9,.5) {};
-  \draw[-{Stealth},thick] (u2) -- (w2);
-  \draw[-{Stealth},thick] (w2) -- (v2);
-  \draw[-{Stealth},thick] (u2) -- node[left=2pt,font=\scriptsize] {$R$} (e); \draw[thick,black!40] (e2) -- (v2);
-\end{tikzpicture}
-\end{center}
-
-\begin{fact}[for $\Sigma_1$\CoR]
-  If $\M$ is an induced substructure of $\M'$, then $T^{\M} \subseteq T^{\M'}$.
-\end{fact}
-\NOTE{A witness in $\M$ remains a witness in $\M'$.
-\fcite{nakamura2022} combines this with rectangularity of $;$ (a fooling-set argument).}
-
-\vfill
-\pause
-\begin{alertblock}{Complement reverses inclusion}
-  $(u, u) \in \overline{R \mathbin{;} \one}$ \ iff \ $u$ has no outgoing $R$-edge:
-  \ true in $\M$, \ false in $\M'$.
-\end{alertblock}
-
-\note{
-- Previous lower bounds compare a small structure with a larger structure that contains it.
-- Without complement above composition, everything true in the small structure stays true in the larger one.
-- With complement this fails: "u has no outgoing R-edge" is destroyed by adding an edge.
-- On the instances of [Nakamura 2022], one term with complement separates all of them at once.
-- Any argument that transfers tests into a larger structure breaks down for full CoR.
-}
-\end{frame}
-
-% ============================================================
-\begin{frame}{Symmetric structures are infinite}
-
+\vspace{.3em}
 \begin{columns}[T]
-\begin{column}{.48\textwidth}
-\begin{block}{Infinite homogeneous colored graph}
-  Every \CoR-definable relation is invariant under automorphisms,
-  hence a union of color classes (and possibly $\id$).\\[.2em]
-  Complement is harmless.
+\begin{column}{.47\textwidth}
+\begin{block}{Communication complexity}
+  $F \subseteq f^{-1}(1)$ is a \emph{fooling set} if any two
+  $(a, b), (a', b') \in F$ have a crossed input with value $0$.\\
+  Covering $F$ by 1-rectangles takes $\ge |F|$ of them.
 \end{block}
 \end{column}
-\begin{column}{.48\textwidth}
+\begin{column}{.50\textwidth}
 \pause
-\begin{alertblock}{Correctness on finite structures}
-  An infinite counter-model does not exclude a short term that is correct
-  on all \emph{finite} structures.\\[.2em]
-  Finite homogeneous structures are rare.
-\end{alertblock}
+\begin{block}{Nakamura's instances}
+  $t = \Theta(2^k)$ structures $\mathcal S_i$ on $u_i, w_i, v_i$; \ one $\mathcal N$ with $u^*, v^*$:
+  \begin{itemize}
+    \item $\sem{\varphi}{\mathcal S_i}(u_i, v_i) = 1$, \ $\sem{\varphi}{\mathcal N}(u^*, v^*) = 0$;
+    \item for $i < j$, some $c$ with $(\mathcal S_i; u_i, w_i) \hookrightarrow (\mathcal N; u^*, c)$
+      and $(\mathcal S_j; w_j, v_j) \hookrightarrow (\mathcal N; c, v^*)$.
+  \end{itemize}
+\end{block}
 \end{column}
 \end{columns}
 
 \vfill
 \pause
-\begin{center}
-  We need a comparison that is preserved by complement,\\
-  carried out on a \emph{finite} structure.
-\end{center}
+\begin{itemize}
+  \item $\Sigma_1$\CoR{} is \emph{preserved under extensions}: \
+    $\iota(\sem{T}{\mathcal S}) \subseteq \sem{T}{\mathcal S'}$ for every embedding $\iota$. \hfill $(\diamond)$
+  \item A lowest subterm separating $\mathcal S_i$ from $\mathcal N$ is a composition $X \mathbin{;} Y$
+    with witness $w_i$: a 1-rectangle.
+  \item If $\mathcal S_i, \mathcal S_j$ share it, $c$ is a witness for $(u^*, v^*)$ in $\mathcal N$ by $(\diamond)$.
+    \ $\Rightarrow$ \ $t$ compositions.
+\end{itemize}
 
 \note{
-- In a homogeneous (Fraisse limit) colored graph, automorphisms map any edge to any other edge of the same color,
-  so every intermediate relation is a union of colors, even with complement.
-- But a lower bound for finite structures needs finite counter-models, and finite homogeneous structures are rare.
+- Before this work, exponential lower bounds were known only for Sigma_1 CoR.
+- Organized as a fooling-set argument, the proof is simple.
+- Nakamura's instances: many small structures that satisfy the query, and one large structure that does not,
+  into which crossed pairs embed.
+- Sigma_1 CoR is preserved under extensions, so each separating composition acts as a 1-rectangle,
+  and no two instances share one.
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{With complement, both ingredients fail}
+
+\begin{enumerate}
+  \item \emph{Complement reverses $(\diamond)$}:
+    \ $\overline{R \mathbin{;} \one}$ holds at $(u, v)$ when $u$ has no $R$-successor,
+    but fails at $(\iota(u), \iota(v))$ once $\iota(u)$ gains one.
+  \vfill
+  \pause
+  \item \emph{A term with two compositions separates every $\mathcal S_i$ from $\mathcal N$}:
+    \[
+      \overline{(E \cap (E \mathbin{;} \overline{\id}))} \mathbin{;} \one
+      \qquad \text{\NOTE{($E$: the adjacency relation)}}
+    \]
+\end{enumerate}
+
+\vfill
+\pause
+\NOTE{Other lower-bound methods do not apply directly either:
+formula-size and EF/pebble games ($G_k$ needs one quantifier and three variables; its DNF nests no compositions);
+rank and discrepancy (free Boolean operations defeat measures of a single matrix).}
+
+\vfill
+\begin{alertblock}{}
+  \centering
+  Unlike the inclusion $(\diamond)$, an \emph{equality} survives complement.
+\end{alertblock}
+
+\note{
+- Allowing complement above compositions breaks this argument completely.
+- First, complement reverses the inclusion (diamond).
+- Second, a term with two compositions separates every S_i from N.
+- Other methods do not apply directly either.
+- Unlike the inclusion (diamond), an equality survives complement.
 }
 \end{frame}

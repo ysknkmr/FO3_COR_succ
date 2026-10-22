@@ -1,0 +1,44 @@
+% Timing: 25:00--27:00   (paper: Sec. 1.4)
+\section{Further results}
+
+% ============================================================
+\begin{frame}{One argument, many targets}
+
+\NOTE{Only two ingredients change: how many folds one operation can notice, and the tests of the query.}
+
+\vspace{.2em}
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}lll@{}}
+  \toprule
+  target or setting & folds noticed per gate & lower bound for $G_k$ \\
+  \midrule
+  relational circuits & composition 2, projection 1 & $\gcost{C} \ge 2^{k-1}$ \\
+  without converse & composition 1 \NOTE{(directed input)} & $\gcost{C} \ge 2^k$, exact \\
+  \CoR{} equations for $G_k^{\forall}$ & as for circuits & $2^{k-1} - 1$ compositions \\
+  \FOtwo{} formulas, sentences & quantifier 1 & $2^k$ quantifiers \\
+  matrix languages, breadth $\beta$ & matrix--matrix $3\beta$, matrix--vector $\beta$ & $2^k / (3\beta)$ such products \\
+  with closure $X^*$ & closure 1 & $2\gcost{C} + g_*(C) \ge 2^k$ \\
+  randomized, error $\varepsilon$ & as for circuits & factor $1 - 2\varepsilon$ \\
+  random inputs & as for circuits & success $\le \frac12 + g/2^k + o(1)$, exact \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\vfill
+\begin{itemize}
+  \item \emph{Three versus two variables}: $G_k^{\forall} \defeq \forall x \forall y\, (x = y \lor G_k(x, y))$
+    is \FOtwo-definable, but needs $2^k$ quantifiers in \FOtwo.
+  \item \emph{Arity elimination in matrix query languages}, asked by \fcite{brijder2019}:
+    exponential over every commutative idempotent semiring of finite join breadth.
+\end{itemize}
+
+\note{
+- All these bounds follow the same scheme; only the number of folds a single operation can notice changes.
+- In FO2, a quantifier is a projection, which notices at most one fold: three variables are exponentially more succinct than two.
+- For matrix languages over semirings, a join over witnesses reduces to at most beta summands,
+  which answers a question of Brijder, Gyssens, and Van den Bussche.
+- Closure, fixed sizes, randomization, and random inputs are handled by the same tests.
+}
+\end{frame}

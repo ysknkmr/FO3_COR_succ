@@ -1,30 +1,33 @@
-% Timing: 23:00--25:00
+% Timing: 27:00--29:00   (paper: Sec. 7)
 \section{Conclusion}
 
 % ============================================================
 \begin{frame}{Summary}
 
 \begin{center}
-\renewcommand{\arraystretch}{1.6}
-\begin{tabular}{@{}l@{\quad}p{.78\textwidth}@{}}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}l@{\quad}p{.74\textwidth}@{}}
   \KEY{Question} & \CoR{} evaluates \FOthree{} by matrix multiplication;
-                   is the $2^{O(|\varphi|)}$ translation necessary? \\
-  \KEY{Answer}   & Yes: $G_k$ (size $O(k)$) needs $\ge 2^{k-1}$ compositions,
+                   is Tarski's $2^{O(|\varphi|)}$ translation necessary? \\
+  \KEY{Answer}   & Yes: $G_k$ (size $8k$) needs $\ge 2^{k-1}$ compositions,
                    even for circuits with complement and converse. \\
-  \KEY{Difficulty} & Complement reverses inclusion; symmetric counter-models are infinite. \\
-  \KEY{Method}   & A finite colored graph with two witnesses per color pair;
-                   $2^k$ recolorings at one vertex; compare gate values by equality;
-                   each composition breaks the equality for $\le 2$ recolorings.
+  \KEY{Natural approaches} & fail: complement reverses the inclusion $(\diamond)$ of the fooling-set argument for $\Sigma_1$\CoR. \\
+  \KEY{Our technique} & Exact predictions on one reference structure: $2^k$ folds at the hub;
+                   an equality survives complement; each composition notices $\le 2$ folds.
 \end{tabular}
 \end{center}
 
 \vfill
-\NOTE{Further results in the paper: size-specific and randomized bounds; \FOthree{} vs.\ $\mathrm{FO}^2$ sentences;
-matrix query languages over semirings.\\
-Open: a superpolynomial gap over a fixed signature.}
+\begin{block}{Open questions}
+  \begin{itemize}
+    \item A superpolynomial gap over a \emph{fixed} signature, even one binary relation symbol?
+    \item Domain size: close $\Omega(\sqrt{n / \log n}) \le c_n(G_k) \le 4kn$ for $n < n_0(2^k)$.
+    \item The exact composition count for $G_k$: between $2^{k-1}$ and $2^k$.
+  \end{itemize}
+\end{block}
 
 \note{
-- Recap.
-- The same counting gives further results listed here; see the paper.
+- Recap: the question, the answer, why natural approaches fail, and our technique.
+- Open questions: a fixed signature, small domains, and the exact constant.
 }
 \end{frame}
