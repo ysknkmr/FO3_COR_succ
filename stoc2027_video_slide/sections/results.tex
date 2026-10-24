@@ -1,121 +1,43 @@
-% Timing: 5:00--9:00   (paper: Sec. 1.1)
-\section{Main results}
+% Timing: 5:00--8:00   (paper: Sec. 1.1)
+% One slide: the hard formula G_k, its DNF, and where the lower bound sits.
+% (The DNF idea was already shown on the 'unavoidable?' slide; no section of its own.)
 
 % ============================================================
-\begin{frame}{The formula $G_k$}
+\begin{frame}{The hard formula $G_k$}
 
 \[
   G_k(x, y) \defeq \exists z \bigwedge_{i=1}^{k}
   \bigl[(P_i(x, y) \land Q_i(x, z)) \lor (Q_i(x, y) \land P_i(x, z))\bigr]
+  \qquad \text{\NOTE{($|G_k| = O(k)$)}}
 \]
 
-\vfill
 \begin{center}
 \begin{tikzpicture}[every node/.style={font=\small}]
   \node[pv,minimum size=7pt,label=left:$x$] (x) at (0,0) {};
-  \node[pv,minimum size=7pt,label=right:$y$] (y) at (3,0) {};
-  \node[pv,minimum size=7pt,label=above:$z$] (z) at (1.3,1.6) {};
-  \draw[thick,cA] (x) -- node[below] {read edge} (y);
-  \draw[thick,cB] (x) -- node[above left] {witness edge} (z);
-  \begin{scope}[visible on=<2->]
-    \node[anchor=east,text=cA] at (6.2,1.1) {read edge};
-    \node[anchor=east,text=cB] at (6.2,.3) {witness edge};
-    \foreach \i/\r/\w in {1/P/Q,2/Q/P,3/P/Q,4/Q/P} {
-      \node[text=cA] (r\i) at (6.2+.75*\i,1.1) {$\r_{\i}$};
-      \node[text=cB] (w\i) at (6.2+.75*\i,.3) {$\w_{\i}$};
-      \draw[black!30] (r\i) -- (w\i);
-      \node[font=\scriptsize,text=black!50] at (6.2+.75*\i,1.6) {$i = \i$};
-    }
-  \end{scope}
+  \node[pv,minimum size=7pt,label=right:$y$] (y) at (2.6,0) {};
+  \node[pv,minimum size=7pt,label=above:$z$] (z) at (1.6,.6) {};
+  \draw[thick,cA] (x) -- (y);
+  \draw[thick,cB] (x) -- (z);
+  \node[anchor=west,align=left] at (4.2,.6)
+    {at every $i$: one of the edges $xy$, $xz$ is in $P_i$,\\
+     the other is in $Q_i$};
 \end{tikzpicture}
 \end{center}
 
-\vfill
-\onslide<2->{%
-\begin{center}
-  at every coordinate $i$: one edge meets $P_i$, the other meets $Q_i$
-  \ $\Rightarrow$ \ the read edge \emph{accepts} the witness edge
-\end{center}}
+\vspace{1em}
+DNF: \ $G_k \equiv \bigcup_{A \subseteq [k]} \bigl[ H_A \cap (H_{A^c} \mathbin{;} \one) \bigr]$
+\ : \ \EMPH{$2^k$ compositions}
+\ \NOTE{($H_A \defeq \bigcap_{i \in A} P_i \cap \bigcap_{i \notin A} Q_i$)}
+\\ \hspace*{2.6em} $\Rightarrow$ optimal up to a factor of $2$: \ every equivalent \CoR{} term needs $\ge 2^{k-1}$ compositions
+
 
 \note{
-\textbf{スライド概要}：$G_k$ の読み方：read edge が witness edge を受理する。
+\textbf{スライド概要}：$G_k$ は DNF で合成 $2^k$ 個、これは 2 倍を除いて最適。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 各座標で一方が $P_i$、他方が $Q_i$
-  \item 量化子 1 つ、サイズ $8k$
-\end{itemize}
-}
-\end{frame}
-
-% ============================================================
-\begin{frame}{The DNF: $2^k$ compositions}
-
-\begin{center}
-\begin{tikzpicture}[every node/.style={font=\small}]
-  \foreach \A/\B/\j in {{\emptyset}/{[k]}/0,{\{1\}}/{\{1\}^c}/1,{\{1,2\}}/{\{1,2\}^c}/2} {
-    \node[structbox,align=center] at (\j*3.7,0) {$H_{\A} \cap (H_{\B} \mathbin{;} \one)$};
-    \node at (\j*3.7+1.85,0) {$\cup$};
-  }
-  \node at (3*3.7-.4,0) {$\cdots$};
-  \draw[decorate,decoration={brace,mirror,amplitude=6pt}] (-1.4,-.5) -- (11.6,-.5)
-    node[midway,below=8pt] {$G_k \equiv \bigcup_{A \subseteq [k]} \bigl[ H_A \cap (H_{A^c} \mathbin{;} \one) \bigr]$ \ : \ \EMPH{$2^k$ compositions}};
-\end{tikzpicture}
-\end{center}
-\NOTE{\hfill $H_A \defeq \bigcap_{i \in A} P_i \cap \bigcap_{i \notin A} Q_i$; \
-a read edge in $H_A$ accepts every witness edge in $H_{A^c}$}
-
-\vfill
-\pause
-\begin{center}
-  Is the DNF optimal?
-\end{center}
-
-\note{
-\textbf{スライド概要}：DNF なら合成 $2^k$ 個。これより減らせるか？
-
-\textbf{メモ}：
-\begin{itemize}
-  \item $H_A$ の read edge は $H_{A^c}$ の witness edge を受理
-\end{itemize}
-}
-\end{frame}
-
-% ============================================================
-\begin{frame}{Main results}
-
-\begin{theorem}[Exponential lower bounds for full \CoR]
-  Every relational circuit $C \eqfin G_k$ has $\ge 2^{k-1}$ composition gates.
-\end{theorem}
-
-\vfill
-\pause
-\begin{center}
-\begin{tikzpicture}[every node/.style={font=\small}]
-  \draw[thick,-{Stealth}] (0,0) -- (10,0) node[right] {\#compositions};
-  \foreach \x/\l in {2/{$O(k)$},6/{$2^{k-1}$},8.5/{$2^k$}} {
-    \draw (\x,.12) -- (\x,-.12); \node[below=3pt] at (\x,0) {\l};
-  }
-  \node[above=4pt] at (2,0) {$|G_k|$};
-  \node[above=4pt,text=chibasub] at (6,0) {lower bound};
-  \node[above=4pt] at (8.5,0) {DNF};
-\end{tikzpicture}
-\end{center}
-
-\vfill
-\pause
-\begin{itemize}
-  \item shared subterms, complement, converse: all allowed and free
-  \item also: term size $\Theta(k 2^k)$; \ the blowup begins at domain size $2^{\Theta(k)}$
-\end{itemize}
-
-\note{
-\textbf{スライド概要}：主定理：合成は $2^{k-1}$ 個以上必要。
-
-\textbf{メモ}：
-\begin{itemize}
-  \item 共有・補・逆は無料
-  \item サイズ $O(k)$ の式から $2^{\Omega(k)}$
+  \item 各 $i$ で、辺 $xy$ と辺 $xz$ の一方が $P_i$、他方が $Q_i$
+  \item 下界は合成以外の演算（補・逆・共有）を無料にしても成り立つ
 \end{itemize}
 }
 \end{frame}

@@ -134,7 +134,7 @@ DNF translation is used, for example:
 \vfill
 \onslide<2->{%
 \begin{problem}[Open \fcite{FletcherEtAl2015,nakamura2022,nakamura-uezato2027}]
-Can we prove that there is no $2^{o(|\varphi|)}$-size translation from \FOthree{} to \CoR{}?
+Does every translation from \FOthree{} to \CoR{} need $2^{\Omega(|\varphi|)}$ compositions in the worst case?
 \end{problem}
 \NOTE{Partial answer: Yes for $\Sigma_1$\CoR{} (with transitive closure) \fcite{nakamura2020,nakamura2022}}}
 
@@ -154,28 +154,35 @@ Can we prove that there is no $2^{o(|\varphi|)}$-size translation from \FOthree{
 
 % ============================================================
 % Contributions up front (paper, Sec. 1 abstract-level summary; details in Sec. 1.1, 1.4)
+\section{Our results}
+
 \begin{frame}{Our results}
 
 {\Large The answer is \emph{YES!}}
 \begin{theorem}[This paper]
 \label{thm:main}
-There is no $2^{o(|\varphi|)}$-size translation from \FOthree{} to \CoR{}.
+For each $k$, there is an \FOthree{} formula of size $O(k)$
+such that every equivalent \CoR{} term needs $\ge 2^{k-1}$ compositions,
+even with complement, converse, and shared subterms.
 \end{theorem}
 
+\vfill
 \pause
-\begin{theorem}[Also in this paper]
-  For each $k$, there is
-  \begin{enumerate}
-    \item an \FOthree{} sentence of size $O(k)$ that is \FOtwo-definable,
-      but every equivalent \FOtwo{} sentence has $\ge 2^{k}$ quantifiers;
-      \\ \NOTE{before: $\mathrm{FO}^{k+1}$ vs.\ $\mathrm{FO}^{k}$ known for $k \ge 3$ \fcite{vinall-smeeth2024}; \ \FOthree{} vs.\ \FOtwo{} only on linear orders \fcite{grohe-schweikardt2005}}
-    \item an ARA(3) expression of size $O(k)$ such that every matrix circuit computing it
-      has $\ge 2^{k} / (3\beta)$ aggregation gates;
-      \\ \NOTE{asked by \fcite{brijder2019,brijder2022}; \ $\beta$: join breadth of the semiring}
-    \item an \FOthree{} formula of size $O(k)$ such that every equivalent \CoR{} term with closure $X^{*}$
-      has $2 \cdot \#\text{compositions} + \#\text{closures} \ge 2^{k}$.
-  \end{enumerate}
-\end{theorem}
+{\large
+\KEY{Also in this paper}: exponential lower bounds for
+\begin{itemize}
+  \item $\FOthree \leadsto \FOtwo$
+    \quad \NOTE{before:
+      \begin{tabular}[t]{@{}l@{}}
+        exponential gap $\mathrm{FO}^{k}$ vs.\ $\mathrm{FO}^{k-1}$ ($k \ge 4$), higher arity \fcite{vinall-smeeth2024} \\
+        $\FOthree \leadsto \FOtwo$ is polynomial over linear orders \fcite{grohe-schweikardt2005}
+      \end{tabular}}
+  \pause
+  \item ARA(3) $\leadsto$ matrix circuits
+    \quad \NOTE{asked by \fcite{brijder2019,brijder2022}}
+  \pause
+  \item $\FOthree$ $\leadsto$ $\CoR{}$ with transitive closure $X^{*}$
+\end{itemize}}
 
 \vfill
 \HP{Our proof technique can apply to all the above!}
@@ -185,7 +192,9 @@ There is no $2^{o(|\varphi|)}$-size translation from \FOthree{} to \CoR{}.
 
 \textbf{メモ}：
 \begin{itemize}
-  \item \FOtwo{}：3 変数は 2 変数より指数的に簡潔（線形順序では多項式）
+  \item \FOtwo{}：$O(k)$ サイズの \FOthree{} 文、同値な \FOtwo{} 文は量化子 $\ge 2^k$
+  \item 行列：集約ゲート $\ge 2^k/(3\beta)$（$\beta$：半環の join breadth）
+  \item 閉包付き \CoR：$2\cdot\#\text{合成} + \#\text{閉包} \ge 2^k$
   \item 行列言語：Brijder--Gyssens--Van den Bussche の問いに答える
   \item 変わるのは「1 演算が気づける変更の数」だけ（量化子 1、集約 $3\beta$、閉包 1）
   \item 論文には他に：\CoR{} 等式、逆なし回路（ちょうど $2^k$）、乱択回路、ランダム入力
@@ -193,39 +202,3 @@ There is no $2^{o(|\varphi|)}$-size translation from \FOthree{} to \CoR{}.
 }
 \end{frame}
 
-% ============================================================
-% Paper, Sec. 1, paragraph 4
-\begin{frame}{The calculus of relations (\CoR)}
-
-\begin{center}
-  $\zero, \ \one, \ \id, \qquad \cup, \ \cap, \ \overline{\,\cdot\,}, \ {}^{\conv}, \qquad$ and \emph{composition} \ $;$
-\end{center}
-
-\vfill
-\begin{center}
-\begin{tikzpicture}[every node/.style={font=\small}]
-  \node[pv,minimum size=7pt,label=below:$u$] (x) at (0,0) {};
-  \node[pv,minimum size=7pt,label=above:$w$] (z) at (1.8,1.1) {};
-  \node[pv,minimum size=7pt,label=below:$v$] (y) at (3.6,0) {};
-  \draw[thick,-{Stealth}] (x) -- node[above left] {$X$} (z);
-  \draw[thick,-{Stealth}] (z) -- node[above right] {$Y$} (y);
-  \draw[very thick,-{Stealth},dashed] (x) -- node[below] {$X \mathbin{;} Y$} (y);
-  \node[draw=chibasub,thick,circle,minimum size=16pt,visible on=<2->] at (z) {};
-  \node[anchor=west,visible on=<2->,text=chibasub] at (2.3,1.5) {a \emph{witness} for $(u, v)$};
-\end{tikzpicture}
-\end{center}
-
-\vfill
-\[
-  X \mathbin{;} Y \defeq \set{(u, v) : \text{some } w \in \mathbb D \text{ satisfies } (u, w) \in X,\ (w, v) \in Y}
-\]
-
-\note{
-\textbf{スライド概要}：\CoR{} の演算。変数を消すのは合成だけ、中間点が witness。
-
-\textbf{メモ}：
-\begin{itemize}
-  \item 補・逆などは後で「無料」扱い
-\end{itemize}
-}
-\end{frame}

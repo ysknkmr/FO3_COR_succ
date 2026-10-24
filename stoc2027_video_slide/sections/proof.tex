@@ -2,49 +2,73 @@
 \section{Technical overview}
 
 % ============================================================
-\begin{frame}{Our technique: exact predictions on one reference structure}
+\begin{frame}{Proof idea: telling $\M_0$ apart from $2^k$ structures}
+
+\KEY{Goal} \ $C \equiv G_k$ \ $\Longrightarrow$ \ $C$ has $\ge 2^{k-1}$ compositions
+\NOTE{\ ($C$: any \CoR{} term or circuit)}
+
+\vspace{.3em}
+\uncover<2->{%
+$C$ must tell $\M_0$ apart from each of $2^k$ structures $\M_\lambda$:
+\ $G_k = 1$ on $\M_0$, \ $G_k = 0$ on $\M_\lambda$}
 
 \begin{center}
 \begin{tikzpicture}[every node/.style={font=\small}]
-  \node[structbox,minimum width=1.6cm,minimum height=1.1cm] (M0) at (0,0) {$\M_0$};
-  \foreach \l/\y in {1/1.5,2/.5,3/-.5} {
-    \node[structbox,minimum width=1.6cm,minimum height=.75cm,visible on=<2->] (M\l) at (4.2,\y) {$\M_{\lambda_{\l}}$};
-    \draw[-{Stealth},visible on=<2->] (M0.east) -- (M\l.west);
+  \node (M0) at (6.1,1.0) {$\M_0$};
+  \foreach \i in {1,...,8} {
+    \node[visible on=<2->] (L\i) at (1.4+\i*1.05,0) {$\M_{\lambda_{\i}}$};
+    \draw[densely dashed,black!40,visible on=<2->] (M0.south) -- (L\i.north);
   }
-  \node[visible on=<2->] at (4.2,-1.25) {$\vdots$};
-  \node[visible on=<2->,anchor=west] at (5.2,.5) {$2^k$ small modifications, each changes $G_k$};
+  \node[visible on=<2->] at (11.0,0) {$\cdots$};
+  % each composition newly tells M_0 apart from at most two of them
+  \foreach \i/\j/\g in {1/2/1,3/4/2,5/6/3,7/8/4} {
+    \draw[decorate,decoration={brace,mirror,amplitude=4pt},thick,chibasub,visible on=<4->]
+      ($(L\i.south west)+(.05,-.05)$) -- ($(L\j.south east)+(-.05,-.05)$)
+      node[midway,below=4pt,font=\scriptsize] {composition $;_{\g}$};
+  }
 \end{tikzpicture}
 \end{center}
 
-\vfill
-\onslide<3->{%
+\uncover<3->{%
 \begin{center}
-  only \emph{compositions} can notice a modification
+\small
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{@{}lll@{}}
+  \toprule
+  \CoR{} operation & meaning & newly tells $\M_0$ apart from \\
+  \midrule
+  $\zero, \one, \id$, \ $\cup, \cap, \overline{\,\cdot\,}$, \ $X^{\conv}$ & constants, Boolean operations, converse & no $\M_\lambda$ \\
+  $X \mathbin{;} Y$ & composition $=$ Boolean matrix product & \alert{$\le 2$ of the $\M_\lambda$} \\
+  \bottomrule
+\end{tabular}
 \end{center}}
-\onslide<4->{%
+
+\uncover<4->{%
 \begin{center}
-  each composition notices at most \emph{two}
-  \qquad $\Rightarrow$ \qquad \alert{$2^k \le 2 \cdot \gcost{C}$}
+  every $\M_\lambda$ needs a composition that tells it apart
+  \quad $\Longrightarrow$ \quad \alert{$2^k \le 2 \cdot \#\text{compositions}(C)$}
 \end{center}}
 
 \note{
-\textbf{スライド概要}：証明の全体像：$2^k$ 個の変更、各合成は高々 2 つに気づく。
+\textbf{スライド概要}：$C$ は $\M_0$ と $2^k$ 個の $\M_\lambda$ を見分けねばならない。合成 1 個が新たに見分けられるのは高々 2 個。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 以降のページはこの 3 行の中身
+  \item 「新たに見分ける」＝そのゲートで初めて $\M_0$ から期待される値とずれる（論文の notice）
+  \item 以降のページ：変更（塗り替え）の作り方、期待値の意味、合成が高々 2 つの理由
 \end{itemize}
 }
 \end{frame}
 
 % ============================================================
-\begin{frame}{The reference structure}
+% The structure M_0 (edge-colored complete graph, two middle vertices, the hub)
+\begin{frame}{The structure $\M_0$}
 
 \begin{columns}[c]
-\begin{column}{.40\textwidth}
+\begin{column}{.30\textwidth}
 \centering
-\begin{tikzpicture}[every node/.style={font=\small},scale=1.1]
-  \foreach \i in {0,...,4} { \node[pv] (n\i) at (90+72*\i:1.3) {}; }
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \foreach \i in {0,...,4} { \node[pv] (n\i) at (90+72*\i:1.0) {}; }
   \draw[thick,cA] (n0) -- (n1); \draw[thick,cB] (n0) -- (n2); \draw[thick,cC] (n0) -- (n3);
   \draw[thick,cD] (n0) -- (n4); \draw[thick,cB] (n1) -- (n2); \draw[thick,cA] (n1) -- (n3);
   \draw[thick,cC] (n1) -- (n4); \draw[thick,cD] (n2) -- (n3); \draw[thick,cA] (n2) -- (n4);
@@ -53,76 +77,53 @@
 
 \NOTE{an edge-colored complete graph}
 \end{column}
-\begin{column}{.56\textwidth}
-colors $\mu \subseteq [k]$; \ on an edge of color $\mu$:
-\[
-  P_i \iff i \in \mu, \qquad Q_i \iff i \notin \mu
-\]
+\begin{column}{.66\textwidth}
+colors $\mu \subseteq [k]$; \ on an edge of color $\mu$: \
+$P_i \iff i \in \mu$, \ $Q_i \iff i \notin \mu$
 
-\pause
-\begin{center}
-\begin{tikzpicture}[every node/.style={font=\small}]
-  \node[pv,label=left:$x$] (x) at (0,0) {};
-  \node[pv,label=right:$y$] (y) at (3,0) {};
-  \node[pv,label=above:$z$] (z) at (1.2,1.3) {};
-  \draw[thick,cA] (x) -- node[below] {$\mu$} (y);
-  \draw[thick,cB] (x) -- node[above left] {$\mu^c$} (z);
-\end{tikzpicture}
-
-a read edge of color $\mu$ \emph{accepts} exactly\\ the witness edges of color $\mu^c$
-\end{center}
+\vspace{.4em}
+$\Rightarrow$ \ if $xy$ has color $\mu$: \ $G_k(x, y)$ holds iff some edge $xz$ has color $\mu^c$
 \end{column}
 \end{columns}
 
-\note{
-\textbf{スライド概要}：参照構造は辺彩色完全グラフ。色が入力関係を決める。
-
-\textbf{メモ}：
-\begin{itemize}
-  \item 色 $\mu$ の read edge は色 $\mu^c$ の witness edge を受理
-\end{itemize}
-}
-\end{frame}
-
-% ============================================================
-\begin{frame}{The two-witness property}
-
-\begin{center}
+\vfill
+\pause
+\begin{columns}[c]
+\begin{column}{.30\textwidth}
+\centering
 \begin{tikzpicture}[every node/.style={font=\small}]
   \node[pv,label=left:$u$] (u) at (0,0) {};
-  \node[pv,label=right:$v$] (v) at (4,0) {};
-  \node[pv,label=above:$z$] (z1) at (2,1.3) {};
-  \node[pv,label=below:$z'$] (z2) at (2,-1.3) {};
+  \node[pv,label=right:$v$] (v) at (2.4,0) {};
+  \node[pv,label=above:$z$] (z1) at (1.2,.8) {};
+  \node[pv,label=below:$z'$] (z2) at (1.2,-.8) {};
   \draw[thick,cA] (u) -- node[above left] {$\mu$} (z1);
   \draw[thick,cB] (z1) -- node[above right] {$\nu$} (v);
   \draw[thick,cA] (u) -- node[below left] {$\mu$} (z2);
   \draw[thick,cB] (z2) -- node[below right] {$\nu$} (v);
 \end{tikzpicture}
-\end{center}
-\begin{center}
-  for all $u \ne v$ and all colors $\mu, \nu$: \ at least two witnesses
-\end{center}
+\end{column}
+\begin{column}{.66\textwidth}
+for all $u \ne v$ and all colors $\mu, \nu$: \ at least \emph{two} middle vertices $z$
+\NOTE{\ (random coloring, $n \ge n_0(2^k)$ \fcite{jmt1995})}
 
-\vfill
-\pause
-\begin{center}
-  exists for $n \ge n_0(2^k)$ \NOTE{(random coloring)} \fcite{jmt1995} \\[.4em]
-  fix one: the \emph{reference structure} $\M_0$, \ and a vertex $\hub$: the \emph{hub}
-\end{center}
+\vspace{.4em}
+fix such an $\M_0$ and one vertex $\hub$, \ the \emph{hub}
+\end{column}
+\end{columns}
 
 \note{
-\textbf{スライド概要}：どの点対・色の組にも witness が 2 つ以上。
+\textbf{スライド概要}：$\M_0$ は辺に色の付いた完全グラフ。どの色の組にも中間の頂点が 2 つ。hub を 1 つ固定。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item ランダム彩色で存在
-  \item hub を避ける witness が残る、が後で効く
+  \item 色が $P_i, Q_i$ を決めるので、$G_k$ は色だけで読める
+  \item 「中間の頂点が 2 つ」が最後のページで効く
 \end{itemize}
 }
 \end{frame}
 
 % ============================================================
-\begin{frame}{Folds}
+\begin{frame}{Recoloring at the hub $\hub$}
 
 % Figure 1 of the paper, redrawn around the mechanism: the read edge at the hub
 % accepts only witness edges of color lambda, and the fold recolors exactly those.
@@ -130,7 +131,7 @@ a read edge of color $\mu$ \emph{accepts} exactly\\ the witness edges of color $
 \begin{center}
 \begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=1.1cm,
     xmark/.style={text=red,font=\large\bfseries,inner sep=0pt}]
-  \foreach \sx/\name/\lab/\vis in {0/0/reference structure $\M_0$/1-,7.3/1/folded structure $\M_\lambda$/2-} {
+  \foreach \sx/\name/\lab/\vis in {0/0/structure $\M_0$/1-,7.3/1/recolored structure $\M_\lambda$/2-} {
     \begin{scope}[xshift=\sx cm,visible on=<\vis>]
       \node at (.6,2.35) {\lab};
       \node[pv,label=below:$\hub$] (h\name) at (0,0) {};
@@ -139,13 +140,13 @@ a read edge of color $\mu$ \emph{accepts} exactly\\ the witness edges of color $
       \node[pv] (w\name) at (.6,1.75) {};
       \node[pv] (o\name) at (-1.6,.3) {};
       \draw[black!35] (h\name) -- node[below,font=\scriptsize,text=black!50] {$\mu \ne \lambda$} (o\name);
-      \draw[line width=1.4pt,cA] (h\name) -- node[below=2pt,font=\scriptsize] {read edge, color $\lambda^c$} (v\name);
+      \draw[line width=1.4pt,cA] (h\name) -- node[below=2pt,font=\scriptsize] {color $\lambda^c$} (v\name);
     \end{scope}
   }
   % M_0: witness edges of color lambda at the hub
   \draw[thick,cB] (h0) -- node[left,font=\scriptsize] {$\lambda$} (z0);
   \draw[thick,cB] (h0) -- node[right,font=\scriptsize] {$\lambda$} (w0);
-  \node[font=\scriptsize,text=cB] at (-.2,2.0) {witness edges};
+  \node[font=\scriptsize,text=cB] at (-.2,2.0) {color $\lambda$};
   \node at (1.2,-1.05) {$G_k(\hub, v) = 1$};
   % M_lambda: the same edges, recolored to lambda^c, are no longer witnesses
   \begin{scope}[visible on=<2->]
@@ -154,213 +155,36 @@ a read edge of color $\mu$ \emph{accepts} exactly\\ the witness edges of color $
     \node[xmark] at ($(h1)!.75!(z1)$) {$\times$};
     \node[xmark] at ($(h1)!.75!(w1)$) {$\times$};
     \node at (7.3/1.1+1.2,-1.05) {$G_k(\hub, v) = \textcolor{red}{0}$};
-    \draw[-{Stealth},thick] (3.3,1.0) -- node[above] {fold of $\lambda$} (4.6,1.0);
+    \draw[-{Stealth},thick] (3.3,1.0) -- node[above] {recolor $\lambda$} (4.6,1.0);
   \end{scope}
 \end{tikzpicture}
 \end{center}
 
 \vfill
 \begin{center}
-  a read edge of color $\lambda^c$ accepts exactly the witness edges of color $\lambda$
-  \onslide<2->{\\ the fold of $\lambda$ recolors \emph{those edges at the hub}, \ and nothing else}
+  $G_k(\hub, v)$ needs an edge $\hub z$ of color $\lambda$
+  \onslide<2->{\\ recoloring $\lambda$ changes \emph{exactly those edges at $\hub$}, \ and nothing else}
 \end{center}
 
 \vfill
 \onslide<3->{%
 \begin{center}
-  $2^k$ folds, one for each color $\lambda$
+  $2^k$ recolored structures $\M_\lambda$, one for each color $\lambda$
 \end{center}}
 
 \note{
-\textbf{スライド概要}：fold で $G_k$ が 1 から 0 に変わる。
+\textbf{スライド概要}：塗り替えで $G_k$ が 1 から 0 に変わる。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item hub の色 $\lambda$ の辺だけ塗り替える
+  \item $\hub$ に接する色 $\lambda$ の辺だけ塗り替える
   \item 色ごとに 1 つ、計 $2^k$ 個
 \end{itemize}
 }
 \end{frame}
 
 % ============================================================
-\begin{frame}{Predictions and noticing}
-
-\begin{columns}[c]
-\begin{column}{.46\textwidth}
-\centering
-\begin{tikzpicture}[every node/.style={font=\scriptsize}]
-  \node[gate] (p) at (0,0) {$P_1$};
-  \node[gate] (q) at (1.2,0) {$Q_1$};
-  \node[gate] (r) at (2.4,0) {$P_2$};
-  \node[cgate] (c1) at (.6,1.1) {$;$};
-  \node[gate] (n1) at (1.8,1.1) {$\overline{\,\cdot\,}$};
-  \node[gate] (u1) at (1.2,2.2) {$\cap$};
-  \node[cgate] (c2) at (1.2,3.2) {$;$};
-  \draw[-{Stealth}] (p) -- (c1); \draw[-{Stealth}] (q) -- (c1);
-  \draw[-{Stealth}] (r) -- (n1);
-  \draw[-{Stealth}] (c1) -- (u1); \draw[-{Stealth}] (n1) -- (u1);
-  \draw[-{Stealth}] (u1) -- (c2); \draw[-{Stealth}] (q) to[bend right=50] (c2);
-  \begin{scope}[visible on=<2->,font=\scriptsize,text=chibasub]
-    \node[below=2pt] at (q.south) {$\Delta = \emptyset$};
-    \node[right=2pt] at (c2.east) {$\Delta = 2^{[k]}$};
-  \end{scope}
-  \begin{scope}[visible on=<3->,font=\scriptsize,text=chibasub]
-    \node[left=2pt] at (c1.west) {$+ \le 2$};
-    \node[left=2pt] at (c2.west) {$+ \le 2$};
-    \node[right=2pt] at (n1.east) {$+ 0$};
-    \node[right=2pt] at (u1.east) {$+ 0$};
-  \end{scope}
-\end{tikzpicture}
-
-\NOTE{a relational circuit}
-\end{column}
-\begin{column}{.52\textwidth}
-gate by gate: is $\sem{g}{\M_\lambda}$ what $\sem{g}{\M_0}$ \emph{predicts}? \ $(\star)$
-
-\vspace{.6em}
-\onslide<2->{$\Delta_g$: the folds for which $g$ violates $(\star)$}
-
-\vspace{.6em}
-\onslide<3->{$g$ \emph{notices} $\lambda$: \ a new violation at $g$\\
-\NOTE{Boolean operations and converse notice nothing}}
-\end{column}
-\end{columns}
-
-\vfill
-\onslide<4->{%
-\begin{center}
-  every fold must be noticed somewhere \quad $\Rightarrow$ \quad \alert{$2^k \le 2 \cdot \gcost{C}$}
-  \NOTE{\ (also with sharing)}
-\end{center}}
-
-\note{
-\textbf{スライド概要}：ゲートごとに予測と比べる。どこかのゲートが必ず fold に気づく。
-
-\textbf{メモ}：
-\begin{itemize}
-  \item 等式なので補を通る
-  \item 共有があっても数えられる
-\end{itemize}
-}
-\end{frame}
-
-% ============================================================
-\begin{frame}{Values on the reference structure are color tables}
-
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}lccc@{}}
-  \toprule
-  $X$ & $X[\id]$ & $X[\set{1}]$ & $X[\emptyset]$ \\
-  \midrule
-  $P_1$ & 0 & 1 & 0 \\
-  $Q_1$ & 0 & 0 & 1 \\
-  \onslide<2->{$P_1 \mathbin{;} Q_1$} & \onslide<2->{0} & \onslide<2->{1} & \onslide<2->{1} \\
-  \onslide<2->{$P_1 \mathbin{;} \one$} & \onslide<2->{1} & \onslide<2->{1} & \onslide<2->{1} \\
-  \bottomrule
-\end{tabular}
-\quad \NOTE{($k = 1$)}
-\end{center}
-
-\vfill
-\onslide<3->{%
-\begin{center}
-  every relation computed on $\M_0$ has a \emph{color table} \NOTE{(however much complement is used)}
-\end{center}}
-
-\note{
-\textbf{スライド概要}：$\M_0$ 上の値は色だけで決まる（色テーブル）。
-
-\textbf{メモ}：
-\begin{itemize}
-  \item 補をいくら使っても成り立つ
-\end{itemize}
-}
-\end{frame}
-
-% ============================================================
-\begin{frame}{Predictions}
-
-\[
-  \pred{X}{\lambda}(u, v) \defeq X[\colr_\lambda(u, v)]
-  \qquad \text{\NOTE{(read the table of $X$ with the new colors)}}
-\]
-
-\vspace{1.5em}
-\pause
-\begin{center}
-\renewcommand{\arraystretch}{1.5}
-\begin{tabular}{@{}l@{\qquad}l@{}}
-  $\overline{\pred{X}{\lambda}} = \pred{\overline{X}}{\lambda}$, \ $\pred{X}{\lambda} \cup \pred{Y}{\lambda} = \pred{(X \cup Y)}{\lambda}$, \ \dots
-    & notice nothing \\
-  \onslide<3->{$\pred{X}{\lambda} \mathbin{;} \pred{Y}{\lambda} \;\overset{?}{=}\; \pred{(X \mathbin{;} Y)}{\lambda}$}
-    & \onslide<3->{\alert{may notice}}
-\end{tabular}
-\end{center}
-
-\note{
-\textbf{スライド概要}：予測が外れうるのは合成だけ。
-
-\textbf{メモ}：
-\begin{itemize}
-  \item ブール演算・逆は予測と可換
-\end{itemize}
-}
-\end{frame}
-
-% ============================================================
-\begin{frame}{Each composition notices at most two folds}
-
-\begin{lemma}[Each composition notices at most two folds]
-  For color tables $X, Y$: \
-  $\pred{(X \mathbin{;} Y)}{\lambda} = \pred{X}{\lambda} \mathbin{;} \pred{Y}{\lambda}$
-  for all $\lambda$ except at most two.
-\end{lemma}
-
-\vfill
-\pause
-\begin{columns}[c]
-\begin{column}{.40\textwidth}
-\centering
-\begin{tikzpicture}[every node/.style={font=\scriptsize}]
-  \node[pv,label=left:$a$] (a) at (0,0) {};
-  \foreach \i/\y in {1/1,2/.33,3/-.33,4/-1} {
-    \node[pv] (b\i) at (1.3,\y) {};
-    \node[pv] (c\i) at (2.6,\y) {};
-    \draw[-{Stealth},thick] (b\i) -- (c\i);
-  }
-  \draw[-{Stealth},thick] (a) -- (b1);
-  \draw[-{Stealth},thick] (a) -- (b2);
-  \draw[-{Stealth},thick] (a) -- (b4);
-  \draw[-{Stealth},thick,dashed,red] (a) -- (b3);
-  \node[above] at (1.3,1.1) {$R$};
-  \node[above] at (2.0,1.1) {$S$};
-\end{tikzpicture}
-\end{column}
-\begin{column}{.56\textwidth}
-on an arbitrary structure: \ a single $R \mathbin{;} S$\\
-reacts to $t$ separate changes
-\end{column}
-\end{columns}
-
-\vfill
-\pause
-\begin{center}
-  on the reference structure: \ at most \alert{two}
-\end{center}
-
-\note{
-\textbf{スライド概要}：鍵の補題：1 つの合成は高々 2 つの fold にしか気づかない。
-
-\textbf{メモ}：
-\begin{itemize}
-  \item 一般の構造なら $t$ 個に反応しうる
-\end{itemize}
-}
-\end{frame}
-
-% ============================================================
-\begin{frame}{At the hub, and away from the hub}
+\begin{frame}{Why a composition detects at most two recolorings}
 
 % Figure 2 of the paper, redrawn with one layout for all panels:
 % the pair is the bottom edge, witnesses sit above (and below) it.
@@ -379,7 +203,7 @@ reacts to $t$ separate changes
     \draw[thick] (h) -- node[above left] {$\lambda$} (z);
     \draw[thick] (z) -- node[above right] {$\nu$} (v);
     \draw[densely dotted] (h) -- (v);
-    \node[align=center] at (.9,-.85) {witness $z$: \ $(X \mathbin{;} Y)(\hub, v) = 1$};
+    \node[align=center] at (.9,-.85) {middle vertex $z$:\\ $(X \mathbin{;} Y)(\hub, v) = 1$};
   \end{scope}
   % (b) M_lambda, at the hub: every witness uses an edge at the hub
   \begin{scope}[xshift=4.4cm,visible on=<2->]
@@ -391,7 +215,7 @@ reacts to $t$ separate changes
     \node[xmark] at ($(h)!.5!(z)$) {$\times$};
     \draw[thick] (z) -- node[above right] {$\nu$} (v);
     \draw[densely dotted] (h) -- (v);
-    \node[align=center] at (.9,-.85) {every witness is lost: \ \alert{noticed}};
+    \node[align=center] at (.9,-.85) {every middle vertex is lost:\\ \alert{detected}};
   \end{scope}
   % (c) M_lambda, away from the hub: the hub is only one of the witnesses
   \begin{scope}[xshift=8.8cm,visible on=<3->]
@@ -406,26 +230,25 @@ reacts to $t$ separate changes
     \draw[kept] (u) -- node[below left] {$\lambda$} (z);
     \draw[kept] (z) -- node[below right] {$\nu$} (v);
     \draw[densely dotted] (u) -- (v);
-    \node[align=center] at (.9,-1.45) {$z'$ avoids $\hub$ (M3): \ not noticed};
+    \node[align=center] at (.9,-1.45) {a second middle vertex $z'$\\ avoids $\hub$: \ not detected};
   \end{scope}
 \end{tikzpicture}
 \end{center}
-\NOTE{\hfill $X \defeq H_\lambda$, \ $Y \defeq H_\nu$ \ ($\nu \ne \lambda$); \
-noticed: the prediction $\pred{(X \mathbin{;} Y)}{\lambda} = 1$ differs from $\pred{X}{\lambda} \mathbin{;} \pred{Y}{\lambda} = 0$}
+\NOTE{\hfill a composition $X \mathbin{;} Y$, \ where $X$ holds on the edges of color $\lambda$ and $Y$ on those of color $\nu \ne \lambda$}
 
 \vfill
 \onslide<4->{%
 \begin{center}
-  differ only if \ $S_X = \set{\lambda}$, \ $S_Y = \set{\lambda}$, \ or \ $S_X \cap S_Y = \set{\lambda}$
-  \quad $\Rightarrow$ \quad at most \alert{two} $\lambda$
+  only pairs at the hub can change, and only if $X$ or $Y$ singles out the color $\lambda$
+  \\ $\Rightarrow$ \ each composition detects at most \alert{two} colors $\lambda$
 \end{center}}
 
 \note{
-\textbf{スライド概要}：hub では気づかれうる、hub の外では気づかれない。
+\textbf{スライド概要}：$\hub$ を含む点対では気づかれうる、含まない点対では気づかれない。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item hub の外では hub を避ける witness $z'$ が残る
+  \item $\hub$ を含まない点対では、$\hub$ を通らない中間の頂点 $z'$ が残る
   \item 条件は 3 つ、どれも $\lambda$ を決める $\to$ 高々 2
 \end{itemize}
 }
