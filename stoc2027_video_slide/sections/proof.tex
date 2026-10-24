@@ -28,12 +28,10 @@
 \end{center}}
 
 \note{
-\textbf{スライド概要}：証明の全体像を 1 枚で。1 つの参照構造 $\M_0$ を $2^k$ 通りに少しだけ変え、どれも $G_k$ の値を変える。
+\textbf{スライド概要}：証明の全体像：$2^k$ 個の変更、各合成は高々 2 つに気づく。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 変更に「気づける」のは合成だけ
-  \item 各合成は高々 2 つにしか気づかない $\Rightarrow$ $2^k \le 2 \cdot \gcost{C}$
   \item 以降のページはこの 3 行の中身
 \end{itemize}
 }
@@ -77,12 +75,11 @@ a read edge of color $\mu$ \emph{accepts} exactly\\ the witness edges of color $
 \end{columns}
 
 \note{
-\textbf{スライド概要}：構造は辺彩色された完全グラフ。色は $[k]$ の部分集合で、色が入力関係を決める。
+\textbf{スライド概要}：参照構造は辺彩色完全グラフ。色が入力関係を決める。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 色 $\mu$ の辺では $P_i \iff i \in \mu$、$Q_i \iff i \notin \mu$
-  \item だから色 $\mu$ の read edge は、ちょうど色 $\mu^c$ の witness edge を受理する
+  \item 色 $\mu$ の read edge は色 $\mu^c$ の witness edge を受理
 \end{itemize}
 }
 \end{frame}
@@ -114,13 +111,12 @@ a read edge of color $\mu$ \emph{accepts} exactly\\ the witness edges of color $
 \end{center}
 
 \note{
-\textbf{スライド概要}：参照構造の唯一の要請は「どの点対・どの色の組にも witness が 2 つ以上ある」こと。
+\textbf{スライド概要}：どの点対・色の組にも witness が 2 つ以上。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item ランダム彩色で $n \ge n_0(2^k)$ なら存在する（Jipsen--Maddux--Tuza）
-  \item 1 つ固定して $\M_0$、さらに任意の 1 頂点を hub $\hub$ とする
-  \item 「2 つ」が効くのは後半：hub を避けた witness が必ず残る
+  \item ランダム彩色で存在
+  \item hub を避ける witness が残る、が後で効く
 \end{itemize}
 }
 \end{frame}
@@ -176,13 +172,12 @@ a read edge of color $\mu$ \emph{accepts} exactly\\ the witness edges of color $
 \end{center}}
 
 \note{
-\textbf{スライド概要}：fold の定義と、fold で $G_k$ が変わる理由。
+\textbf{スライド概要}：fold で $G_k$ が 1 から 0 に変わる。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 色 $\lambda^c$ の read edge が受理するのは色 $\lambda$ の witness edge だけ
-  \item fold は hub の色 $\lambda$ の辺だけを $\lambda^c$ に塗り替える $\to$ witness が消えて $G_k(\hub, v) = 0$
-  \item 色ごとに 1 つ、計 $2^k$ 個の fold
+  \item hub の色 $\lambda$ の辺だけ塗り替える
+  \item 色ごとに 1 つ、計 $2^k$ 個
 \end{itemize}
 }
 \end{frame}
@@ -239,13 +234,12 @@ gate by gate: is $\sem{g}{\M_\lambda}$ what $\sem{g}{\M_0}$ \emph{predicts}? \ $
 \end{center}}
 
 \note{
-\textbf{スライド概要}：回路を $\M_0$ と $\M_\lambda$ でゲートごとに比べ、「予測どおりか」$(\star)$ を見る。どこかのゲートが必ず fold に気づく。
+\textbf{スライド概要}：ゲートごとに予測と比べる。どこかのゲートが必ず fold に気づく。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 葉は $(\star)$ を満たし、出力は破る $\to$ 途中で新たに破るゲートがある（$=$ 気づく）
-  \item $(\star)$ は等式なので補を通る：ブール演算・逆は何にも気づかない
-  \item 気づきはゲートに付くので、共有があっても数えられる
+  \item 等式なので補を通る
+  \item 共有があっても数えられる
 \end{itemize}
 }
 \end{frame}
@@ -275,13 +269,11 @@ gate by gate: is $\sem{g}{\M_\lambda}$ what $\sem{g}{\M_0}$ \emph{predicts}? \ $
 \end{center}}
 
 \note{
-\textbf{スライド概要}：$\M_0$ 上で計算される関係は、値が辺の色だけで決まる（色テーブル）。補をいくら使っても成り立つ。
+\textbf{スライド概要}：$\M_0$ 上の値は色だけで決まる（色テーブル）。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item $k = 1$ の表で具体的に
-  \item 合成でもテーブルが保たれるのは two-witness property のおかげ
-  \item fold した構造ではテーブルが崩れうる $\to$ だから予測は $\M_0$ から作る
+  \item 補をいくら使っても成り立つ
 \end{itemize}
 }
 \end{frame}
@@ -307,11 +299,11 @@ gate by gate: is $\sem{g}{\M_\lambda}$ what $\sem{g}{\M_0}$ \emph{predicts}? \ $
 \end{center}
 
 \note{
-\textbf{スライド概要}：予測 $=$ $\M_0$ のテーブルを新しい色で読むこと。ブール演算と逆は予測と可換で、等号が崩れうるのは合成だけ。
+\textbf{スライド概要}：予測が外れうるのは合成だけ。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 合成だけが ``may notice''（オレンジ）であることを強調
+  \item ブール演算・逆は予測と可換
 \end{itemize}
 }
 \end{frame}
@@ -358,12 +350,11 @@ reacts to $t$ separate changes
 \end{center}
 
 \note{
-\textbf{スライド概要}：鍵の補題。参照構造の上では、1 つの合成は高々 2 つの fold にしか気づかない。
+\textbf{スライド概要}：鍵の補題：1 つの合成は高々 2 つの fold にしか気づかない。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 一般の構造では 1 つの $R \mathbin{;} S$ が $t$ 個の別々の変化に反応しうる（$\Sigma_1$ の議論が壊れたのと同じ現象）
-  \item 回路は関係なく、2 つの色テーブルについての主張
+  \item 一般の構造なら $t$ 個に反応しうる
 \end{itemize}
 }
 \end{frame}
@@ -430,13 +421,12 @@ noticed: the prediction $\pred{(X \mathbin{;} Y)}{\lambda} = 1$ differs from $\p
 \end{center}}
 
 \note{
-\textbf{スライド概要}：補題の証明の核心は「hub では気づかれうるが、hub の外では気づかれない」。
+\textbf{スライド概要}：hub では気づかれうる、hub の外では気づかれない。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item (b) $(\hub, v)$ では witness はすべて hub の辺を通る $\to$ 塗り替えで全部失われうる
-  \item (c) hub の外では、two-witness property が hub を避ける $z'$ を残す
-  \item 気づく条件は 3 つで、どれも $\lambda$ を 1 つに決める $\to$ 高々 2
+  \item hub の外では hub を避ける witness $z'$ が残る
+  \item 条件は 3 つ、どれも $\lambda$ を決める $\to$ 高々 2
 \end{itemize}
 }
 \end{frame}

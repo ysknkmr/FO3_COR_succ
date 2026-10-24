@@ -1,5 +1,5 @@
 % Timing: 0:00--5:00   (paper: Sec. 1, opening paragraphs)
-\section{The question}
+% No \section here: the talk opens directly with the question (no outline slide).
 
 % ============================================================
 % Background for non-logicians: what FO^k and model checking are
@@ -12,33 +12,37 @@ For example, ``a closed walk of length $\ell$ at $x$''\ is expressible in $\FOth
 \begin{center}
 \begin{tikzpicture}[every node/.style={font=\normalfont}]
   % a closed walk of length 6 drawn as a regular hexagon, starting at x on the left
-  \foreach \i/\v/\c in {0/x/black,1/y/cA,2/z/cB,3/y/cA,4/z/cB,5/y/cA} {
-    \node[pv,minimum size=7pt,label={[text=\c]180-\i*60:$\v$}] (p\i) at (180-\i*60:1.0) {};
+  % the variable at vertex i appears together with the edge into it (x from the start)
+  \foreach \i/\v/\c/\s in {0/x/black/1,1/y/cA/2,2/z/cB/3,3/y/cA/4,4/z/cB/5,5/y/cA/6} {
+    \node[pv,minimum size=7pt] (p\i) at (180-\i*60:1.0) {};
+    \node[text=\c,opacity=.15,onslide=<\s->{opacity=1}] at (180-\i*60:1.4) {$\v$};
   }
-  % edge number s is highlighted on slide s+1, together with its conjunct in the formula
+  % edge number s appears on slide s+1 (semi-transparent before, as covered text), with its conjunct
   \foreach \i/\j/\s in {0/1/2,1/2/3,2/3/4,3/4/5,4/5/6,5/0/7} {
-    \draw[thick,-{Stealth},shorten <=1pt,shorten >=1pt,onslide=<\s>{red,very thick}] (p\i) -- (p\j);
+    \draw[thick,-{Stealth},shorten <=1pt,shorten >=1pt,opacity=.15,onslide=<\s->{opacity=1}] (p\i) -- (p\j);
   }
   \node[anchor=west,font=\footnotesize,text=black!55] at (1.8,0) {$\ell = 6$};
 \end{tikzpicture}
 
 \vspace{.4em}
-{\normalfont $\textcolor<2>{red}{\exists \textcolor{cA}{y}\, \bigl(E(x, \textcolor{cA}{y})} \land \textcolor<3>{red}{\exists \textcolor{cB}{z}\, \bigl(E(\textcolor{cA}{y}, \textcolor{cB}{z})} \land \textcolor<4>{red}{\exists \textcolor{cA}{y}\, \bigl(E(\textcolor{cB}{z}, \textcolor{cA}{y})} \land \textcolor<5>{red}{\exists \textcolor{cB}{z}\, \bigl(E(\textcolor{cA}{y}, \textcolor{cB}{z})} \land \textcolor<6>{red}{\exists \textcolor{cA}{y}\, (E(\textcolor{cB}{z}, \textcolor{cA}{y})} \land \textcolor<7>{red}{E(\textcolor{cA}{y}, x)})\bigr)\bigr)\bigr)\bigr)$}
+{\normalfont $\uncover<2->{\exists \textcolor{cA}{y}\, \bigl(E(x, \textcolor{cA}{y})}\uncover<3->{{} \land \exists \textcolor{cB}{z}\, \bigl(E(\textcolor{cA}{y}, \textcolor{cB}{z})}\uncover<4->{{} \land \exists \textcolor{cA}{y}\, \bigl(E(\textcolor{cB}{z}, \textcolor{cA}{y})}\uncover<5->{{} \land \exists \textcolor{cB}{z}\, \bigl(E(\textcolor{cA}{y}, \textcolor{cB}{z})}\uncover<6->{{} \land \exists \textcolor{cA}{y}\, (E(\textcolor{cB}{z}, \textcolor{cA}{y})}\uncover<7->{{} \land E(\textcolor{cA}{y}, x))\bigr)\bigr)\bigr)\bigr)}$}
 \end{center}
 
 \vfill
+\uncover<8->{%
 \emph{Model checking}: \ $\M \models \varphi(a, b)$? \quad \NOTE{(given $\M$ with $n$ elements, a formula $\varphi$, and $a, b \in \M$)}
 
+\pause
 \vspace{.6em}
-\HP{$O(|\varphi| \cdot n^{k})$ for $\mathrm{FO}^k$ by table memoization \fcite{vardi1995}}
+\HP{$O(|\varphi| \cdot n^{k})$ for $\mathrm{FO}^k$ by table memoization \fcite{vardi1995}}}
 
 \note{
-\textbf{スライド概要}：$\mathrm{FO}^k$ は変数を $k$ 個だけ（使い回して）使う一階述語論理。モデル検査は構造・式・要素 $a, b$ から $\varphi(a,b)$ の真偽を判定する問題で、表のメモ化で $O(|\varphi| n^k)$。
+\textbf{スライド概要}：$\mathrm{FO}^k$ は変数を使い回せる。モデル検査は $O(|\varphi| n^k)$。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 例：$x$ は固定したまま $y, z$ を交互に使い回せば、長さ $\ell$ の closed walk も 3 変数で書ける  \item 各部分式は自由変数が高々 $k$ 個 $\to$ 部分式ごとに $n^k$ の表を下から作る（table memoization）と $O(|\varphi| n^k)$（Vardi, PODS 1995）
-  \item 次のページ：この素朴な $n^k$ が $k \ge 4$ では最適で、\FOthree{} だけが例外
+  \item 辺を 1 本ずつ出し、式の対応する部分と一緒に読む
+  \item $x$ を固定し $y, z$ を交互に使えば 3 変数で足りる
 \end{itemize}
 }
 \end{frame}
@@ -86,7 +90,7 @@ We consider binary relation structures with $n$ elements:
 
 \uncover<4->{%
 Boolean matrix algorithm of \FOthree{} model checking
-via \FOthree{} $\leadsto$ \CoR{}:
+via \FOthree{} $\leadsto$ \CoR{} \fcite{tarski1941,tarski-givant1987}:
 
 \begin{center}
 \Large
@@ -100,70 +104,91 @@ $\exists z.\ P(x, z) \land Q(z, y)
 \end{tikzpicture}
 
 \vspace{1.2em}
-\NOTE{\hfill This translation requires a DNF translation inside each $\exists$:
-\ \EMPH{$2^{O(|\varphi|)}$} size blowup}}
+\hfill To obtain the form of $\exists z. - \land -$, we use DNF translation.\\
+\hfill $\leadsto$ \ \EMPH{$2^{O(|\varphi|)}$} compositions are used \cite{nakamura2022}.}
 
 \note{
-\textbf{スライド概要}：$\mathrm{FO}^k$ のモデル検査で \FOthree{} だけが例外的に速い。ただし $2^{O(|\varphi|)}$ の因子が付き、その出どころは \CoR{} への翻訳。
+\textbf{スライド概要}：$k \ge 4$ では $n^k$ が最適、\FOthree{} だけ $n^{\omega}$ に下がる。代償は翻訳の $2^{O(|\varphi|)}$。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item $k \ge 4$：$O(n^{k-\varepsilon})$ にはできない（hyperclique 仮説：Bringmann--Slusallek。1 つの二項関係の固定文でも：Nakamura--Uezato）
-  \item \CoR{} は各演算が行列演算なので $O(|\varphi| n^{\omega})$。合成が第 3 変数 $z$ を消す（式の $\leadsto$）
-  \item \FOthree{} は \CoR{} に翻訳してから評価するので $n^{\omega}$
-  \item 指数因子は翻訳から来る $\to$ 次のページの問いへつなぐ
+  \item 合成 $=$ ブール行列積
+  \item $\exists$ の内側の DNF 化が指数爆発の原因
 \end{itemize}
 }
 \end{frame}
 
 % ============================================================
 % Paper, Sec. 1, paragraph 3
-\begin{frame}{Is \EMPH{$2^{O(|\varphi|)}$} size blowup necessary?}
-
-\begin{center}
-\begin{tikzpicture}
-  \node (phi) at (0,0) {$\varphi$};
-  \node (T) at (4,0) {$T_\varphi$};
-  \node[font=\small,text=black!55,below=2pt] at (phi.south) {\FOthree};
-  \node[font=\small,text=black!55,below=2pt] at (T.south) {\CoR};
-  \draw[-{Stealth},thick] (phi) -- node[above] {\small Tarski (1940s)}
-    node[below] {\fcite[construction]{tarski-givant1987}} (T);
-  \node[anchor=west] at (5,.35) {$|T_\varphi| = 2^{O(|\varphi|)}$ \ \NOTE{(classical)}};
-  \node[anchor=west,visible on=<3->] at (5,-.45) {\alert{$|T_\varphi| = 2^{\Omega(|\varphi|)}$} \ \NOTE{(our result)}};
-\end{tikzpicture}
-\end{center}
-\NOTE{\hfill $T_\varphi$: a smallest \CoR{} term equivalent to $\varphi$ on finite structures}
-
-\vfill
-\begin{center}
-  e.g.\ \
-  $\exists z.\ \bigl(P_1(x, z) \lor Q_1(z, y)\bigr) \land \cdots \land \bigl(P_k(x, z) \lor Q_k(z, y)\bigr)$
-  \\[.4em]
-  $\leadsto \ \displaystyle\bigcup_{A \subseteq [k]}
-    \Bigl(\bigcap_{i \in A} P_i\Bigr) \mathbin{;} \Bigl(\bigcap_{i \notin A} Q_i\Bigr)$
-  \quad \NOTE{($2^k$ compositions: necessary?)}
-\end{center}
+\begin{frame}{Are \EMPH{$2^{O(|\varphi|)}$} compositions unavoidable?}
+DNF translation is used, for example:
+\begin{align*}
+  & \exists z.\ \bigl(P_1(x, z) \lor Q_1(z, y)\bigr) \land \cdots \land \bigl(P_k(x, z) \lor Q_k(z, y)\bigr) \\
+  \leadsto_{\text{\NOTE{(DNF)}}} \ & \exists z.\ \bigvee_{A \subseteq [k]}
+    \Bigl(\bigwedge_{i \in A} P_i(x, z) \land \bigwedge_{i \notin A} Q_i(z, y)\Bigr) \\
+  \leadsto_{\text{\NOTE{(to \CoR)}}} \ & \Bigl(\bigcup_{A \subseteq [k]}
+    \Bigl(\bigcap_{i \in A} P_i\Bigr) \mathbin{;} \Bigl(\bigcap_{i \notin A} Q_i\Bigr) \Bigr)(x, y)
+\end{align*}
+\NOTE{(In this translation, we use $2^k$ compositions)}
 
 \vfill
 \onslide<2->{%
-\begin{center}
-  Open \fcite{FletcherEtAl2015,nakamura2022,nakamura-uezato2027}
-\end{center}}
+\begin{problem}[Open \fcite{FletcherEtAl2015,nakamura2022,nakamura-uezato2027}]
+Can we prove that there is no $2^{o(|\varphi|)}$-size translation from \FOthree{} to \CoR{}?
+\end{problem}
+\NOTE{Partial answer: Yes for $\Sigma_1$\CoR{} (with transitive closure) \fcite{nakamura2020,nakamura2022}}}
 
-\vfill
-\onslide<3->{%
-\begin{center}
-  We settle it: \ \emph{Tarski's translation is optimal in the worst case.}
-\end{center}}
+\NOTE{The argument of \fcite{nakamura2022} is based on the fact that $\Sigma_1$\CoR{} is equivalent to 
+\emph{existential} $\mathrm{FO}^3$, which is closed under \emph{extensions}.}
 
 \note{
-\textbf{スライド概要}：「翻訳の指数爆発は必要か」は Tarski 以来の古い問いで、未解決だった。答えは「必要」：Tarski の翻訳は最悪ケースで最適。
+\textbf{スライド概要}：この指数個の合成は必要か？ 未解決だった（$\Sigma_1$\CoR{} のみ既知）。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 翻訳は 1940 年代の Tarski だが、具体的な構成は Tarski--Givant の本（1987）にある
-  \item 先行研究で未解決と明記されていた（FGL+15, Nak22, NU27）
-  \item 既知だったのは 3-OV 仮説下での翻訳\emph{時間}の下界だけ。今回は\emph{サイズ}の無条件下界
+  \item 例の式は素直に訳すと合成 $2^k$ 個
+  \item 今回はサイズの無条件下界
+\end{itemize}
+}
+\end{frame}
+
+% ============================================================
+% Contributions up front (paper, Sec. 1 abstract-level summary; details in Sec. 1.1, 1.4)
+\begin{frame}{Our results}
+
+{\Large The answer is \emph{YES!}}
+\begin{theorem}[This paper]
+\label{thm:main}
+There is no $2^{o(|\varphi|)}$-size translation from \FOthree{} to \CoR{}.
+\end{theorem}
+
+\pause
+\begin{theorem}[Also in this paper]
+  For each $k$, there is
+  \begin{enumerate}
+    \item an \FOthree{} sentence of size $O(k)$ that is \FOtwo-definable,
+      but every equivalent \FOtwo{} sentence has $\ge 2^{k}$ quantifiers;
+      \\ \NOTE{before: $\mathrm{FO}^{k+1}$ vs.\ $\mathrm{FO}^{k}$ known for $k \ge 3$ \fcite{vinall-smeeth2024}; \ \FOthree{} vs.\ \FOtwo{} only on linear orders \fcite{grohe-schweikardt2005}}
+    \item an ARA(3) expression of size $O(k)$ such that every matrix circuit computing it
+      has $\ge 2^{k} / (3\beta)$ aggregation gates;
+      \\ \NOTE{asked by \fcite{brijder2019,brijder2022}; \ $\beta$: join breadth of the semiring}
+    \item an \FOthree{} formula of size $O(k)$ such that every equivalent \CoR{} term with closure $X^{*}$
+      has $2 \cdot \#\text{compositions} + \#\text{closures} \ge 2^{k}$.
+  \end{enumerate}
+\end{theorem}
+
+\vfill
+\HP{Our proof technique can apply to all the above!}
+
+\note{
+\textbf{スライド概要}：答えは YES（主定理）。同じ手法で \FOtwo{}、行列言語、閉包付き \CoR{} にも指数下界。
+
+\textbf{メモ}：
+\begin{itemize}
+  \item \FOtwo{}：3 変数は 2 変数より指数的に簡潔（線形順序では多項式）
+  \item 行列言語：Brijder--Gyssens--Van den Bussche の問いに答える
+  \item 変わるのは「1 演算が気づける変更の数」だけ（量化子 1、集約 $3\beta$、閉包 1）
+  \item 論文には他に：\CoR{} 等式、逆なし回路（ちょうど $2^k$）、乱択回路、ランダム入力
 \end{itemize}
 }
 \end{frame}
@@ -196,11 +221,11 @@ $\exists z.\ P(x, z) \land Q(z, y)
 \]
 
 \note{
-\textbf{スライド概要}：\CoR{} の演算を固定する。変数を消すのは合成だけで、中間点 $w$ が \emph{witness}。以降はこの言葉で話す。
+\textbf{スライド概要}：\CoR{} の演算。変数を消すのは合成だけ、中間点が witness。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 合成以外（$\cup, \cap$、補、逆、定数）は後で「自由」に使ってよいことになる
+  \item 補・逆などは後で「無料」扱い
 \end{itemize}
 }
 \end{frame}

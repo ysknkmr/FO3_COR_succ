@@ -4,36 +4,35 @@
 % ============================================================
 \begin{frame}{Summary}
 
-\begin{center}
-\begin{tikzpicture}
-  \node (phi) at (0,0) {$\varphi$};
-  \node (T) at (4,0) {$T_\varphi$};
-  \draw[-{Stealth},thick] (phi) -- node[above] {\small Tarski} (T);
-  \node[anchor=west] at (5,0) {\alert{$|T_\varphi| = 2^{\Omega(|\varphi|)}$}};
-\end{tikzpicture}
-\end{center}
-
-\vfill
-\begin{center}
-  exact predictions on one reference structure:\\
-  $2^k$ folds, \ each composition notices $\le 2$
-\end{center}
-
-\vfill
-\pause
-\myIconQuestion \quad \KEY{Open questions}
+\KEY{Result} \ Tarski's translation from \FOthree{} to \CoR{} is optimal in the worst case:
 \begin{itemize}
-  \item a \emph{fixed} signature?
-  \item the onset domain size; \ the exact count between $2^{k-1}$ and $2^k$
+  \item some \FOthree{} formulas of size $O(k)$ need $\ge 2^{k-1}$ compositions in every equivalent \CoR{} term,
+    even with complement, converse, and shared subterms;
+  \item the same technique: \FOthree{} vs.\ \FOtwo{}, matrix query languages, \CoR{} with closure.
 \end{itemize}
 
+\KEY{Technique} \ $2^k$ folds of one reference structure; each composition notices $\le 2$ of them.
+
+\pause
+\vspace{.4em}
+\myIconQuestion \ \KEY{Open questions}
+\begin{itemize}
+  \item a superpolynomial gap over a \emph{fixed} finite signature (e.g., one binary relation)?
+  \item the domain size from which the blowup begins?
+  \item the exact number of compositions for $G_k$: between $2^{k-1}$ and $2^{k}$?
+\end{itemize}
+
+\vfill
+\begin{center}
+  {\large \emph{Thank you for your attention!}}
+\end{center}
+
 \note{
-\textbf{スライド概要}：Tarski の翻訳は最悪ケースで最適。鍵は「1 つの参照構造上での厳密な予測」で、各合成は $2^k$ 個の fold のうち高々 2 つにしか気づかない。
+\textbf{スライド概要}：結果・手法・未解決問題をまとめて締める。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 未解決：固定シグネチャ（二項関係 1 つ）でも超多項式差は出るか
-  \item 爆発が始まる領域サイズ、正確な合成数（$2^{k-1}$ か $2^k$ か）
+  \item 未解決：固定シグネチャ、開始の領域サイズ、正確な合成数
 \end{itemize}
 }
 \end{frame}

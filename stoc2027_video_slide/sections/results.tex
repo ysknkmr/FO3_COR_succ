@@ -38,12 +38,12 @@
 \end{center}}
 
 \note{
-\textbf{スライド概要}：下界を与える式 $G_k$ の読み方。read edge が witness edge を「受理する」$=$ 各座標 $i$ で一方が $P_i$、他方が $Q_i$。
+\textbf{スライド概要}：$G_k$ の読み方：read edge が witness edge を受理する。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 量化子 1 つ、サイズ $8k$ の小さな式
-  \item 右の表で「座標ごとに $P$ と $Q$ が入れ替わる」ことを見せる
+  \item 各座標で一方が $P_i$、他方が $Q_i$
+  \item 量化子 1 つ、サイズ $8k$
 \end{itemize}
 }
 \end{frame}
@@ -72,12 +72,11 @@ a read edge in $H_A$ accepts every witness edge in $H_{A^c}$}
 \end{center}
 
 \note{
-\textbf{スライド概要}：座標ごとの順序を固定すると、$2^k$ 個の合成を使う DNF で書ける。問い：これより本質的に少なくできるか？
+\textbf{スライド概要}：DNF なら合成 $2^k$ 個。これより減らせるか？
 
 \textbf{メモ}：
 \begin{itemize}
-  \item $H_A$ の read edge は $H_{A^c}$ の witness edge をすべて受理する
-  \item $X \mathbin{;} \one$ は「$x$ から $X$ の辺が出ている」
+  \item $H_A$ の read edge は $H_{A^c}$ の witness edge を受理
 \end{itemize}
 }
 \end{frame}
@@ -111,13 +110,12 @@ a read edge in $H_A$ accepts every witness edge in $H_{A^c}$}
 \end{itemize}
 
 \note{
-\textbf{スライド概要}：主定理。$G_k$ と同値な関係回路は $2^{k-1}$ 個以上の合成を使う。
+\textbf{スライド概要}：主定理：合成は $2^{k-1}$ 個以上必要。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 共有・補・逆はすべて許して\emph{無料}。数えるのは合成（行列積）だけ
-  \item サイズ $O(k)$ の式から $2^{\Omega(k)}$ 個の合成が必要
-  \item 補足（さらっと）：項サイズは $\Theta(k 2^k)$、爆発は領域サイズ $2^{\Theta(k)}$ から始まる
+  \item 共有・補・逆は無料
+  \item サイズ $O(k)$ の式から $2^{\Omega(k)}$
 \end{itemize}
 }
 \end{frame}
