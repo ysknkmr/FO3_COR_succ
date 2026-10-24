@@ -2,47 +2,115 @@
 \section{The question}
 
 % ============================================================
-% Paper, Sec. 1, paragraph 2 (paragraph 1, FO3 vs FO2 on satisfiability, is left out:
-% it does not lead to the question; the talk opens with model checking instead)
-\begin{frame}{Model checking: \FOthree{} is the exception}
+% Background for non-logicians: what FO^k and model checking are
+\begin{frame}<1-8>{$k$-variable logic $\mathrm{FO}^k$}
+
+$\mathrm{FO}^k$: first-order logic with $k$ variables, \ \emph{reusable}.\\
+
+For example, ``a closed walk of length $\ell$ at $x$''\ is expressible in $\FOthree$:
 
 \begin{center}
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{@{}l@{\qquad}l@{}}
+\begin{tikzpicture}[every node/.style={font=\normalfont}]
+  % a closed walk of length 6 drawn as a regular hexagon, starting at x on the left
+  \foreach \i/\v/\c in {0/x/black,1/y/cA,2/z/cB,3/y/cA,4/z/cB,5/y/cA} {
+    \node[pv,minimum size=7pt,label={[text=\c]180-\i*60:$\v$}] (p\i) at (180-\i*60:1.0) {};
+  }
+  % edge number s is highlighted on slide s+1, together with its conjunct in the formula
+  \foreach \i/\j/\s in {0/1/2,1/2/3,2/3/4,3/4/5,4/5/6,5/0/7} {
+    \draw[thick,-{Stealth},shorten <=1pt,shorten >=1pt,onslide=<\s>{red,very thick}] (p\i) -- (p\j);
+  }
+  \node[anchor=west,font=\footnotesize,text=black!55] at (1.8,0) {$\ell = 6$};
+\end{tikzpicture}
+
+\vspace{.4em}
+{\normalfont $\textcolor<2>{red}{\exists \textcolor{cA}{y}\, \bigl(E(x, \textcolor{cA}{y})} \land \textcolor<3>{red}{\exists \textcolor{cB}{z}\, \bigl(E(\textcolor{cA}{y}, \textcolor{cB}{z})} \land \textcolor<4>{red}{\exists \textcolor{cA}{y}\, \bigl(E(\textcolor{cB}{z}, \textcolor{cA}{y})} \land \textcolor<5>{red}{\exists \textcolor{cB}{z}\, \bigl(E(\textcolor{cA}{y}, \textcolor{cB}{z})} \land \textcolor<6>{red}{\exists \textcolor{cA}{y}\, (E(\textcolor{cB}{z}, \textcolor{cA}{y})} \land \textcolor<7>{red}{E(\textcolor{cA}{y}, x)})\bigr)\bigr)\bigr)\bigr)$}
+\end{center}
+
+\vfill
+\emph{Model checking}: \ $\M \models \varphi(a, b)$? \quad \NOTE{(given $\M$ with $n$ elements, a formula $\varphi$, and $a, b \in \M$)}
+
+\vspace{.6em}
+\HP{$O(|\varphi| \cdot n^{k})$ for $\mathrm{FO}^k$ by table memoization \fcite{vardi1995}}
+
+\note{
+\textbf{スライド概要}：$\mathrm{FO}^k$ は変数を $k$ 個だけ（使い回して）使う一階述語論理。モデル検査は構造・式・要素 $a, b$ から $\varphi(a,b)$ の真偽を判定する問題で、表のメモ化で $O(|\varphi| n^k)$。
+
+\textbf{メモ}：
+\begin{itemize}
+  \item 例：$x$ は固定したまま $y, z$ を交互に使い回せば、長さ $\ell$ の closed walk も 3 変数で書ける  \item 各部分式は自由変数が高々 $k$ 個 $\to$ 部分式ごとに $n^k$ の表を下から作る（table memoization）と $O(|\varphi| n^k)$（Vardi, PODS 1995）
+  \item 次のページ：この素朴な $n^k$ が $k \ge 4$ では最適で、\FOthree{} だけが例外
+\end{itemize}
+}
+\end{frame}
+
+% ============================================================
+% Paper, Sec. 1, paragraph 2 (paragraph 1, FO3 vs FO2 on satisfiability, is left out:
+% it does not lead to the question; the talk opens with model checking instead)
+\begin{frame}{$\mathrm{FO}^{k}$ model checking:
+$O(n^{k})$ is `optimal' for $k \ge 4$; the exception is \FOthree{}}
+We consider binary relation structures with $n$ elements:
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}l@{\quad}l@{\quad}l@{}}
   \toprule
-  logic & model checking \\
+  syntax & model checking & \\
   \midrule
-  $\mathrm{FO}^{k}$, \ $k \ge 4$ & no $O(n^{k-\varepsilon})$ \ \NOTE{(hyperclique hypothesis)} \\
-  \FOthree & \EMPH{$2^{O(|\varphi|)}$} $\cdot\, n^{\omega}$ \ \NOTE{\fcite{nakamura-uezato2027}} \\
+  $\mathrm{FO}^{k}$, \ $k \ge 4$ &
+    \renewcommand{\arraystretch}{1}\begin{tabular}[t]{@{}l@{}}
+      no $O(n^{k-\varepsilon})$ \\
+      \NOTE{under HyperClique Hypothesis}
+    \end{tabular} &
+    \renewcommand{\arraystretch}{1}\begin{tabular}[t]{@{}l@{}}
+      \fcite{BringmannSlusallek2021} \fcite{nakamura-uezato2027}
+    \end{tabular} \\
+  \noalign{\vskip 2pt}\hdashline\noalign{\vskip 4pt}
+  \uncover<2->{\FOthree} &
+    \renewcommand{\arraystretch}{1}\begin{tabular}[t]{@{}l@{}}
+      \uncover<2->{\EMPH{$2^{O(|\varphi|)}$} $\cdot\, n^{\omega}$} \\
+      \uncover<3->{no $2^{o(|\varphi|)} \cdot n^{\omega-\varepsilon}$} \\
+      \uncover<3->{\NOTE{under 3-OV Hypothesis}}
+    \end{tabular} &
+    \renewcommand{\arraystretch}{1}\begin{tabular}[t]{@{}l@{}}
+      \uncover<2->{\fcite{nakamura-uezato2027} \fcite[for PNF]{williams-lics-csl2014}} \\
+      \uncover<3->{\fcite{nakamura-uezato2027}}
+    \end{tabular} \\
+  \uncover<2->{\renewcommand{\arraystretch}{1}\begin{tabular}[t]{@{}l@{}}
+      \KEY{\CoR} \ \fcite{tarski1941} \\
+      \NOTE{Tarski's calculus of relations}
+    \end{tabular}} &
+    \uncover<2->{\KEY{$O(|\varphi| \cdot n^{\omega})$}} & \\
   \bottomrule
 \end{tabular}
 \end{center}
 
-\vfill
-\pause
-\begin{center}
-\begin{tikzpicture}[every node/.style={font=\small}]
-  \node[pv,minimum size=7pt,label=below:$x$] (x) at (0,0) {};
-  \node[pv,minimum size=7pt,label=below:$y$] (y) at (3.6,0) {};
-  \node[pv,minimum size=7pt,label=above:$z$,gray on=<3->] (z) at (1.8,1.1) {};
-  \draw[thick,-{Stealth},gray on=<3->] (x) -- node[above left] {$P$} (z);
-  \draw[thick,-{Stealth},gray on=<3->] (z) -- node[above right] {$Q$} (y);
-  \draw[very thick,-{Stealth},visible on=<3->] (x) -- node[below] {$P \mathbin{;} Q$} (y);
-  \node[anchor=west,align=left,visible on=<3->] at (4.4,.5)
-    {\emph{composition} eliminates $z$\\ $=$ Boolean matrix product, $O(n^{\omega})$};
-\end{tikzpicture}
-\end{center}
-\NOTE{\hfill \FOthree{} and \CoR{} define the same binary queries \fcite{tarski-givant1987}}
+\uncover<4->{%
+Boolean matrix algorithm of \FOthree{} model checking
+via \FOthree{} $\leadsto$ \CoR{}:
 
-\vfill
-\onslide<4->{%
-\HP{The factor \EMPH{$2^{O(|\varphi|)}$} comes from the translation into \CoR.}}
+\begin{center}
+\Large
+$\exists z.\ P(x, z) \land Q(z, y)
+  \quad \leadsto \quad
+  (P \tikzmarknode{comp}{\mathbin{;}} Q)(x, y)$
+\end{center}
+\begin{tikzpicture}[remember picture,overlay]
+  \node[mycalloutnote,callout absolute pointer={(comp.south)},font=\footnotesize,anchor=north]
+    at ($(comp.south)+(0,-.3)$) {composition $=$ Boolean matrix multiplication};
+\end{tikzpicture}
+
+\vspace{1.2em}
+\NOTE{\hfill This translation requires a DNF translation inside each $\exists$:
+\ \EMPH{$2^{O(|\varphi|)}$} size blowup}}
 
 \note{
-\textbf{伝えること}：$\mathrm{FO}^k$ のモデル検査で \FOthree{} だけが例外的に速い。ただし $2^{O(|\varphi|)}$ の因子が付き、その出どころは \CoR{} への翻訳。
+\textbf{スライド概要}：$\mathrm{FO}^k$ のモデル検査で \FOthree{} だけが例外的に速い。ただし $2^{O(|\varphi|)}$ の因子が付き、その出どころは \CoR{} への翻訳。
+
+\textbf{メモ}：
 \begin{itemize}
-  \item $k \ge 4$：$O(n^{k-\varepsilon})$ にはできない（hyperclique 仮説、1 つの二項関係の固定文でも）
-  \item \FOthree：合成 $=$ ブール行列積で第 3 変数を消せるので $n^{\omega}$
+  \item $k \ge 4$：$O(n^{k-\varepsilon})$ にはできない（hyperclique 仮説：Bringmann--Slusallek。1 つの二項関係の固定文でも：Nakamura--Uezato）
+  \item \CoR{} は各演算が行列演算なので $O(|\varphi| n^{\omega})$。合成が第 3 変数 $z$ を消す（式の $\leadsto$）
+  \item \FOthree{} は \CoR{} に翻訳してから評価するので $n^{\omega}$
   \item 指数因子は翻訳から来る $\to$ 次のページの問いへつなぐ
 \end{itemize}
 }
@@ -50,7 +118,7 @@
 
 % ============================================================
 % Paper, Sec. 1, paragraph 3
-\begin{frame}{Is the blowup necessary?}
+\begin{frame}{Is \EMPH{$2^{O(|\varphi|)}$} size blowup necessary?}
 
 \begin{center}
 \begin{tikzpicture}
@@ -58,7 +126,8 @@
   \node (T) at (4,0) {$T_\varphi$};
   \node[font=\small,text=black!55,below=2pt] at (phi.south) {\FOthree};
   \node[font=\small,text=black!55,below=2pt] at (T.south) {\CoR};
-  \draw[-{Stealth},thick] (phi) -- node[above] {\small Tarski (1940s)} (T);
+  \draw[-{Stealth},thick] (phi) -- node[above] {\small Tarski (1940s)}
+    node[below] {\fcite[construction]{tarski-givant1987}} (T);
   \node[anchor=west] at (5,.35) {$|T_\varphi| = 2^{O(|\varphi|)}$ \ \NOTE{(classical)}};
   \node[anchor=west,visible on=<3->] at (5,-.45) {\alert{$|T_\varphi| = 2^{\Omega(|\varphi|)}$} \ \NOTE{(our result)}};
 \end{tikzpicture}
@@ -66,9 +135,19 @@
 \NOTE{\hfill $T_\varphi$: a smallest \CoR{} term equivalent to $\varphi$ on finite structures}
 
 \vfill
+\begin{center}
+  e.g.\ \
+  $\exists z.\ \bigl(P_1(x, z) \lor Q_1(z, y)\bigr) \land \cdots \land \bigl(P_k(x, z) \lor Q_k(z, y)\bigr)$
+  \\[.4em]
+  $\leadsto \ \displaystyle\bigcup_{A \subseteq [k]}
+    \Bigl(\bigcap_{i \in A} P_i\Bigr) \mathbin{;} \Bigl(\bigcap_{i \notin A} Q_i\Bigr)$
+  \quad \NOTE{($2^k$ compositions: necessary?)}
+\end{center}
+
+\vfill
 \onslide<2->{%
 \begin{center}
-  Open \NOTE{(Fletcher et al.\ 2015; \cite{nakamura2022}; \cite{nakamura-uezato2027})}
+  Open \fcite{FletcherEtAl2015,nakamura2022,nakamura-uezato2027}
 \end{center}}
 
 \vfill
@@ -78,8 +157,11 @@
 \end{center}}
 
 \note{
-\textbf{伝えること}：「翻訳の指数爆発は必要か」は Tarski 以来の古い問いで、未解決だった。答えは「必要」：Tarski の翻訳は最悪ケースで最適。
+\textbf{スライド概要}：「翻訳の指数爆発は必要か」は Tarski 以来の古い問いで、未解決だった。答えは「必要」：Tarski の翻訳は最悪ケースで最適。
+
+\textbf{メモ}：
 \begin{itemize}
+  \item 翻訳は 1940 年代の Tarski だが、具体的な構成は Tarski--Givant の本（1987）にある
   \item 先行研究で未解決と明記されていた（FGL+15, Nak22, NU27）
   \item 既知だったのは 3-OV 仮説下での翻訳\emph{時間}の下界だけ。今回は\emph{サイズ}の無条件下界
 \end{itemize}
@@ -114,7 +196,9 @@
 \]
 
 \note{
-\textbf{伝えること}：\CoR{} の演算を固定する。変数を消すのは合成だけで、中間点 $w$ が \emph{witness}。以降はこの言葉で話す。
+\textbf{スライド概要}：\CoR{} の演算を固定する。変数を消すのは合成だけで、中間点 $w$ が \emph{witness}。以降はこの言葉で話す。
+
+\textbf{メモ}：
 \begin{itemize}
   \item 合成以外（$\cup, \cap$、補、逆、定数）は後で「自由」に使ってよいことになる
 \end{itemize}

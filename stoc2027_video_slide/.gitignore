@@ -13,7 +13,5 @@
 *.synctex.gz
 *.toc
 *-SAVE-ERROR
-# speaker-notes build (`make notes`)
-slide-notes.*
 # luaotfload cache used by the Makefile / .latexmkrc
 .texmf-var/

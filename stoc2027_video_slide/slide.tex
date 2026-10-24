@@ -7,10 +7,8 @@
 %   Story (follows Sec. 1 of the paper, v5): question -> main results ->
 %   natural approaches that fail -> technical overview -> further results
 %   Rules: https://acm-stoc.org/stoc2027/stoc2027-video-instructions.pdf
-%   Style: ../../PCORTC_derivative/20260920_karuizawa_seminar_slide (header colours: moloch defaults)
 \documentclass[unicode,10pt,aspectratio=169]{beamer}
 
-% House style of the Karuizawa seminar slides (header colours: moloch defaults)
 \input{beamer_header}
 
 % ==== basic packages (as in the Karuizawa slides' header.tex) ====
@@ -22,6 +20,7 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=false}
 \usepackage{booktabs,array}
+\usepackage{arydshln}  % \hdashline in tables
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,calc,backgrounds,decorations.pathreplacing,
@@ -38,7 +37,15 @@
 \newcommand{\DEF}[1]{\emph{\uline{#1}}}
 \newcommand{\NOTE}[1]{{\footnotesize\textcolor{black!55}{#1}}}
 \newcommand{\KEY}[1]{\emph{\textcolor{blue!60!white}{#1}}}
-\newcommand{\fcite}[2][]{{\textcolor{black!50}{\footnotesize(\cite[#1]{#2})}}}
+% citations as "[NU27, PODS]", as the alphabetic labels of the paper plus the venue
+% (the usera field of the entry; entries without one, e.g. books, show the label only)
+\DeclareCiteCommand{\venuecite}[\mkbibbrackets]
+  {\usebibmacro{prenote}}
+  {\bibhyperref{\printfield{labelalpha}\printfield{extraalpha}%
+   \iffieldundef{usera}{}{\addcomma\space\printfield{usera}}}}
+  {\multicitedelim}
+  {\usebibmacro{postnote}}
+\newcommand{\fcite}[2][]{{\textcolor{black!50}{\footnotesize\venuecite[#1]{#2}}}}
 \newcommand{\HP}[1]{\faHandPointRight \quad
   \begin{minipage}[t]{\dimexpr\linewidth-2.2em\relax}#1\end{minipage}}
 
@@ -104,15 +111,12 @@
 
 \hypersetup{colorlinks=false}
 
-% ==== speaker notes (`make notes` -> slide-notes.pdf, notes to the right of each slide) ====
-% Each \note says, in Japanese, what the slide must get across. LuaTeX-ja is loaded
-% only here, so the slides themselves keep the plain house style.
-\ifdefined\SHOWNOTES
-  \usepackage{luatexja}
-  \setbeameroption{show notes on second screen=right}
-  \setbeamertemplate{note page}{%
-    \vskip1em\small\raggedright\setlength{\parskip}{.6em}\insertnote}
-\fi
+% ==== speaker notes: shown to the right of each slide ====
+% Each \note says, in Japanese, what the slide must get across.
+\usepackage{luatexja}
+\setbeameroption{show notes on second screen=right}
+\setbeamertemplate{note page}{%
+  \vskip1em\small\raggedright\setlength{\parskip}{.6em}\insertnote}
 
 \title{An Exponential Succinctness Gap between\\Three-Variable Logic and the Calculus of Relations}
 \author{\underline{Yuya Uezato} \and Yoshiki Nakamura}
@@ -134,6 +138,7 @@
 \AtBeginSection[]{}
 \begingroup
 \AtNextBibliography{\small}
+\setbeamertemplate{bibliography item}[text]
 \begin{frame}[allowframebreaks,noframenumbering]{References}
   \printbibliography[heading=none]
 \end{frame}
