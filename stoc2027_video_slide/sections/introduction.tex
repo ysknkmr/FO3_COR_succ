@@ -1,94 +1,50 @@
-% Timing: 0:00--6:00   (paper: Sec. 1, opening paragraphs)
+% Timing: 0:00--5:00   (paper: Sec. 1, opening paragraphs)
 \section{The question}
 
 % ============================================================
-% Paper, Sec. 1, paragraph 1
-\begin{frame}{\FOthree{} is a singular point}
+% Paper, Sec. 1, paragraph 2 (paragraph 1, FO3 vs FO2 on satisfiability, is left out:
+% it does not lead to the question; the talk opens with model checking instead)
+\begin{frame}{Model checking: \FOthree{} is the exception}
 
-Three-variable first-order logic restricted to binary relations (\FOthree)
-is already a singular point among the finite-variable fragments $\mathrm{FO}^k$.
-
-\vfill
 \begin{center}
-\renewcommand{\arraystretch}{1.25}
-\footnotesize
-\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{.27\textwidth}>{\raggedright\arraybackslash}p{.42\textwidth}@{}}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}l@{\qquad}l@{}}
   \toprule
-  & \FOtwo & \FOthree \\
+  logic & model checking \\
   \midrule
-  triangle, transitivity & & expresses them \\
-  over words & & expresses all of first-order logic \\
-  (finite) satisfiability & decidable; finite models suffice & undecidable; \EMPH{can force infinite models} \\
-  property testing & & a single $\forall\exists\forall$ sentence is not testable \\
-  symmetric model counting & polynomial for every sentence & $\#\mathrm{P}_1$-complete for a fixed sentence \\
-  spectra & & Asser's question reduces to spectra of \FOthree{} sentences \\
+  $\mathrm{FO}^{k}$, \ $k \ge 4$ & no $O(n^{k-\varepsilon})$ \ \NOTE{(hyperclique hypothesis)} \\
+  \FOthree & \EMPH{$2^{O(|\varphi|)}$} $\cdot\, n^{\omega}$ \ \NOTE{\fcite{nakamura-uezato2027}} \\
   \bottomrule
 \end{tabular}
 \end{center}
-\NOTE{\hfill satisfiability: even over a single binary relation; \ property testing: with a constant number of queries;\\
-\hfill Asser's question (are first-order spectra closed under complement?) is equivalent to $\mathrm{NE} = \mathrm{coNE}$}
 
 \vfill
-\NOTE{Three variables even suffice for all of mathematics: Tarski formalized set theory in $\mathcal L^{\times}$,
-a variable-free logic of equations between terms of the calculus of relations (\CoR), and these equations
-have exactly the expressive power of three-variable sentences \fcite{tarski-givant1987}.}
-
-\note{
-- FO3, three-variable first-order logic restricted to binary relations, is already a singular point among the finite-variable fragments.
-- Unlike FO2, it expresses the existence of a triangle and transitivity. Over words, it expresses all of first-order logic.
-- Three variables even suffice for all of mathematics: Tarski formalized set theory in L-times.
-- This expressive strength has sharp computational consequences: satisfiability, property testing,
-  symmetric model counting, and spectra.
-}
-\end{frame}
-
-% ============================================================
-% Paper, Sec. 1, paragraph 2
-\begin{frame}{Model checking: \FOthree{} is singular here as well}
-
-Model checking is solvable in polynomial time for every $\mathrm{FO}^k$:
-a $k$-variable formula $\varphi$ can be evaluated naively in time $O(|\varphi| n^k)$
-\NOTE{($n$ elements)}.
-
-\vfill
+\pause
 \begin{center}
 \begin{tikzpicture}[every node/.style={font=\small}]
-  \node[logicrow] (k4) at (0,.8) {$\mathrm{FO}^{k}$, \ $k \ge 4$};
-  \node[logicrow] (k3) at (0,-.5) {\FOthree};
-  \node[anchor=west,align=left] at (2,.8) {not improvable to $O(n^{k-\varepsilon})$ under the hyperclique hypothesis,\\
-    \NOTE{even for a fixed sentence over a single binary relation}\\
-    \NOTE{\fcite[Corollary 32]{nakamura-uezato2027}}};
-  \node[anchor=west,align=left] at (2,-.5) {every sentence in time \EMPH{$2^{O(|\varphi|)}$} $\cdot\, n^{\omega}$\\
-    \NOTE{$\omega < 2.3714$ \ \fcite[Theorem 10]{nakamura-uezato2027}}};
+  \node[pv,minimum size=7pt,label=below:$x$] (x) at (0,0) {};
+  \node[pv,minimum size=7pt,label=below:$y$] (y) at (3.6,0) {};
+  \node[pv,minimum size=7pt,label=above:$z$,gray on=<3->] (z) at (1.8,1.1) {};
+  \draw[thick,-{Stealth},gray on=<3->] (x) -- node[above left] {$P$} (z);
+  \draw[thick,-{Stealth},gray on=<3->] (z) -- node[above right] {$Q$} (y);
+  \draw[very thick,-{Stealth},visible on=<3->] (x) -- node[below] {$P \mathbin{;} Q$} (y);
+  \node[anchor=west,align=left,visible on=<3->] at (4.4,.5)
+    {\emph{composition} eliminates $z$\\ $=$ Boolean matrix product, $O(n^{\omega})$};
 \end{tikzpicture}
 \end{center}
+\NOTE{\hfill \FOthree{} and \CoR{} define the same binary queries \fcite{tarski-givant1987}}
 
 \vfill
-\pause
-\FOthree{} and \CoR{} define the same binary queries \fcite{tarski-givant1987}, and the key is
-the central operation of \CoR, \emph{composition}:
-\begin{itemize}
-  \item it eliminates the third variable, \
-    $\exists z\, (P(x, z) \land Q(z, y)) \iff (P \mathbin{;} Q)(x, y)$;
-  \item it is a Boolean matrix product, computable in subcubic time $O(n^{\omega})$.
-\end{itemize}
-
-\vfill
-\pause
-\begin{alertblock}{}
-  \centering
-  The factor $2^{O(|\varphi|)}$ comes from the translation into \CoR.
-\end{alertblock}
+\onslide<4->{%
+\HP{The factor \EMPH{$2^{O(|\varphi|)}$} comes from the translation into \CoR.}}
 
 \note{
-- Model checking is solvable in polynomial time for every FO^k, yet FO3 is singular here as well.
-- A k-variable formula can be evaluated naively in O(|phi| n^k).
-- For k >= 4, under the hyperclique hypothesis, this cannot be improved to O(n^{k-eps}),
-  even for a fixed sentence over a single binary relation.
-- For FO3, every sentence can be evaluated in 2^{O(|phi|)} n^omega.
-- FO3 and CoR define the same binary queries, and the key is composition:
-  it eliminates the third variable, and it is a Boolean matrix product.
-- The factor 2^{O(|phi|)} comes from the translation into CoR.
+\textbf{伝えること}：$\mathrm{FO}^k$ のモデル検査で \FOthree{} だけが例外的に速い。ただし $2^{O(|\varphi|)}$ の因子が付き、その出どころは \CoR{} への翻訳。
+\begin{itemize}
+  \item $k \ge 4$：$O(n^{k-\varepsilon})$ にはできない（hyperclique 仮説、1 つの二項関係の固定文でも）
+  \item \FOthree：合成 $=$ ブール行列積で第 3 変数を消せるので $n^{\omega}$
+  \item 指数因子は翻訳から来る $\to$ 次のページの問いへつなぐ
+\end{itemize}
 }
 \end{frame}
 
@@ -96,35 +52,37 @@ the central operation of \CoR, \emph{composition}:
 % Paper, Sec. 1, paragraph 3
 \begin{frame}{Is the blowup necessary?}
 
-\begin{itemize}
-  \item Whether it is necessary sounds like a modern question about query compilation,
-    but it is as old as Tarski's translation from the 1940s \fcite{tarski-givant1987},
-    and its roots reach back to the nineteenth-century calculus of relations.
-  \item It remained open
-    \NOTE{(Fletcher et al.\ 2015, Remark 4.5; \cite[§8]{nakamura2022}; \cite[Question 3]{nakamura-uezato2027})},
-    although under the 3-OV hypothesis no translation can be computed in polynomial time
-    \fcite[Corollary 40]{nakamura-uezato2027}.
-\end{itemize}
+\begin{center}
+\begin{tikzpicture}
+  \node (phi) at (0,0) {$\varphi$};
+  \node (T) at (4,0) {$T_\varphi$};
+  \node[font=\small,text=black!55,below=2pt] at (phi.south) {\FOthree};
+  \node[font=\small,text=black!55,below=2pt] at (T.south) {\CoR};
+  \draw[-{Stealth},thick] (phi) -- node[above] {\small Tarski (1940s)} (T);
+  \node[anchor=west] at (5,.35) {$|T_\varphi| = 2^{O(|\varphi|)}$ \ \NOTE{(classical)}};
+  \node[anchor=west,visible on=<3->] at (5,-.45) {\alert{$|T_\varphi| = 2^{\Omega(|\varphi|)}$} \ \NOTE{(our result)}};
+\end{tikzpicture}
+\end{center}
+\NOTE{\hfill $T_\varphi$: a smallest \CoR{} term equivalent to $\varphi$ on finite structures}
 
 \vfill
-\pause
+\onslide<2->{%
+\begin{center}
+  Open \NOTE{(Fletcher et al.\ 2015; \cite{nakamura2022}; \cite{nakamura-uezato2027})}
+\end{center}}
+
+\vfill
+\onslide<3->{%
 \begin{center}
   We settle it: \ \emph{Tarski's translation is optimal in the worst case.}
-
-  \vspace{.6em}
-  Writing $T_\varphi$ for a smallest \CoR{} term equivalent to $\varphi$ on finite structures,
-  \[
-    \varphi \Longrightarrow T_\varphi \qquad
-    |T_\varphi| = 2^{O(|\varphi|)} \ \text{(classical)}, \qquad
-    \alert{|T_\varphi| = 2^{\Omega(|\varphi|)}} \ \text{(our result)}.
-  \]
-\end{center}
+\end{center}}
 
 \note{
-- Whether this blowup is necessary sounds like a modern question about query compilation,
-  but it is as old as Tarski's translation from the 1940s.
-- It remained open, although under the 3-OV hypothesis no translation can be computed in polynomial time.
-- We settle it: Tarski's translation is optimal in the worst case.
+\textbf{伝えること}：「翻訳の指数爆発は必要か」は Tarski 以来の古い問いで、未解決だった。答えは「必要」：Tarski の翻訳は最悪ケースで最適。
+\begin{itemize}
+  \item 先行研究で未解決と明記されていた（FGL+15, Nak22, NU27）
+  \item 既知だったのは 3-OV 仮説下での翻訳\emph{時間}の下界だけ。今回は\emph{サイズ}の無条件下界
+\end{itemize}
 }
 \end{frame}
 
@@ -132,39 +90,33 @@ the central operation of \CoR, \emph{composition}:
 % Paper, Sec. 1, paragraph 4
 \begin{frame}{The calculus of relations (\CoR)}
 
-On a structure with nonempty domain $\mathbb D$, \CoR{} uses the constants
-\[
-  \zero \defeq \emptyset, \qquad \one \defeq \mathbb D^2, \qquad \id \defeq \set{(u, u) : u \in \mathbb D},
-\]
-together with union, intersection, complement $\overline{X} \defeq \mathbb D^2 \setminus X$,
-converse $X^{\conv} \defeq \set{(v, u) : (u, v) \in X}$, and composition
-\[
-  X \mathbin{;} Y \defeq \set{(u, v) : \text{some } w \in \mathbb D \text{ satisfies } (u, w) \in X,\ (w, v) \in Y}.
-\]
+\begin{center}
+  $\zero, \ \one, \ \id, \qquad \cup, \ \cap, \ \overline{\,\cdot\,}, \ {}^{\conv}, \qquad$ and \emph{composition} \ $;$
+\end{center}
 
 \vfill
 \begin{center}
 \begin{tikzpicture}[every node/.style={font=\small}]
-  \node[cellvert,minimum size=6pt,label=below:$x$] (x) at (0,0) {};
-  \node[cellvert,minimum size=6pt,label=above:$z$] (z) at (1.4,.9) {};
-  \node[cellvert,minimum size=6pt,label=below:$y$] (y) at (2.8,0) {};
-  \draw[-{Stealth},thick] (x) -- node[above left] {$P$} (z);
-  \draw[-{Stealth},thick] (z) -- node[above right] {$Q$} (y);
-  \draw[-{Stealth},line width=1.5pt,black!40] (3.5,.3) -- (4.7,.3);
-  \node[cellvert,minimum size=6pt,label=below:$x$] (x2) at (5.4,0) {};
-  \node[cellvert,minimum size=6pt,label=below:$y$] (y2) at (8.2,0) {};
-  \draw[-{Stealth},thick] (x2) -- node[above] {$P \mathbin{;} Q$} (y2);
+  \node[pv,minimum size=7pt,label=below:$u$] (x) at (0,0) {};
+  \node[pv,minimum size=7pt,label=above:$w$] (z) at (1.8,1.1) {};
+  \node[pv,minimum size=7pt,label=below:$v$] (y) at (3.6,0) {};
+  \draw[thick,-{Stealth}] (x) -- node[above left] {$X$} (z);
+  \draw[thick,-{Stealth}] (z) -- node[above right] {$Y$} (y);
+  \draw[very thick,-{Stealth},dashed] (x) -- node[below] {$X \mathbin{;} Y$} (y);
+  \node[draw=chibasub,thick,circle,minimum size=16pt,visible on=<2->] at (z) {};
+  \node[anchor=west,visible on=<2->,text=chibasub] at (2.3,1.5) {a \emph{witness} for $(u, v)$};
 \end{tikzpicture}
 \end{center}
 
 \vfill
-Composition implements the elimination step
-$\exists z\, (P(x, z) \land Q(z, y)) \iff (P \mathbin{;} Q)(x, y)$;
-a vertex $z$ with $P(x, z)$ and $Q(z, y)$ is a \emph{witness} for $(x, y)$.
+\[
+  X \mathbin{;} Y \defeq \set{(u, v) : \text{some } w \in \mathbb D \text{ satisfies } (u, w) \in X,\ (w, v) \in Y}
+\]
 
 \note{
-- To state the result formally, we fix the operations of CoR:
-  the constants 0, 1, id, together with union, intersection, complement, converse, and composition.
-- Composition implements the elimination step; a vertex z with P(x,z) and Q(z,y) is a witness for (x,y).
+\textbf{伝えること}：\CoR{} の演算を固定する。変数を消すのは合成だけで、中間点 $w$ が \emph{witness}。以降はこの言葉で話す。
+\begin{itemize}
+  \item 合成以外（$\cup, \cap$、補、逆、定数）は後で「自由」に使ってよいことになる
+\end{itemize}
 }
 \end{frame}

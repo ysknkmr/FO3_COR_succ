@@ -1,33 +1,37 @@
-% Timing: 27:00--29:00   (paper: Sec. 7)
+% Timing: 27:00--28:00   (paper: Sec. 7)
 \section{Conclusion}
 
 % ============================================================
 \begin{frame}{Summary}
 
 \begin{center}
-\renewcommand{\arraystretch}{1.35}
-\begin{tabular}{@{}l@{\quad}p{.74\textwidth}@{}}
-  \KEY{Question} & \CoR{} evaluates \FOthree{} by matrix multiplication;
-                   is Tarski's $2^{O(|\varphi|)}$ translation necessary? \\
-  \KEY{Answer}   & Yes: $G_k$ (size $8k$) needs $\ge 2^{k-1}$ compositions,
-                   even for circuits with complement and converse. \\
-  \KEY{Natural approaches} & fail: complement reverses the inclusion $(\diamond)$ of the fooling-set argument for $\Sigma_1$\CoR. \\
-  \KEY{Our technique} & Exact predictions on one reference structure: $2^k$ folds at the hub;
-                   an equality survives complement; each composition notices $\le 2$ folds.
-\end{tabular}
+\begin{tikzpicture}
+  \node (phi) at (0,0) {$\varphi$};
+  \node (T) at (4,0) {$T_\varphi$};
+  \draw[-{Stealth},thick] (phi) -- node[above] {\small Tarski} (T);
+  \node[anchor=west] at (5,0) {\alert{$|T_\varphi| = 2^{\Omega(|\varphi|)}$}};
+\end{tikzpicture}
 \end{center}
 
 \vfill
-\begin{block}{Open questions}
-  \begin{itemize}
-    \item A superpolynomial gap over a \emph{fixed} signature, even one binary relation symbol?
-    \item Domain size: close $\Omega(\sqrt{n / \log n}) \le c_n(G_k) \le 4kn$ for $n < n_0(2^k)$.
-    \item The exact composition count for $G_k$: between $2^{k-1}$ and $2^k$.
-  \end{itemize}
-\end{block}
+\begin{center}
+  exact predictions on one reference structure:\\
+  $2^k$ folds, \ each composition notices $\le 2$
+\end{center}
+
+\vfill
+\pause
+\myIconQuestion \quad \KEY{Open questions}
+\begin{itemize}
+  \item a \emph{fixed} signature?
+  \item the onset domain size; \ the exact count between $2^{k-1}$ and $2^k$
+\end{itemize}
 
 \note{
-- Recap: the question, the answer, why natural approaches fail, and our technique.
-- Open questions: a fixed signature, small domains, and the exact constant.
+\textbf{伝えること}：Tarski の翻訳は最悪ケースで最適。鍵は「1 つの参照構造上での厳密な予測」で、各合成は $2^k$ 個の fold のうち高々 2 つにしか気づかない。
+\begin{itemize}
+  \item 未解決：固定シグネチャ（二項関係 1 つ）でも超多項式差は出るか
+  \item 爆発が始まる領域サイズ、正確な合成数（$2^{k-1}$ か $2^k$ か）
+\end{itemize}
 }
 \end{frame}

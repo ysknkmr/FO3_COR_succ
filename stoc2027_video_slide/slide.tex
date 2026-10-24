@@ -1,4 +1,8 @@
-% !TEX program = lualatex
+% !TEX program = /usr/local/texlive/2026/bin/x86_64-linux/lualatex
+% !BIB program = /usr/local/texlive/2026/bin/x86_64-linux/biber
+%   LaTeX Workshop follows these magic comments and calls the engine directly
+%   (no latexmk, so .latexmkrc is not read); the Debian TeX Live 2023 in /usr/bin
+%   is too old for the house style, hence the absolute paths. `make` also works.
 % STOC 2027 author video (20--30 min, for PC members and subreviewers)
 %   Story (follows Sec. 1 of the paper, v5): question -> main results ->
 %   natural approaches that fail -> technical overview -> further results
@@ -83,10 +87,32 @@
     text width=4.15cm,minimum height=2.6cm,inner sep=6pt,anchor=north},
   ev/.style={circle,fill=#1,draw=white,thick,minimum size=.32cm,inner sep=0pt},
   lbl/.style={align=left,font=\small,anchor=west,text width=11.5cm},
-  logicrow/.style={draw=black,thin,rounded corners=2pt,minimum height=.75cm,minimum width=3.2cm,align=center},
+  % overlay-aware styles: onslide=<2->{red}, visible on=<2->
+  onslide/.code args={<#1>#2}{\only<#1>{\pgfkeysalso{#2}}},
+  invisible/.style={opacity=0,text opacity=0},
+  visible on/.style={invisible,onslide=#1{opacity=1,text opacity=1}},
+  gray on/.style={onslide=#1{draw=black!25,text=black!25}},
+  structbox/.style={inner sep=4pt},
+  gate/.style={circle,draw=black,fill=white,minimum size=13pt,inner sep=0pt,font=\scriptsize},
+  cgate/.style={gate,fill=black!12},
 }
+% edge colours used only for illustrations of colorings
+\colorlet{cA}{blue!70!black}
+\colorlet{cB}{orange!85!black}
+\colorlet{cC}{green!50!black}
+\colorlet{cD}{violet!80!black}
 
 \hypersetup{colorlinks=false}
+
+% ==== speaker notes (`make notes` -> slide-notes.pdf, notes to the right of each slide) ====
+% Each \note says, in Japanese, what the slide must get across. LuaTeX-ja is loaded
+% only here, so the slides themselves keep the plain house style.
+\ifdefined\SHOWNOTES
+  \usepackage{luatexja}
+  \setbeameroption{show notes on second screen=right}
+  \setbeamertemplate{note page}{%
+    \vskip1em\small\raggedright\setlength{\parskip}{.6em}\insertnote}
+\fi
 
 \title{An Exponential Succinctness Gap between\\Three-Variable Logic and the Calculus of Relations}
 \author{\underline{Yuya Uezato} \and Yoshiki Nakamura}

@@ -1,0 +1,19 @@
+# LaTeX build artifacts (slide.pdf is the deliverable and stays tracked)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*-SAVE-ERROR
+# speaker-notes build (`make notes`)
+slide-notes.*
+# luaotfload cache used by the Makefile / .latexmkrc
+.texmf-var/

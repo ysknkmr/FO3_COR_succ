@@ -1,89 +1,96 @@
-% Timing: 11:00--14:00   (paper: Sec. 1.2)
+% Timing: 10:00--13:00   (paper: Sec. 1.2)
 \section{Natural approaches that fail}
 
 % ============================================================
-\begin{frame}{$\Sigma_1$\CoR{}: organized as a fooling-set argument}
+\begin{frame}{$\Sigma_1$\CoR{}: a fooling-set argument \ \NOTE{\fcite{nakamura2020}, \fcite{nakamura2022}}}
 
-Before this work, exponential lower bounds were known only for $\Sigma_1$\CoR, even with shared subterms
-\NOTE{(positive \CoR{} \cite{nakamura2020}; $\Sigma_1$\CoR{} \cite[Theorems 6.1 and 6.12]{nakamura2022})}.\\
-\NOTE{$\Sigma_1$\CoR: complement may be applied only to input relations and $\id$, and so never stands above a composition.}
-
-\vspace{.3em}
-\begin{columns}[T]
-\begin{column}{.47\textwidth}
-\begin{block}{Communication complexity}
-  $F \subseteq f^{-1}(1)$ is a \emph{fooling set} if any two
-  $(a, b), (a', b') \in F$ have a crossed input with value $0$.\\
-  Covering $F$ by 1-rectangles takes $\ge |F|$ of them.
-\end{block}
-\end{column}
-\begin{column}{.50\textwidth}
-\pause
-\begin{block}{Nakamura's instances}
-  $t = \Theta(2^k)$ structures $\mathcal S_i$ on $u_i, w_i, v_i$; \ one $\mathcal N$ with $u^*, v^*$:
-  \begin{itemize}
-    \item $\sem{\varphi}{\mathcal S_i}(u_i, v_i) = 1$, \ $\sem{\varphi}{\mathcal N}(u^*, v^*) = 0$;
-    \item for $i < j$, some $c$ with $(\mathcal S_i; u_i, w_i) \hookrightarrow (\mathcal N; u^*, c)$
-      and $(\mathcal S_j; w_j, v_j) \hookrightarrow (\mathcal N; c, v^*)$.
-  \end{itemize}
-\end{block}
-\end{column}
-\end{columns}
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\small}]
+  % small structures
+  \node[structbox,minimum width=2.6cm,minimum height=1.3cm] (Si) at (0,1.4) {};
+  \node[above] at (Si.north) {$\mathcal S_i$};
+  \node[pv,label=left:$u_i$] (ui) at (-.9,1.2) {};
+  \node[pv,label=above:$w_i$] (wi) at (0,1.75) {};
+  \node[pv,label=right:$v_i$] (vi) at (.9,1.2) {};
+  \draw[thick,-{Stealth}] (ui) -- (wi); \draw[thick,-{Stealth}] (wi) -- (vi);
+  \node[structbox,minimum width=2.6cm,minimum height=1.3cm] (Sj) at (0,-1.4) {};
+  \node[below] at (Sj.south) {$\mathcal S_j$};
+  \node[pv,label=left:$u_j$] (uj) at (-.9,-1.6) {};
+  \node[pv,label=below:$w_j$] (wj) at (0,-1.05) {};
+  \node[pv,label=right:$v_j$] (vj) at (.9,-1.6) {};
+  \draw[thick,-{Stealth}] (uj) -- (wj); \draw[thick,-{Stealth}] (wj) -- (vj);
+  \node[font=\scriptsize,text=chibasub] at (2.0,1.4) {$\varphi = 1$};
+  \node[font=\scriptsize,text=chibasub] at (2.0,-1.4) {$\varphi = 1$};
+  % large structure
+  \begin{scope}[visible on=<2->]
+  \node[structbox,minimum width=4.4cm,minimum height=2.4cm] (N) at (6.4,0) {};
+  \node[above] at (N.north) {$\mathcal N$};
+  \node[pv,label=left:$u^*$] (u) at (4.8,-.3) {};
+  \node[pv,label=above:$c$] (c) at (6.4,.6) {};
+  \node[pv,label=right:$v^*$] (v) at (8.0,-.3) {};
+  \draw[thick,-{Stealth}] (u) -- (c); \draw[thick,-{Stealth}] (c) -- (v);
+  \node[font=\scriptsize,text=chibasub] at (6.4,-.85) {$\varphi = 0$};
+  \draw[-{Stealth},densely dashed,black!50] (Si.east) to[bend left=15] node[above,font=\scriptsize] {$\hookrightarrow$} (5.5,.4);
+  \draw[-{Stealth},densely dashed,black!50] (Sj.east) to[bend right=15] node[below,font=\scriptsize] {$\hookrightarrow$} (7.3,.1);
+  \end{scope}
+\end{tikzpicture}
+\end{center}
 
 \vfill
-\pause
-\begin{itemize}
-  \item $\Sigma_1$\CoR{} is \emph{preserved under extensions}: \
-    $\iota(\sem{T}{\mathcal S}) \subseteq \sem{T}{\mathcal S'}$ for every embedding $\iota$. \hfill $(\diamond)$
-  \item A lowest subterm separating $\mathcal S_i$ from $\mathcal N$ is a composition $X \mathbin{;} Y$
-    with witness $w_i$: a 1-rectangle.
-  \item If $\mathcal S_i, \mathcal S_j$ share it, $c$ is a witness for $(u^*, v^*)$ in $\mathcal N$ by $(\diamond)$.
-    \ $\Rightarrow$ \ $t$ compositions.
-\end{itemize}
+\onslide<3->{%
+\begin{center}
+  $\Sigma_1$\CoR: \ $\iota(\sem{T}{\mathcal S}) \subseteq \sem{T}{\mathcal S'}$ \ $(\diamond)$
+  \quad $\Rightarrow$ \quad each composition separates $\le 1$ instance
+\end{center}}
 
 \note{
-- Before this work, exponential lower bounds were known only for Sigma_1 CoR.
-- Organized as a fooling-set argument, the proof is simple.
-- Nakamura's instances: many small structures that satisfy the query, and one large structure that does not,
-  into which crossed pairs embed.
-- Sigma_1 CoR is preserved under extensions, so each separating composition acts as a 1-rectangle,
-  and no two instances share one.
+\textbf{伝えること}：既存の指数下界は $\Sigma_1$\CoR{}（補が合成の上に来ない）だけ。その証明は fooling-set 論法として整理できる。
+\begin{itemize}
+  \item 小さい構造 $\mathcal S_i$ は $\varphi = 1$、大きい構造 $\mathcal N$ は $\varphi = 0$、交差した組は $\mathcal N$ に埋め込める
+  \item 拡張で保存される $(\diamond)$ ので、各合成は 1 つのインスタンスしか分離できない $\to$ $t$ 個必要
+\end{itemize}
 }
 \end{frame}
 
 % ============================================================
 \begin{frame}{With complement, both ingredients fail}
 
-\begin{enumerate}
-  \item \emph{Complement reverses $(\diamond)$}:
-    \ $\overline{R \mathbin{;} \one}$ holds at $(u, v)$ when $u$ has no $R$-successor,
-    but fails at $(\iota(u), \iota(v))$ once $\iota(u)$ gains one.
-  \vfill
-  \pause
-  \item \emph{A term with two compositions separates every $\mathcal S_i$ from $\mathcal N$}:
-    \[
-      \overline{(E \cap (E \mathbin{;} \overline{\id}))} \mathbin{;} \one
-      \qquad \text{\NOTE{($E$: the adjacency relation)}}
-    \]
-\end{enumerate}
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\small}]
+  \node[structbox,minimum width=2.6cm,minimum height=1.6cm] (S) at (0,0) {};
+  \node[above] at (S.north) {$\mathcal S$};
+  \node[pv,label=left:$u$] (u) at (-.5,.1) {};
+  \node[font=\scriptsize] at (0,-.5) {$\overline{R \mathbin{;} \one}$ holds};
+  \draw[-{Stealth},thick] (1.7,0) -- node[above] {$\iota$} (2.9,0);
+  \node[structbox,minimum width=2.6cm,minimum height=1.6cm] (S2) at (4.6,0) {};
+  \node[above] at (S2.north) {$\mathcal S'$};
+  \node[pv,label=left:$\iota(u)$] (u2) at (4.2,.1) {};
+  \node[pv] (r) at (5.3,.45) {};
+  \draw[thick,-{Stealth},chibasub] (u2) -- node[above,font=\scriptsize] {$R$} (r);
+  \node[font=\scriptsize,text=chibasub] at (4.6,-.5) {$\overline{R \mathbin{;} \one}$ fails};
+\end{tikzpicture}
+
+1. complement reverses $(\diamond)$
+\end{center}
 
 \vfill
 \pause
-\NOTE{Other lower-bound methods do not apply directly either:
-formula-size and EF/pebble games ($G_k$ needs one quantifier and three variables; its DNF nests no compositions);
-rank and discrepancy (free Boolean operations defeat measures of a single matrix).}
+\begin{center}
+  2. \ $\overline{(E \cap (E \mathbin{;} \overline{\id}))} \mathbin{;} \one$ \ separates every $\mathcal S_i$ from $\mathcal N$
+  \ \NOTE{(two compositions)}
+\end{center}
 
 \vfill
-\begin{alertblock}{}
-  \centering
-  Unlike the inclusion $(\diamond)$, an \emph{equality} survives complement.
-\end{alertblock}
+\pause
+\HP{Unlike the inclusion $(\diamond)$, an \EMPH{equality} survives complement.}
 
 \note{
-- Allowing complement above compositions breaks this argument completely.
-- First, complement reverses the inclusion (diamond).
-- Second, a term with two compositions separates every S_i from N.
-- Other methods do not apply directly either.
-- Unlike the inclusion (diamond), an equality survives complement.
+\textbf{伝えること}：補を許すと、この論法の 2 つの材料が両方壊れる。教訓：\emph{包含}は補で反転するが、\emph{等式}は補を通る。
+\begin{itemize}
+  \item 1. 補は $(\diamond)$ を逆向きにする（図）
+  \item 2. 合成 2 つの項で全インスタンスを分離できてしまう
+  \item 他の手法（formula size、EF ゲーム、rank）も直接は使えない
+  \item 最後の一行が、我々の不変条件を等式にする動機
+\end{itemize}
 }
 \end{frame}
