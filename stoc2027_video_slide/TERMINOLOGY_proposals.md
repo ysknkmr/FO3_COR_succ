@@ -29,7 +29,7 @@ fold / notice / prediction などの語はまだ無い。括弧内の数字は v
 - **主定理は合成の個数で述べる**（スライド p.3–4 の書き方）。
   "For each $k$, there is an FO³ formula of size $O(k)$ such that every equivalent CoR term needs $\ge 2^{k-1}$ compositions, even with complement, converse, and shared subterms."
   サイズの下界（Thm 1.2, $\Theta(k2^k)$）より合成数の下界が主であることを冒頭から明確に。
-- **問いの形**: "Does every translation from FO³ to CoR need $2^{\Omega(|\varphi|)}$ compositions in the worst case?"
+- **問いの形**: 文献で未解決とされていた形のまま "Can we prove that there is no polynomial-size translation from FO³ to CoR?"（答えは合成数の指数下界でより強く与える）
   部分的な既知結果として「$\Sigma_1$CoR（存在型、拡張で保存）では既知 [Nak20, Nak22]」を問いの直後に置く。
 - **翻訳の出典**: 翻訳自体は Tarski（1940 年代）、具体的な構成は [TG87]。スライドでは "[Tar41, JSL; TG87]"。
 - **DNF の中間段**: $\exists z \bigwedge_i (P_i(x,z) \lor Q_i(z,y))$ → DNF → $\bigcup_A (\bigcap_{i \in A} P_i) ; (\bigcap_{i \notin A} Q_i)$ の 3 段を見せると、合成 $2^k$ 個の出どころが一目で分かる。

@@ -14,11 +14,18 @@
 \begin{center}
 \begin{tikzpicture}[every node/.style={font=\small}]
   \node[pv,minimum size=7pt,label=left:$x$] (x) at (0,0) {};
-  \node[pv,minimum size=7pt,label=right:$y$] (y) at (2.6,0) {};
-  \node[pv,minimum size=7pt,label=above:$z$] (z) at (1.6,.6) {};
+  \node[pv,minimum size=7pt,label=right:$y$] (y) at (3.0,0) {};
+  % z is existentially quantified: other candidate positions are drawn faintly,
+  % stacked vertically so that the edges from x fan out without overlapping
+  \foreach \h in {1.15,1.7} {
+    \node[pv,minimum size=5pt,draw=black!30] (c) at (2.0,\h) {};
+    \draw[densely dashed,black!30] (x) -- (c);
+  }
+  \node[pv,minimum size=7pt,label=right:$z$] (z) at (2.0,.6) {};
   \draw[thick,cA] (x) -- (y);
   \draw[thick,cB] (x) -- (z);
-  \node[anchor=west,align=left] at (4.2,.6)
+  \node[font=\footnotesize,text=black!60] at (2.45,1.45) {$\exists z$};
+\node[anchor=west,align=left] at (4.0,.6)
     {at every $i$: one of the edges $xy$, $xz$ is in $P_i$,\\
      the other is in $Q_i$};
 \end{tikzpicture}

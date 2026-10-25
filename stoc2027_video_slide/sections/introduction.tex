@@ -103,6 +103,7 @@ $\exists z.\ P(x, z) \land Q(z, y)
     at ($(comp.south)+(0,-.3)$) {composition $=$ Boolean matrix multiplication};
 \end{tikzpicture}
 
+\pause
 \vspace{1.2em}
 \hfill To obtain the form of $\exists z. - \land -$, we use DNF translation.\\
 \hfill $\leadsto$ \ \EMPH{$2^{O(|\varphi|)}$} compositions are used \cite{nakamura2022}.}
@@ -124,22 +125,21 @@ $\exists z.\ P(x, z) \land Q(z, y)
 DNF translation is used, for example:
 \begin{align*}
   & \exists z.\ \bigl(P_1(x, z) \lor Q_1(z, y)\bigr) \land \cdots \land \bigl(P_k(x, z) \lor Q_k(z, y)\bigr) \\
-  \leadsto_{\text{\NOTE{(DNF)}}} \ & \exists z.\ \bigvee_{A \subseteq [k]}
-    \Bigl(\bigwedge_{i \in A} P_i(x, z) \land \bigwedge_{i \notin A} Q_i(z, y)\Bigr) \\
-  \leadsto_{\text{\NOTE{(to \CoR)}}} \ & \Bigl(\bigcup_{A \subseteq [k]}
-    \Bigl(\bigcap_{i \in A} P_i\Bigr) \mathbin{;} \Bigl(\bigcap_{i \notin A} Q_i\Bigr) \Bigr)(x, y)
+  \uncover<2->{\leadsto_{\text{\NOTE{(DNF)}}}} \ & \uncover<2->{\exists z.\ \bigvee_{A \subseteq [k]}
+    \Bigl(\bigwedge_{i \in A} P_i(x, z) \land \bigwedge_{i \notin A} Q_i(z, y)\Bigr)} \\
+  \uncover<3->{\leadsto_{\text{\NOTE{(to \CoR)}}}} \ & \uncover<3->{\Bigl(\bigcup_{A \subseteq [k]}
+    \Bigl(\bigcap_{i \in A} P_i\Bigr) \mathbin{;} \Bigl(\bigcap_{i \notin A} Q_i\Bigr) \Bigr)(x, y)}
 \end{align*}
-\NOTE{(In this translation, we use $2^k$ compositions)}
+\uncover<3->{\NOTE{(In this translation, we use $2^k$ compositions)}}
 
 \vfill
-\onslide<2->{%
+\onslide<4->{%
 \begin{problem}[Open \fcite{FletcherEtAl2015,nakamura2022,nakamura-uezato2027}]
-Does every translation from \FOthree{} to \CoR{} need $2^{\Omega(|\varphi|)}$ compositions in the worst case?
+Can we prove that there is no polynomial-size translation from \FOthree{} to \CoR{}?
 \end{problem}
-\NOTE{Partial answer: Yes for $\Sigma_1$\CoR{} (with transitive closure) \fcite{nakamura2020,nakamura2022}}}
+\NOTE{Partial answer: Yes for $\Sigma_1$\CoR{} (with transitive closure) \fcite{nakamura2022}},}
 
-\NOTE{The argument of \fcite{nakamura2022} is based on the fact that $\Sigma_1$\CoR{} is equivalent to 
-\emph{existential} $\mathrm{FO}^3$, which is closed under \emph{extensions}.}
+\onslide<4->{\NOTE{which has the same expressive power as \emph{existential} $\mathrm{FO}^3$, which is closed under \emph{extensions}.}}
 
 \note{
 \textbf{スライド概要}：この指数個の合成は必要か？ 未解決だった（$\Sigma_1$\CoR{} のみ既知）。
@@ -159,11 +159,14 @@ Does every translation from \FOthree{} to \CoR{} need $2^{\Omega(|\varphi|)}$ co
 \begin{frame}{Our results}
 
 {\Large The answer is \emph{YES!}}
+\pause
 \begin{theorem}[This paper]
 \label{thm:main}
-For each $k$, there is an \FOthree{} formula of size $O(k)$
-such that every equivalent \CoR{} term needs $\ge 2^{k-1}$ compositions,
-even with complement, converse, and shared subterms.
+There is no polynomial-size translation from \FOthree{} to \CoR{}.
+\pause
+
+More precisely, there are \FOthree{} formulas $\varphi_1, \varphi_2, \dots$ with $|\varphi_k| = O(k)$
+such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compositions.
 \end{theorem}
 
 \vfill
