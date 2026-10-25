@@ -53,7 +53,7 @@ $O(n^{k})$ is `optimal' for $k \ge 4$; the exception is \FOthree{}}
 We consider binary relation structures with $n$ elements:
 \begin{center}
 \small
-\renewcommand{\arraystretch}{1.15}
+\renewcommand{\arraystretch}{1.0}
 \begin{tabular}{@{}l@{\quad}l@{\quad}l@{}}
   \toprule
   syntax & model checking & \\
@@ -102,9 +102,9 @@ $\exists z.\ P(x, z) \land Q(z, y)
 \end{tikzpicture}
 
 \pause
-\vspace{1.2em}
+\vspace{.5em}
 \hfill To obtain the form of $\exists z. - \land -$, we use DNF translation.\\
-\hfill $\leadsto$ \ \EMPH{$2^{O(|\varphi|)}$} compositions are used \cite{nakamura2022}.}
+\hfill $\leadsto$ \ \EMPH{$2^{O(|\varphi|)}$} compositions are used \fcite{nakamura2022}.}
 
 \note{
 \textbf{ページ概要}：
@@ -126,7 +126,7 @@ DNF translation is used, for example:
   \uncover<3->{\leadsto_{\text{\NOTE{(to \CoR)}}}} \ & \uncover<3->{\Bigl(\bigcup_{A \subseteq [k]}
     \Bigl(\bigcap_{i \in A} P_i\Bigr) \mathbin{;} \Bigl(\bigcap_{i \notin A} Q_i\Bigr) \Bigr)(x, y)}
 \end{align*}
-\uncover<3->{\NOTE{(In this translation, we use $2^k$ compositions, since the number of subsets $A \subseteq [k]$ is $2^k$.)}}
+\uncover<3->{\NOTE{(This translation uses $2^k$ compositions, since the number of subsets $A \subseteq [k]$ is $2^k$.)}}
 
 \vfill
 \onslide<4->{%
@@ -182,7 +182,7 @@ such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compos
 \end{itemize}}
 
 \vfill
-\HP{Our proof technique can apply to all the above!}
+\HP{Our proof technique applies to them above!}
 
 \note{
 \textbf{ページ概要}：

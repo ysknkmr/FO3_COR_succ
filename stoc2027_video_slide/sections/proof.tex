@@ -2,7 +2,7 @@
 \section{Technical overview}
 
 % ============================================================
-\begin{frame}{Proof outline (at high-level)}
+\begin{frame}{Proof outline (high level)}
 
 \KEY{Goal Lemma} \ Every \CoR{} term equivalent to $G_k$ needs $2^{\Omega(k)}$ compositions.
 
@@ -38,7 +38,7 @@ then $t$ needs $\ge d/2$ compositions.
 \end{itemize}
 
 \vfill
-\uncover<6->{\HP{if $t \equiv G_k$, then $t$ needs $\ge 2^k/2$ compositions.}}
+\uncover<6->{\HP{If $t \equiv G_k$, then $t$ needs $\ge 2^k/2$ compositions.}}
 
 \vfill
 \uncover<7->{\large \KEY{TASK} How can we construct such $\M_0$ and $\M_1, \dots, \M_{2^k}$?}
@@ -120,7 +120,7 @@ $P_i \iff i \in \mu$.
 whenever the $u$-$v$ and $u'$-$v'$ edges have the same color.
 
 \vspace{1em}
-Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the (two-)witness property.
+Proof by induction on $t$: the case $t = t_1 \mathbin{;} t_2$ follows from the (two-)witness property.
 
 \note{
 \textbf{ページ概要}：
@@ -303,21 +303,21 @@ for some $u$-$v$ edge in $\M_0$ and $u'$-$v'$ edge in $\M_\lambda$ of the same c
     \node[anchor=north west,align=left,font=\scriptsize] (n1) at (1.5,1.14) {$w$ picked\\as a witness};
     \node[stepno,anchor=north east] at ([xshift=-2pt,yshift=-3pt]n1.north west) {1};
   \end{scope}
-  \node[anchor=north west,align=left,font=\scriptsize,visible on=<3->] (n2) at (6.4/1.3+2.55,.32)
-    {Here we cannot pickup a witness\\
+  \node[anchor=north west,align=left,font=\scriptsize,visible on=<3->] (n2) at (6.4/1.3+.15,-1.3)
+    {Here we cannot pick a witness\\
     with the same colors $(\lambda, \nu)$};
   \node[stepno,anchor=north east,visible on=<3->] at ([xshift=-2pt,yshift=-3pt]n2.north west) {2};
 \end{tikzpicture}
 \end{center}
 
 \onslide<4->{%
-So the answer changes only if $t$ holds on some $\lambda$-edges, and only on them \NOTE{($v = \hub$: the same for $s$)}.
+So the answer changes only if $t$ holds on some $\lambda$-edges and only on them \NOTE{($v = \hub$: the same for $s$)}.
 }
 \onslide<5->{%
 Such $\lambda$ is uniquely determined for $t$ and for $s$.}
 
 \onslide<6->{
-Each composition newly distinguishes \alert{at most two} of them.}
+$\leadsto$ Each composition newly distinguishes \alert{at most two} $\M_\lambda$.}
 
 \note{
 \textbf{ページ概要}：
