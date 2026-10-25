@@ -31,7 +31,7 @@ $\varphi(x, y) := \exists z\, \bigl(E(x, y) \land E(y, z) \land E(z, x)\bigr)$ \
 \end{itemize}
 
 \vspace{1em}
-\emph{Model checking}: \ $\M \models \varphi(a, b)$? \quad \NOTE{(given $\M$ with $n$ elements, a formula $\varphi$, and $a, b \in \M$)}
+\emph{Model checking}: \ $\M \models \varphi(a, b)$? \quad \NOTE{($n$: the number of elements)}
 
 \pause
 \vspace{.6em}
@@ -44,6 +44,10 @@ E.g., $O(n^3)$ for $\varphi$ above: try all $x, y, z$
 \begin{itemize}
   \item $\mathrm{FO}^k$ とモデル検査の問題設定
   \item 素直に計算すると $O(|\varphi| \cdot n^k)$
+\end{itemize}
+\textbf{口頭補足}：
+\begin{itemize}
+  \item 入力は構造 $\M$（要素数 $n$）、式 $\varphi$、要素 $a, b$
 \end{itemize}
 }
 \end{frame}
@@ -107,13 +111,13 @@ $\exists z.\ P(x, z) \land Q(z, y)
 \pause
 \vspace{1.0em}
 \hfill To obtain the form of $\exists z. - \land -$, we use DNF translation.\\
-\hfill $\leadsto$ \ \EMPH{$2^{O(|\varphi|)}$} compositions are used \fcite{nakamura2022}.}
+\hfill The translation uses \EMPH{$2^{O(|\varphi|)}$} compositions \fcite{nakamura2022}.}
 
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
   \item $k \ge 4$ では $n^k$ が最適。\FOthree{} は特別に \CoR{} への翻訳で $n^{\omega}$ まで下がる
-  \item ただし翻訳で合成が $2^{O(|\varphi|)}$ 個に増える
+  \item ただし CoR への翻訳で合成が $2^{O(|\varphi|)}$ 個に増える
 \end{itemize}
 }
 \end{frame}
@@ -129,7 +133,6 @@ DNF translation is used, for example:
   \uncover<3->{\leadsto_{\text{\NOTE{(to \CoR)}}}} \ & \uncover<3->{\Bigl(\bigcup_{A \subseteq [k]}
     \Bigl(\bigcap_{i \in A} P_i\Bigr) \mathbin{;} \Bigl(\bigcap_{i \notin A} Q_i\Bigr) \Bigr)(x, y)}
 \end{align*}
-\uncover<3->{\NOTE{(This translation uses $2^k$ compositions, since the number of subsets $A \subseteq [k]$ is $2^k$.)}}
 
 \vfill
 \onslide<4->{%
@@ -145,6 +148,10 @@ Partial answer \fcite{nakamura2022}: yes for \emph{existential} \CoR{} \fcite{na
 \begin{itemize}
   \item 指数個の合成は必要不可欠か？ は未解決の問題だった
 \end{itemize}
+\textbf{口頭補足}：
+\begin{itemize}
+  \item 部分集合 $A \subseteq [k]$ ごとに合成 1 個、計 $2^k$ 個
+\end{itemize}
 }
 \end{frame}
 
@@ -154,7 +161,7 @@ Partial answer \fcite{nakamura2022}: yes for \emph{existential} \CoR{} \fcite{na
 
 \begin{frame}{Our results}
 
-{\Large The answer is \emph{YES!}}
+{\Large The answer is \emph{YES!}} \quad (\emph{unconditionally})
 \begin{theorem}[This paper]
 \label{thm:main}
 \large

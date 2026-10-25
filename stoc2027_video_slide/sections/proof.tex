@@ -46,7 +46,7 @@ then $t$ needs $\ge d/2$ compositions.
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item 証明の方針：$G_k$ が区別する構造 $\M_0, \M_1, \dots, \M_{2^k}$ を作る
+  \item 証明の方針：$G_k$ が区別する構造 $\M_0$ と $\M_1, \dots, \M_{2^k}$ を作る
   \item Key Lemma：$d$ 個を区別するには合成 $\ge d/2$ 個 $\leadsto$ $G_k$ には合成 $\ge 2^{k-1}$ 個
 \end{itemize}
 }
@@ -57,8 +57,8 @@ then $t$ needs $\ge d/2$ compositions.
 \begin{frame}{Structures as colored complete graphs}
 
 \KEY{View} structures as \KEY{complete graphs}, colored with $2^k$ colors $\mu \subseteq [k]$:
-$P_i \iff i \in \mu$.
-\\ \NOTE{$Q_i$ is used as the complement of $P_i$ (i.e., $i \notin \mu$): exactly one of $P_i, Q_i$ holds on each edge.}
+$P_i$ iff $i \in \mu$.
+\NOTE{$Q_i$ is used as the complement of $P_i$ (i.e., $i \notin \mu$).}
 
 \vfill
 \begin{center}
@@ -93,6 +93,10 @@ $P_i \iff i \in \mu$.
   \item 構造を色付き完全グラフとして見る
   \item $G_k(x,y)$ は $x$-$y$ の色 $\mu$ に対して、$x$-$z$ の色が $\mu^c$ であるような $z$ が存在することと同値
 \end{itemize}
+\textbf{口頭補足}：
+\begin{itemize}
+  \item 各辺で $P_i$ と $Q_i$ のちょうど一方が成り立つ
+\end{itemize}
 }
 \end{frame}
 
@@ -121,6 +125,9 @@ whenever the $u$-$v$ and $u'$-$v'$ edges have the same color.
 
 \vspace{1em}
 Proof by induction on $t$: the case $t = t_1 \mathbin{;} t_2$ follows from the (two-)witness property.
+
+\vspace{.6em}
+\HP{Unlike preservation under extensions (p.~3), color-invariance is preserved by complement.}
 
 \note{
 \textbf{ページ概要}：
@@ -152,7 +159,7 @@ Proof by induction on $t$: the case $t = t_1 \mathbin{;} t_2$ follows from the (
       \node[pv] (a\name) at (30:1.2) {};
       \node[pv] (w\name) at (300:1.2) {};
       \node[pv] (o\name) at (90:1.2) {};
-      \draw[thick,black!60] (h\name) -- node[lbl,pos=.55,text=black!60] {$\mu$ ($\ne \lambda$)} (o\name);
+      \draw[thick,black!60] (h\name) -- node[lbl,pos=.4,text=black!60] {$\mu$ ($\ne \lambda$)} (o\name);
       \draw[thick,cA] (h\name) -- node[lbl,pos=.55,text=cA] {$\lambda^c$} (v\name);
     \end{scope}
   }
@@ -195,7 +202,7 @@ $\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOT
   \item hub の $\lambda$-edges を flip した $\M_\lambda$ を考えると $2^k$ 個の構造を得る。
   \item 各合成が新たに区別するのは高々 2 個（次の 2 ページ）
 \end{itemize}
-\textbf{補足}：
+\textbf{口頭補足}：
 \begin{itemize}
   \item 補・逆・和・積は点対ごとの演算なので、新たに区別することはない（口頭）
 \end{itemize}
@@ -245,7 +252,7 @@ $\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOT
     \draw[-{Stealth},thick,black!40] (2.65,0) -- node[above,font=\scriptsize,text=black!50] {flip $\lambda$} (4.0,0);
     \node[anchor=north west,align=left,font=\footnotesize,text=cW] (n1) at (1.5,1.27) {$\hub$ picked\\as a witness};
     \node[stepno,anchor=north east] at ([xshift=-2pt,yshift=-3pt]n1.north west) {1};
-    \node[anchor=west,align=left,font=\footnotesize,text=cW,visible on=<4->] (n3) at (6.4/1.3+1.6,-1.2)
+    \node[anchor=west,align=left,font=\footnotesize,text=cW,visible on=<4->] (n3) at (6.4/1.3+1.52,-1.2)
       {We can pick $w$ as\\ the corresponding witness};
     \node[stepno,anchor=north east,draw=cW,text=cW,visible on=<4->] at ([xshift=-2pt,yshift=-3pt]n3.north west) {3};
     % \node[anchor=west,align=left,font=\footnotesize,text=black!60] at (6.3,1.1) {dashed edges at $\hub$\\ are possibly changed by the flip};
