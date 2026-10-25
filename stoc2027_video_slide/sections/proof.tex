@@ -14,9 +14,9 @@ We construct structures $\M_0$ and $\M_1, \dots, \M_{2^k}$ such that
     \begin{center}
     \renewcommand{\arraystretch}{1.15}
     \begin{tabular}{@{}w{l}{.6cm}|w{c}{.78cm}|*{7}{w{c}{.78cm}}|w{c}{.9cm}|w{c}{1.25cm}@{}}
-      & $\M_0$ & $\M_{1}$ & $\M_{2}$ & \multicolumn{4}{w{c}{\dimexpr 3.12cm+6\tabcolsep\relax}}{$\cdots$} & $\M_{2^k}$ & \#diff. & \uncover<5->{\#comp.\,$\ge$} \\
+      & $\M_0$ & $\M_{1}$ & $\M_{2}$ & \multicolumn{4}{w{c}{\dimexpr 3.12cm+6\tabcolsep\relax}}{$\cdots$} & $\M_{2^k}$ & \#diff. & \uncover<6->{\#comp.\,$\ge$} \\
       \hline
-      $G_k$ & T & \alert{F} & \alert{F} & \multicolumn{4}{w{c}{\dimexpr 3.12cm+6\tabcolsep\relax}}{$\cdots$} & \alert{F} & \alert{$2^k$} & \uncover<5->{$2^k/2$} \\
+      $G_k$ & T & \alert{F} & \alert{F} & \multicolumn{4}{w{c}{\dimexpr 3.12cm+6\tabcolsep\relax}}{$\cdots$} & \alert{F} & \alert{$2^k$} & \uncover<6->{$2^k/2$} \\
     \end{tabular}
     \end{center}
 }
@@ -41,7 +41,7 @@ then $t$ needs $\ge d/2$ compositions.
 \uncover<6->{\HP{if $t \equiv G_k$, then $t$ needs $\ge 2^k/2$ compositions.}}
 
 \vfill
-\uncover<7->{\KEY{TASK} \large How can we construct such $\M_0$ and $\M_1, \dots, \M_{2^k}$?}
+\uncover<7->{\large \KEY{TASK} How can we construct such $\M_0$ and $\M_1, \dots, \M_{2^k}$?}
 
 \note{
 \textbf{スライド概要}：$G_k$ が $\M_0$ で成り立ち、$\M_1, \dots, \M_{2^k}$ で成り立たない構造を作る。$d$ 個を $\M_0$ から見分ける項は、合成を $d/2$ 個以上必要とする。
@@ -56,68 +56,90 @@ then $t$ needs $\ge d/2$ compositions.
 
 % ============================================================
 % The structure M_0 (edge-colored complete graph, two middle vertices, the hub)
-\begin{frame}{The structure $\M_0$}
+\begin{frame}{Structures as colored complete graphs}
 
-\begin{columns}[c]
-\begin{column}{.30\textwidth}
-\centering
-\begin{tikzpicture}[every node/.style={font=\small}]
-  \foreach \i in {0,...,4} { \node[pv] (n\i) at (90+72*\i:1.0) {}; }
-  \draw[thick,cA] (n0) -- (n1); \draw[thick,cB] (n0) -- (n2); \draw[thick,cC] (n0) -- (n3);
-  \draw[thick,cD] (n0) -- (n4); \draw[thick,cB] (n1) -- (n2); \draw[thick,cA] (n1) -- (n3);
-  \draw[thick,cC] (n1) -- (n4); \draw[thick,cD] (n2) -- (n3); \draw[thick,cA] (n2) -- (n4);
-  \draw[thick,cB] (n3) -- (n4);
-\end{tikzpicture}
-
-\NOTE{an edge-colored complete graph}
-\end{column}
-\begin{column}{.66\textwidth}
-colors $\mu \subseteq [k]$; \ on an edge of color $\mu$: \
-$P_i \iff i \in \mu$, \ $Q_i \iff i \notin \mu$
-
-\vspace{.4em}
-$\Rightarrow$ \ if $xy$ has color $\mu$: \ $G_k(x, y)$ holds iff some edge $xz$ has color $\mu^c$
-\end{column}
-\end{columns}
+\KEY{View} structures as \KEY{complete graphs}, colored with $2^k$ colors $\mu \subseteq [k]$:
+$P_i \iff i \in \mu$.
+\\ \NOTE{$Q_i$ is used as the complement of $P_i$ (i.e., $i \notin \mu$): exactly one of $P_i, Q_i$ holds on each edge.}
 
 \vfill
-\pause
-\begin{columns}[c]
-\begin{column}{.30\textwidth}
-\centering
+\begin{center}
 \begin{tikzpicture}[every node/.style={font=\small}]
-  \node[pv,label=left:$u$] (u) at (0,0) {};
-  \node[pv,label=right:$v$] (v) at (2.4,0) {};
-  \node[pv,label=above:$z$] (z1) at (1.2,.8) {};
-  \node[pv,label=below:$z'$] (z2) at (1.2,-.8) {};
-  \draw[thick,cA] (u) -- node[above left] {$\mu$} (z1);
-  \draw[thick,cB] (z1) -- node[above right] {$\nu$} (v);
-  \draw[thick,cA] (u) -- node[below left] {$\mu$} (z2);
-  \draw[thick,cB] (z2) -- node[below right] {$\nu$} (v);
+  % same style as the figure of G_k (example with k = 3): faint candidates for z with dashed edges
+  % (the dashed edges are drawn only near the candidates, to leave room for the label of x-z)
+  \node[pv,minimum size=7pt,label=left:$x$] (x) at (0,0) {};
+  \node[pv,minimum size=7pt,label=right:$y$] (y) at (4.8,0) {};
+  \foreach \h in {2.45,3.0} {
+    \node[pv,minimum size=5pt,draw=black!30] (c) at (3.0,\h) {};
+    \draw[densely dashed,black!30,shorten <=2.2cm] (x) -- (c);
+  }
+  \node[font=\footnotesize,text=black!60] at (3.45,2.72) {$\exists z$};
+  \node[pv,minimum size=7pt,label=right:$z$] (z) at (3.0,1.9) {};
+  \draw[thick,cA] (x) -- node[below,text=cA]
+    {color $\mu = \set{1, 3}$: \ $P_1, \ Q_2, \ P_3$} (y);
+  \draw[thick,cB] (x) -- node[pos=.45,above left,align=right,text=cB,font=\footnotesize]
+    {color $\mu^c = \set{2}$:\\ $Q_1, \ P_2, \ Q_3$} (z);
+  \node[anchor=west,align=left] at (5.8,1.0)
+    {for every $i \in [3]$,\\
+    the $x$-$y$ and $x$-$z$ edges\\
+    have labels $P_i$ and $Q_i$, in either order\\
+    $\Rightarrow$ \ $G_3(x, y)$ \ \NOTE{($k = 3$)}};
 \end{tikzpicture}
-\end{column}
-\begin{column}{.66\textwidth}
-for all $u \ne v$ and all colors $\mu, \nu$: \ at least \emph{two} middle vertices $z$
-\NOTE{\ (random coloring, $n \ge n_0(2^k)$ \fcite{jmt1995})}
+\end{center}
 
-\vspace{.4em}
-fix such an $\M_0$ and one vertex $\hub$, \ the \emph{hub}
-\end{column}
-\end{columns}
+\vfill
+\HP{$G_k(x, y)$ holds iff some $x$-$z$ edge has the color $\mu^c$, where $\mu$ is the color of the $x$-$y$ edge.}
 
 \note{
-\textbf{スライド概要}：$\M_0$ は辺に色の付いた完全グラフ。どの色の組にも中間の頂点が 2 つ。hub を 1 つ固定。
+\textbf{スライド概要}：構造を色付き完全グラフとして見る。$G_k$ は「補の色の $x$-$z$ 辺がある」と読める。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 色が $P_i, Q_i$ を決めるので、$G_k$ は色だけで読める
-  \item 「中間の頂点が 2 つ」が最後のページで効く
+  \item 各辺で $P_i$ と $Q_i$ のちょうど一方が成り立つ
+  \item 例：$k = 3$、$\set{1,3}$ と $\set{2}$ は互いに補
 \end{itemize}
 }
 \end{frame}
 
 % ============================================================
-\begin{frame}{Recoloring at the hub $\hub$}
+\begin{frame}{The randomly colored structure $\M_0$}
+
+\begin{columns}[c]
+  \begin{column}{.36\textwidth}
+    \centering
+    \input{figs/M0_random}
+
+    \NOTE{$\M_0$: randomly colored, $O(k\,4^k)$ vertices \fcite{jmt1995}}
+  \end{column}
+  \begin{column}{.60\textwidth}
+    \KEY{Two-witness property} \ For all $u \ne v$ and all colors $\textcolor{cA}{\boldsymbol{\mu}}, \textcolor{cB}{\boldsymbol{\nu}}$,
+    there are at least two \emph{witnesses} $z$ such that
+    the $u$-$z$ and $z$-$v$ edges have colors $\textcolor{cA}{\boldsymbol{\mu}}$ and $\textcolor{cB}{\boldsymbol{\nu}}$, respectively.
+  \end{column}
+\end{columns}
+
+\vfill
+\pause
+\vspace{.3em}
+\KEY{Every \CoR{} term $t$ is color-invariant on $\M_0$}: $\M_0 \models t(u, v) \iff \M_0 \models t(u', v')$
+whenever the $u$-$v$ and $u'$-$v'$ edges have the same color.
+
+\vspace{1em}
+Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the (two-)witness property.
+
+\note{
+\textbf{スライド概要}：$\M_0$ ではどの色の道のパターンにも中間の頂点がある。だから項は「色 $\mapsto$ T/F」の表になる。
+
+\textbf{メモ}：
+\begin{itemize}
+  \item 例：$P_1 \mathbin{;} Q_1$ はどの辺でも T（色 $\set{1}$ と $\emptyset$ の道が必ずある）、ループでは F
+  \item 「2 つ以上」が効くのは $\M_\lambda$ 側（hub を避ける中間の頂点が残る）
+\end{itemize}
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{$\M_\lambda$: recoloring at the hub $\hub$}
 
 % Figure 1 of the paper, redrawn around the mechanism: the read edge at the hub
 % accepts only witness edges of color lambda, and the fold recolors exactly those.
@@ -156,7 +178,7 @@ fix such an $\M_0$ and one vertex $\hub$, \ the \emph{hub}
 
 \vfill
 \begin{center}
-  $G_k(\hub, v)$ needs an edge $\hub z$ of color $\lambda$
+  $G_k(\hub, v)$ needs a $\hub$-$z$ edge of color $\lambda$
   \onslide<2->{\\ recoloring $\lambda$ changes \emph{exactly those edges at $\hub$}, \ and nothing else}
 \end{center}
 
@@ -164,6 +186,7 @@ fix such an $\M_0$ and one vertex $\hub$, \ the \emph{hub}
 \onslide<3->{%
 \begin{center}
   $2^k$ recolored structures $\M_\lambda$, one for each color $\lambda$ \ \NOTE{($=$ the $\M_1, \dots, \M_{2^k}$ of the outline)}
+  \\ away from $\hub$, terms cannot distinguish $\M_\lambda$ from $\M_0$ \NOTE{(of the $\ge 2$ middle vertices, one avoids $\hub$)}
 \end{center}}
 
 \note{
