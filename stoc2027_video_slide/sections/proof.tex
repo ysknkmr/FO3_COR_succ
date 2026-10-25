@@ -46,8 +46,8 @@ then $t$ needs $\ge d/2$ compositions.
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item 証明の方針：$G_k$ が見分ける構造 $\M_0, \M_1, \dots, \M_{2^k}$ を作る
-  \item Key Lemma：$d$ 個を見分けるには合成 $\ge d/2$ 個 $\to$ $G_k$ には合成 $\ge 2^{k-1}$ 個
+  \item 証明の方針：$G_k$ が区別する構造 $\M_0, \M_1, \dots, \M_{2^k}$ を作る
+  \item Key Lemma：$d$ 個を区別するには合成 $\ge d/2$ 個 $\leadsto$ $G_k$ には合成 $\ge 2^{k-1}$ 個
 \end{itemize}
 }
 \end{frame}
@@ -90,7 +90,8 @@ $P_i \iff i \in \mu$.
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item 構造を色付き完全グラフとして見ると、$G_k$ は色の言葉で読める
+  \item 構造を色付き完全グラフとして見る
+  \item $G_k(x,y)$ は $x$-$y$ の色 $\mu$ に対して、$x$-$z$ の色が $\mu^c$ であるような $z$ が存在することと同値
 \end{itemize}
 }
 \end{frame}
@@ -125,7 +126,7 @@ Proof by induction on $t$: the case $t = t_1 \mathbin{;} t_2$ follows from the (
 \textbf{ページ概要}：
 \begin{itemize}
   \item ランダム彩色の $\M_0$ は two-witness property をもつ
-  \item そのため、どの項の真偽も辺の色だけで決まる（color-invariant）
+  \item 任意の項で同じ辺の色なら真偽が等しい（color-invariant）
 \end{itemize}
 }
 \end{frame}
@@ -191,8 +192,12 @@ $\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOT
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item hub の $\lambda$-edges を flip した $\M_\lambda$ を、$G_k$ は $\M_0$ から見分ける
-  \item こうして $2^k$ 個の構造を得る。distinguish を定義し、各合成が新たに見分けるのは高々 2 個と予告（次の 2 ページ）
+  \item hub の $\lambda$-edges を flip した $\M_\lambda$ を考えると $2^k$ 個の構造を得る。
+  \item 各合成が新たに区別するのは高々 2 個（次の 2 ページ）
+\end{itemize}
+\textbf{補足}：
+\begin{itemize}
+  \item 補・逆・和・積は点対ごとの演算なので、新たに区別することはない（口頭）
 \end{itemize}
 }
 \end{frame}
@@ -258,7 +263,7 @@ $\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOT
 \textbf{ページ概要}：
 \begin{itemize}
   \item hub を含まない点対では、witness を同じ色の組の別の頂点に取り直せる
-  \item よって合成はそこでは見分けない
+  \item よってこの場合では区別できない
 \end{itemize}
 }
 \end{frame}
@@ -320,8 +325,8 @@ $\leadsto$ Each composition newly distinguishes \alert{at most two} $\M_\lambda$
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item hub を含む点対で見分けるのは、$t$（または $s$）が $\lambda$-edges だけで成り立つときだけ
-  \item よって各合成が新たに見分ける $\M_\lambda$ は高々 2 個
+  \item hub を含む点対で区別できるのは、$t$（または $s$）が $\lambda$-edges だけで成り立つときだけ
+  \item 各合成が新たに区別できる $\M_\lambda$ は高々 2 個
 \end{itemize}
 }
 \end{frame}

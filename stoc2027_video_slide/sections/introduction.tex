@@ -43,7 +43,7 @@ E.g., $O(n^3)$ for $\varphi$ above: try all $x, y, z$
 \textbf{ページ概要}：
 \begin{itemize}
   \item $\mathrm{FO}^k$ とモデル検査の問題設定
-  \item 素直に計算すると $O(|\varphi| \cdot n^k)$。例の 3-cycle なら $O(n^3)$（次のページで $n^{\omega}$ に下がる）
+  \item 素直に計算すると $O(|\varphi| \cdot n^k)$
 \end{itemize}
 }
 \end{frame}
@@ -112,7 +112,7 @@ $\exists z.\ P(x, z) \land Q(z, y)
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item $k \ge 4$ では $n^k$ が最適だが、\FOthree{} だけは \CoR{} への翻訳で $n^{\omega}$ まで下がる
+  \item $k \ge 4$ では $n^k$ が最適。\FOthree{} は特別に \CoR{} への翻訳で $n^{\omega}$ まで下がる
   \item ただし翻訳で合成が $2^{O(|\varphi|)}$ 個に増える
 \end{itemize}
 }
@@ -143,7 +143,7 @@ Partial answer \fcite{nakamura2022}: yes for \emph{existential} \CoR{} \fcite{na
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item 指数個の合成は避けられるか？ が未解決の問題だった
+  \item 指数個の合成は避けられるか？ は未解決の問題であった
 \end{itemize}
 }
 \end{frame}
@@ -188,8 +188,8 @@ Our proof technique applies to all of them!
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item 答えは YES：$|\varphi_k| = O(k)$ の式に、合成 $\ge 2^{k-1}$ 個が必要
-  \item 同じ手法が他の設定（\FOtwo{}、行列言語、RTC 付き \CoR{}）にも効く
+  \item $|\varphi_k| = O(k)$ の式に、合成 $\ge 2^{k-1}$ 個が必須
+  \item 同じ手法が他の設定（\FOtwo{}、行列言語、RTC 付き \CoR{} など）にも適用できる
 \end{itemize}
 }
 \end{frame}
