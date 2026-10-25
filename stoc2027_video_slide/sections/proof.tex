@@ -104,13 +104,13 @@ $P_i \iff i \in \mu$.
 \begin{frame}{The randomly colored structure $\M_0$}
 
 \begin{columns}[c]
-  \begin{column}{.36\textwidth}
+  \begin{column}{.42\textwidth}
     \centering
     \input{figs/M0_random}
 
     \NOTE{$\M_0$: randomly colored, $O(k\,4^k)$ vertices \fcite{jmt1995}}
   \end{column}
-  \begin{column}{.60\textwidth}
+  \begin{column}{.55\textwidth}
     \KEY{Two-witness property} \ For all $u \ne v$ and all colors $\textcolor{cA}{\boldsymbol{\mu}}, \textcolor{cB}{\boldsymbol{\nu}}$,
     there are at least two \emph{witnesses} $z$ such that
     the $u$-$z$ and $z$-$v$ edges have colors $\textcolor{cA}{\boldsymbol{\mu}}$ and $\textcolor{cB}{\boldsymbol{\nu}}$, respectively.
@@ -175,20 +175,18 @@ Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the
 
 \vfill
 \onslide<3->{%
-Each $\M_\lambda$ differs from $\M_0$ only at the hub, in one color.
-
-Then $\M_0 \models G_k(\hub, v)$ \ but \ $\M_\lambda \not\models G_k(\hub, v)$
-\ \NOTE{($G_k(\hub, v)$ needs a $\lambda$-edge at the hub $\hub$)}.}
+$\M_\lambda$ differs from $\M_0$ only in the $\lambda$-edges at the hub:\\
+for $v$ with the $\hub$-$v$ edge of color $\lambda^c$: \ $\M_0 \models G_k(\hub, v)$ \ but \ $\M_\lambda \not\models G_k(\hub, v)$.}
 
 \vfill
 \onslide<4->{%
-Doing this for each of the $2^k$ colors $\lambda$ gives $\M_1, \dots, \M_{2^k}$.
+Flipping each of the $2^k$ colors $\lambda$ gives $\M_1, \dots, \M_{2^k}$.
 % Each $\M_\lambda$ differs from $\M_0$ only at the hub, in one color.
 }
 
 \pause
 \onslide<5->{%
-$\leadsto$ One composition can only distinguish \alert{at most two} of them \NOTE{(next slide)}.
+$\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOTE{(next slide)}.
 }
 \note{
 \textbf{スライド概要}：hub の色 $\lambda$ の辺を $\lambda^c$ に flip すると $G_k(\hub, v)$ が 1 から 0 に変わる。それ以外の場所では $\M_0$ と見分けられない。
@@ -205,24 +203,25 @@ $\leadsto$ One composition can only distinguish \alert{at most two} of them \NOT
 % ============================================================
 \begin{frame}{Why a composition newly distinguishes at most two $\M_\lambda$}
 
+$(X \mathbin{;} Y)(u, v)$ holds iff there is a witness $z$; \ flipping $\lambda$ changes only edges at the hub $\hub$.
+\\ \NOTE{(in the panels, $X$ holds on the $\lambda$-edges and $Y$ on the $\nu$-edges, $\nu \ne \lambda$)}
+
 % Figure 2 of the paper, redrawn with one layout for all panels:
 % the pair is the bottom edge, witnesses sit above (and below) it.
-% Red with a cross: an edge recolored by the fold; thick green: a witness that survives.
+% Colors as on the flipping slide: lambda-edges cB, lambda^c-edges cA, other colors black.
 \begin{center}
 \begin{tikzpicture}[every node/.style={font=\small},x=1.2cm,y=1.2cm,
-    xmark/.style={text=red,font=\large\bfseries,inner sep=0pt},
-    lost/.style={thick,red,densely dashed},
-    kept/.style={line width=1.4pt,cC}]
+    lam/.style={thick,cB}, lamc/.style={thick,cA}]
   % (a) M_0
   \begin{scope}
     \node at (.9,1.75) {(a) $\M_0$, at $(\hub, v)$};
     \node[pv,label=below:$\hub$] (h) at (0,0) {};
     \node[pv,label=above:$z$] (z) at (.9,1.0) {};
     \node[pv,label=below:$v$] (v) at (1.8,0) {};
-    \draw[thick] (h) -- node[above left] {$\lambda$} (z);
+    \draw[lam] (h) -- node[above left,text=cB] {$\lambda$} (z);
     \draw[thick] (z) -- node[above right] {$\nu$} (v);
     \draw[densely dotted] (h) -- (v);
-    \node[align=center] at (.9,-.85) {witness $z$:\\ $(X \mathbin{;} Y)(\hub, v) = 1$};
+    \node[align=center] at (.9,-.85) {witness $z$};
   \end{scope}
   % (b) M_lambda, at the hub: every witness uses an edge at the hub
   \begin{scope}[xshift=4.4cm,visible on=<2->]
@@ -230,11 +229,10 @@ $\leadsto$ One composition can only distinguish \alert{at most two} of them \NOT
     \node[pv,label=below:$\hub$] (h) at (0,0) {};
     \node[pv,label=above:$z$] (z) at (.9,1.0) {};
     \node[pv,label=below:$v$] (v) at (1.8,0) {};
-    \draw[lost] (h) -- node[above left] {$\lambda^c$} (z);
-    \node[xmark] at ($(h)!.5!(z)$) {$\times$};
+    \draw[lamc] (h) -- node[above left,text=cA] {$\lambda^c$} (z);
     \draw[thick] (z) -- node[above right] {$\nu$} (v);
     \draw[densely dotted] (h) -- (v);
-    \node[align=center] at (.9,-.85) {every witness is lost:\\ \alert{distinguished}};
+    \node[align=center] at (.9,-.85) {\alert{lost}};
   \end{scope}
   % (c) M_lambda, away from the hub: the hub is only one of the witnesses
   \begin{scope}[xshift=8.8cm,visible on=<3->]
@@ -243,23 +241,27 @@ $\leadsto$ One composition can only distinguish \alert{at most two} of them \NOT
     \node[pv,label=above:$\hub$] (h) at (.9,1.0) {};
     \node[pv,label=right:$v$] (v) at (1.8,0) {};
     \node[pv,label=below:$z'$] (z) at (.9,-.8) {};
-    \draw[lost] (u) -- node[above left] {$\lambda^c$} (h);
-    \node[xmark] at ($(u)!.5!(h)$) {$\times$};
+    \draw[lamc] (u) -- node[above left,text=cA] {$\lambda^c$} (h);
     \draw[thick] (h) -- node[above right] {$\nu$} (v);
-    \draw[kept] (u) -- node[below left] {$\lambda$} (z);
-    \draw[kept] (z) -- node[below right] {$\nu$} (v);
+    \draw[lam] (u) -- node[below left,text=cB] {$\lambda$} (z);
+    \draw[thick] (z) -- node[below right] {$\nu$} (v);
     \draw[densely dotted] (u) -- (v);
-    \node[align=center] at (.9,-1.45) {a second witness $z'$\\ avoids the hub $\hub$: \ not distinguished};
+    \node[align=center] at (.9,-1.5) {$z'$ avoids the hub};
   \end{scope}
 \end{tikzpicture}
 \end{center}
-\NOTE{\hfill a composition $X \mathbin{;} Y$, \ where $X$ holds on the edges of color $\lambda$ and $Y$ on those of color $\nu \ne \lambda$}
 
 \vfill
+\onslide<2->{%
+\KEY{At the hub} (a, b): \ every witness uses a hub edge, so it can be lost
+\\ \hspace*{1em} \NOTE{--- but only if $X$ holds on $\lambda$-edges only (or $Y$ does).}}
+\\ \onslide<3->{%
+\KEY{Away from the hub} (c): \ a second witness $z'$ avoids the hub $\hub$: \ nothing changes.}
+
 \onslide<4->{%
 \begin{center}
-  only pairs at the hub can change, and only if $X$ or $Y$ singles out the color $\lambda$
-  \\ $\Rightarrow$ \ each composition newly distinguishes at most \alert{two} $\M_\lambda$ from $\M_0$ \ \NOTE{(hence the Key Lemma)}
+  $X$ picks at most one $\lambda$, and so does $Y$
+  \ $\Rightarrow$ \ \alert{at most two} $\M_\lambda$ per composition.
 \end{center}}
 
 \note{
