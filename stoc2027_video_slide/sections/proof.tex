@@ -44,12 +44,12 @@ then $t$ needs $\ge d/2$ compositions.
 \uncover<7->{\KEY{TASK} \large How can we construct such $\M_0$ and $\M_1, \dots, \M_{2^k}$?}
 
 \note{
-\textbf{スライド概要}：$G_k$ が $\M_0$ で成り立ち、$2^k$ 個の $\M_\lambda$ で成り立たない構造を作る。$d$ 個を見分ける項は合成を $d/2$ 個以上必要とする。
+\textbf{スライド概要}：$G_k$ が $\M_0$ で成り立ち、$\M_1, \dots, \M_{2^k}$ で成り立たない構造を作る。$d$ 個を $\M_0$ から見分ける項は、合成を $d/2$ 個以上必要とする。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 「新たに見分ける」＝そのゲートで初めて $\M_0$ から期待される値とずれる（論文の notice）
-  \item 以降のページ：変更（塗り替え）の作り方、期待値の意味、合成が高々 2 つの理由
+  \item 表の T/F は、各 $\M_i$ に対応する点対での値（論文の test pair）
+  \item 以降：$\M_0$ の作り方、$\M_i$ ＝ hub での塗り替え $\M_\lambda$、合成が新たに見分けるのは高々 2 個である理由
 \end{itemize}
 }
 \end{frame}
@@ -163,7 +163,7 @@ fix such an $\M_0$ and one vertex $\hub$, \ the \emph{hub}
 \vfill
 \onslide<3->{%
 \begin{center}
-  $2^k$ recolored structures $\M_\lambda$, one for each color $\lambda$
+  $2^k$ recolored structures $\M_\lambda$, one for each color $\lambda$ \ \NOTE{($=$ the $\M_1, \dots, \M_{2^k}$ of the outline)}
 \end{center}}
 
 \note{
@@ -178,7 +178,7 @@ fix such an $\M_0$ and one vertex $\hub$, \ the \emph{hub}
 \end{frame}
 
 % ============================================================
-\begin{frame}{Why a composition detects at most two recolorings}
+\begin{frame}{Why a composition newly distinguishes at most two $\M_\lambda$}
 
 % Figure 2 of the paper, redrawn with one layout for all panels:
 % the pair is the bottom edge, witnesses sit above (and below) it.
@@ -209,7 +209,7 @@ fix such an $\M_0$ and one vertex $\hub$, \ the \emph{hub}
     \node[xmark] at ($(h)!.5!(z)$) {$\times$};
     \draw[thick] (z) -- node[above right] {$\nu$} (v);
     \draw[densely dotted] (h) -- (v);
-    \node[align=center] at (.9,-.85) {every middle vertex is lost:\\ \alert{detected}};
+    \node[align=center] at (.9,-.85) {every middle vertex is lost:\\ \alert{distinguished}};
   \end{scope}
   % (c) M_lambda, away from the hub: the hub is only one of the witnesses
   \begin{scope}[xshift=8.8cm,visible on=<3->]
@@ -224,7 +224,7 @@ fix such an $\M_0$ and one vertex $\hub$, \ the \emph{hub}
     \draw[kept] (u) -- node[below left] {$\lambda$} (z);
     \draw[kept] (z) -- node[below right] {$\nu$} (v);
     \draw[densely dotted] (u) -- (v);
-    \node[align=center] at (.9,-1.45) {a second middle vertex $z'$\\ avoids $\hub$: \ not detected};
+    \node[align=center] at (.9,-1.45) {a second middle vertex $z'$\\ avoids $\hub$: \ not distinguished};
   \end{scope}
 \end{tikzpicture}
 \end{center}
@@ -234,11 +234,11 @@ fix such an $\M_0$ and one vertex $\hub$, \ the \emph{hub}
 \onslide<4->{%
 \begin{center}
   only pairs at the hub can change, and only if $X$ or $Y$ singles out the color $\lambda$
-  \\ $\Rightarrow$ \ each composition detects at most \alert{two} colors $\lambda$
+  \\ $\Rightarrow$ \ each composition newly distinguishes at most \alert{two} $\M_\lambda$ from $\M_0$ \ \NOTE{(hence the Key Lemma)}
 \end{center}}
 
 \note{
-\textbf{スライド概要}：$\hub$ を含む点対では気づかれうる、含まない点対では気づかれない。
+\textbf{スライド概要}：$\hub$ を含む点対では見分けられうる、含まない点対では見分けられない。
 
 \textbf{メモ}：
 \begin{itemize}
