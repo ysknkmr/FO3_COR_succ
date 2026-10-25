@@ -39,8 +39,9 @@ For example, ``a closed walk of length $\ell$ at $x$''\ is expressible in $\FOth
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item $\mathrm{FO}^k$ は変数を使い回せる（長さ $\ell$ の walk も 3 変数）
-  \item モデル検査は $O(|\varphi| n^k)$
+  \item $\mathrm{FO}^k$ は変数を使い回せる：長さ $\ell$ の closed walk も 3 変数で書ける
+  \item モデル検査は表のメモ化で $O(|\varphi| \cdot n^k)$
+  \item （補足）$x$ を固定し、$y$ と $z$ を交互に使い回す
 \end{itemize}
 }
 \end{frame}
@@ -109,8 +110,10 @@ $\exists z.\ P(x, z) \land Q(z, y)
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item $k \ge 4$ では $n^k$ が最適、\FOthree{} だけ $n^{\omega}$
-  \item 代償：\CoR{} への翻訳で合成が $2^{O(|\varphi|)}$ 個（$\exists$ の内側の DNF 化）
+  \item $k \ge 4$ では $n^k$ が（仮説の下で）最適、\FOthree{} だけ $n^{\omega}$ に下がる
+  \item そのために \FOthree{} を \CoR{} に翻訳：$\exists z.\ P(x,z) \land Q(z,y)$ が合成 $P \mathbin{;} Q$（ブール行列積）
+  \item 代償：$\exists$ の内側の DNF 化で、合成が $2^{O(|\varphi|)}$ 個
+  \item （補足）二項関係のシグネチャを考えている
 \end{itemize}
 }
 \end{frame}
@@ -140,8 +143,9 @@ Partial answer \fcite{nakamura2022}: yes for \emph{existential} \CoR{} \fcite{na
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item この指数個の合成は必要か？
-  \item 未解決（existential \CoR{} のみ既知）
+  \item 例：$k$ 個の論理和の論理積を DNF にすると、合成が $2^k$ 個
+  \item 多項式サイズの翻訳がないことを示せるか？ は未解決だった
+  \item （補足）existential \CoR{} では既知（拡張で保存されることを使う）。一般の \CoR{} には使えない
 \end{itemize}
 }
 \end{frame}
@@ -178,7 +182,7 @@ such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compos
   \item ARA(3) $\leadsto$ matrix circuits
     \quad \NOTE{asked by \fcite{brijder2019,brijder2022}}
   \pause
-  \item $\FOthree$ $\leadsto$ $\CoR{}$ with TC
+  \item $\FOthree$ $\leadsto$ $\CoR{}$ with RTC \quad \NOTE{(reflexive--transitive closure)}
 \end{itemize}}
 
 \vfill
@@ -187,8 +191,9 @@ such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compos
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item 答えは YES：$|\varphi_k| = O(k)$ で合成 $\ge 2^{k-1}$ 個
-  \item 同じ手法で \FOtwo{}、行列言語、閉包付き \CoR{} にも指数下界
+  \item 答えは YES：$|\varphi_k| = O(k)$ で、同値な \CoR{} 項は合成 $\ge 2^{k-1}$ 個
+  \item 同じ手法で \FOthree{} $\to$ \FOtwo{}、ARA(3) $\to$ 行列回路、RTC（反射推移閉包）付き \CoR{} にも指数下界
+  \item （補足）下界は補・逆など合成以外の演算や、部分項の共有を許しても成り立つ
 \end{itemize}
 }
 \end{frame}

@@ -46,8 +46,10 @@ then $t$ needs $\ge d/2$ compositions.
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item $G_k$ が $\M_0$ で成り立ち、$\M_1, \dots, \M_{2^k}$ で成り立たない構造を作る
+  \item $G_k$ が $\M_0$ では成り立ち、$\M_1, \dots, \M_{2^k}$ では成り立たない構造を作る
   \item Key Lemma：$d$ 個を $\M_0$ から見分ける項は合成 $\ge d/2$ 個
+  \item よって $G_k$ と同値な項は合成 $\ge 2^k/2$ 個
+  \item （補足）表の T/F は、各構造の対応する点対での値
 \end{itemize}
 }
 \end{frame}
@@ -90,8 +92,8 @@ $P_i \iff i \in \mu$.
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item 構造を色付き完全グラフとして見る
-  \item $G_k(x,y)$：$x$-$y$ 辺の色の補の色の $x$-$z$ 辺がある
+  \item 構造を $2^k$ 色の色付き完全グラフとして見る（色 $\mu \subseteq [k]$、$P_i \iff i \in \mu$）
+  \item $G_k(x, y)$ $\iff$ $x$-$y$ 辺の色 $\mu$ の補 $\mu^c$ の色の $x$-$z$ 辺がある
 \end{itemize}
 }
 \end{frame}
@@ -125,8 +127,9 @@ Proof by induction on $t$: the case $t = t_1 \mathbin{;} t_2$ follows from the (
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item $\M_0$：ランダム彩色、two-witness property
-  \item だからどの項も color-invariant（帰納法、合成の場合に two-witness）
+  \item $\M_0$：ランダム彩色。two-witness property（任意の $u \ne v$ と色 $\mu, \nu$ に witness が 2 つ以上）
+  \item だから任意の \CoR{} 項は $\M_0$ 上で color-invariant（真偽は辺の色だけで決まる）
+  \item （補足）証明は項の帰納法で、合成の場合に witness の存在を使う。「2 つ」は次以降で hub を避けるのに使う
 \end{itemize}
 }
 \end{frame}
@@ -139,7 +142,7 @@ Proof by induction on $t$: the case $t = t_1 \mathbin{;} t_2$ follows from the (
 % Figure 1 of the paper (the fold), redrawn: flipping lambda turns the hub's lambda-edges into
 % lambda^c-edges; afterwards the hub has no lambda-edge. Colors: lambda cL, lambda^c cA.
 \begin{center}
-\begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=1.1cm,lbl/.style={fill=normal text.bg,inner sep=2pt,font=\scriptsize}]
+\begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=1.05cm,lbl/.style={fill=normal text.bg,inner sep=2pt,font=\scriptsize}]
   % drawn like the M_0 slide (vertices on a regular polygon); only the edges at the hub are drawn
   \foreach \cx/\name/\lab/\vis in {0/0/structure $\M_0$/1-,6.64/1/flipped structure $\M_\lambda$/2-} {
     \begin{scope}[shift={(\cx,1.2)},visible on=<\vis>]
@@ -184,14 +187,15 @@ Flipping each of the $2^k$ colors $\lambda$ gives $\M_1, \dots, \M_{2^k}$.
 
 \pause
 \onslide<5->{%
-$\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOTE{(next slides)}.
+$\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOTE{(next slides)}.\\
+\NOTE{(Boolean operations and converse act pair by pair, so they newly distinguish none.)}
 }
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item hub の $\lambda$-edges を $\lambda^c$ に flip $\to$ hub に $\lambda$-edges がない
-  \item $\M_0 \models G_k(\hub, v)$ だが $\M_\lambda \not\models G_k(\hub, v)$
-  \item 色ごとに 1 つ、計 $2^k$ 個
+  \item hub を 1 点固定し、hub の $\lambda$-edges を $\lambda^c$ に flip $\to$ $\M_\lambda$ の hub には $\lambda$-edge がない
+  \item $\hub$-$v$ 辺が $\lambda^c$ の $v$ で、$\M_0 \models G_k(\hub, v)$ だが $\M_\lambda \not\models G_k(\hub, v)$
+  \item 色ごとに 1 つ、計 $2^k$ 個。各合成が新たに見分けるのは高々 2 個（次の 2 ページ）
 \end{itemize}
 }
 \end{frame}
@@ -259,10 +263,11 @@ for some $u$-$v$ edge in $\M_0$ and $u'$-$v'$ edge in $\M_\lambda$ of the same c
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item distinguish の定義：同じ色の辺（$\M_0$ の $u$-$v$ と $\M_\lambda$ の $u'$-$v'$）で真偽が食い違う
-  \item $t$, $s$ が見分けないとき、$t \mathbin{;} s$ はいつ見分けうるか
-  \item $t$, $s$ は color-invariant $\to$ 答えは、その点対で witness が実現する色の組 $(\mu, \nu)$ の集合だけで決まる
-  \item $\hub \notin \{u, v\}$：$\M_\lambda$ でも全ての色の組が実現される（$\hub$ が witness でも two-witness property で $w \ne \hub$ が取れる）$\to$ 変わらない
+  \item distinguish：同じ色の辺（$\M_0$ の $u$-$v$ と $\M_\lambda$ の $u'$-$v'$）で真偽が食い違う
+  \item 問い：$t$, $s$ が見分けないとき、$t \mathbin{;} s$ はいつ見分けうるか
+  \item $\hub \notin \{u, v\}$：① $\M_0$ で $\hub$ が witness でも、② two-witness property で同じ色の組の $w \ne \hub$ がある。③ $w$ の辺は flip されないので $\M_\lambda$ でも witness $\to$ 見分けない
+  \item （補足）$t$, $s$ は見分けないので、witness かどうかは 2 辺の色の組だけで決まる
+  \item （補足）逆向き（$\M_\lambda$ の witness を $\M_0$ に移す）も同様
 \end{itemize}
 }
 \end{frame}
@@ -317,15 +322,16 @@ So the answer changes only if $t$ holds on some $\lambda$-edges and only on them
 Such $\lambda$ is uniquely determined for $t$ and for $s$.}
 
 \onslide<6->{
-$\leadsto$ Each composition newly distinguishes \alert{at most two} $\M_\lambda$.}
+$\leadsto$ Each composition newly distinguishes \alert{at most two} $\M_\lambda$.\\
+\NOTE{(The remaking cases: the pair $(\hub, \hub)$ and witnesses $w \in \{u, v\}$. See the paper for details.)}}
 
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item $u = \hub$：hub の $\lambda$-edges が全て $\lambda^c$ になる $\to$ $\M_\lambda$ で実現されるのは $\mu \ne \lambda$ の組だけ
-  \item 答えが変わるのは、$t$ が成り立つ色が $\lambda$ だけのとき（$v = \hub$ は $s$ について同様）
+  \item $u = \hub$：hub の $\lambda$-edges は全て $\lambda^c$ になる $\to$ 色の組 $(\lambda, \nu)$ の witness は $\M_\lambda$ で取れない
+  \item $t$ が $\lambda$ 以外の色でも成り立てば別の witness が取れる。答えが変わるのは $t$ が $\lambda$-edges だけで成り立つときだけ（$v = \hub$ は $s$ について同様）
   \item そのような $\lambda$ は $t$ と $s$ に 1 つずつ $\to$ 各合成が新たに見分ける $\M_\lambda$ は高々 2 個
-  \item $(\hub, \hub)$ や端点の witness（$w \in \{u, v\}$）も同じ考え方で処理できる（論文参照）
+  \item （補足）$(\hub, \hub)$ や端点の witness（$w \in \{u, v\}$）も同じ考え方で処理できる（論文参照）
 \end{itemize}
 }
 \end{frame}
