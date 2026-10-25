@@ -206,18 +206,20 @@ $t$ are $s$ are color-invariant on both $\M_0$ and $\M_\lambda$:\\
 $w$ is a witness depends only on the colors $(\mu, \nu)$ of the $u$-$w$ and $w$-$v$ edges.
 
 \medskip
-\KEY{Case $\hub \notin \{u, v\}$:} \ Never. \NOTE{(The equivalence is preserved.)}
+\KEY{Case $\hub \notin \{u, v\}$:} \ Never. (The equivalence is always preserved.)
 
 % M_0 and M_lambda differ only in the edges at the hub (dashed on both sides);
 % for every color pair, a witness can be re-picked away from the hub.
 \begin{center}
+% trim: center the two panels (the annotations may stick out)
 \begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=.68cm,
+    trim left={(-.35,0)}, trim right={(5.6/1.1+2.98,0)},
     lbl/.style={fill=normal text.bg,inner sep=2pt,font=\footnotesize},
     hubwit/.style={wit={$\hub$}}, hubplain/.style={nowit={$\hub$}},
-    zwit/.style={witon=<3->{$w$}}, zplain/.style={nowit={$w$}}]
+    zwit/.style={witon=<4->{$w$}}, zplain/.style={nowit={$w$}}]
   \begin{scope}[visible on=<2->]
     % M_0: the witness is the hub; M_lambda: re-picked away from the hub, same color pair
-    \foreach \dx/\str/\hst/\zst in {0/{\M_0}/hubwit/zplain, 4.2/{\M_\lambda}/hubplain/zwit} {
+    \foreach \dx/\str/\hst/\zst in {0/{\M_0}/hubwit/zplain, 5.6/{\M_\lambda}/hubplain/zwit} {
       \begin{scope}[xshift=\dx cm]
         \node at (1,1.95) {$\str$};
         \node[pairv] (u) at (0,0) {$u$};
@@ -233,20 +235,21 @@ $w$ is a witness depends only on the colors $(\mu, \nu)$ of the $u$-$w$ and $w$-
       \begin{scope}[visible on=<2->]
       \draw[thick,black!35,densely dashed] (0,0) -- node[lbl,text=black] {$\mu$} (1,1.0);
       \draw[thick,black!35,densely dashed] (1,1.0) -- node[lbl,text=black] {$\nu$} (2,0);
-      \draw[thick,black!35,densely dashed] (4.2/1.1,0) -- (4.2/1.1+1,1.0) -- (4.2/1.1+2,0);
+      \draw[thick,black!35,densely dashed] (5.6/1.1,0) -- (5.6/1.1+1,1.0) -- (5.6/1.1+2,0);
       \end{scope}
     \end{pgfonlayer}
-    \draw[-{Stealth},thick] (2.5,0) -- node[above,font=\scriptsize] {flip $\lambda$} (3.35,0);
-    \node[anchor=west,font=\scriptsize,text=cW] at (1.22,1.2) {(picked as a witness)};
+    \draw[-{Stealth},thick,black!40] (2.75,0) -- node[above,font=\scriptsize,text=black!50] {flip $\lambda$} (4.0,0);
+    \node[anchor=west,align=left,font=\scriptsize] at (1.22,1.2) {($\hub$ picked\\as a witness)};
+    \node[anchor=west,align=left,font=\scriptsize,text=cW,visible on=<4->] at (5.6/1.1+1.22,-1.2)
+      {(We can pick $w$ as\\ the corresponding witness)};
     % \node[anchor=west,align=left,font=\footnotesize,text=black!60] at (6.3,1.1) {dashed edges at $\hub$\\ are possibly changed by the flip};
   \end{scope}
   \node[font=\footnotesize,text=black!60,visible on=<3->, align= left] at (1,-1.85)
-    {such $w$ exists by\\the \KEY{two-witness property}};
+    {
+    The \KEY{two-witness property} shows\\
+    there is $w$ with the same colors $(\mu, \nu)$};
 \end{tikzpicture}
 \end{center}
-\onslide<3->{
-By the \KEY{two-witness property},\\
-We can always pick a correspondence witness $w$ $(\ne \hub)$ with the same colors $(\mu, \nu)$.}
 
 \note{
 \textbf{ページ概要}：
@@ -284,7 +287,7 @@ We can always pick a correspondence witness $w$ $(\ne \hub)$ with the same color
           \draw[thick] (w) -- node[lbl] {$\nu$} (v);
         \end{scope}
       }
-      \draw[-{Stealth},thick] (2.2,.35) -- node[above,font=\scriptsize] {flip $\lambda$} (2.95,.35);
+      \draw[-{Stealth},thick,black!40] (2.2,.35) -- node[above,font=\scriptsize,text=black!50] {flip $\lambda$} (2.95,.35);
       \node[anchor=west,align=left,visible on=<\cv>] at (6.3,.35) {\cap};
     \end{scope}
   }
