@@ -138,16 +138,28 @@
 \date{STOC 2027 submission \quad\NOTE{(author video for the PC)}}
 
 \begin{document}
-\begin{frame}[plain]
+\begin{frame}[plain,noframenumbering]
 \titlepage
 \note{
-\textbf{論文 v5 との用語の差分}：
+\scriptsize
+\textbf{論文 v8 との差分（用語）}：
 \begin{itemize}
   \item fold $\to$ flip
-  \item notice $\to$ (newly) distinguish：（「気づく」だと広すぎて目的が捉えにくかった）
-  \item reference structure $\to$ $\M_0$（the randomly colored structure）
-  \item read / witness edge $\to$ $x$-$y$ / $x$-$z$ 辺
-'  \item witness の頂点 $z$ $\to$ $w$（変数 $z$ と区別するため）
+  \item notice $\to$ (newly) distinguish：同じ色の辺で真偽が食い違う。notice では「気づいてどうなるか」（そのゲートで初めて区別が生まれる）が伝わらない
+  \item reference structure $\to$ $\M_0$ ／ read・witness edge $\to$ $x$-$y$・$x$-$z$ edge
+  \item color-determined（v8）$\to$ color-invariant。 bisimulation-invariant などと同じ「同色の点対で値が同じ」を意図
+\end{itemize}
+\textbf{論文 v8 との差分（内容）}：
+\begin{itemize}
+  \item Key Lemma「$d$ 個を見分ける項は合成 $\ge d/2$」はスライド独自のまとめ方（v8：各 fold はどこかの合成で notice される ＋ 合成 1 つで高々 2）。論文でもこの形で先に述べることを提案
+  \item distinguish を定義として明示（v8 は prediction と notice で定義）
+  \item 省略：$(\hub,\hub)$、端点 witness、ループ（p.11 で "see the paper"）。Cor 1.3（CoR 等式）、Cor 1.8・1.9（固定サイズ・乱択・ランダム入力）、項サイズ $(2+o(1))k2^k$
+  \item 名前のみ：Thm 1.4（FO$^3$ vs FO$^2$）、Prop 1.5（CoR vs FO$^2$）、Thm 1.6（ARA(3)）、Prop 1.7（RTC）は p.4 で結果の名前だけ
+  \item 追加：導入の FO$^k$ の例（3-cycle、推移性、closed walk）とモデル検査の表
+\end{itemize}
+\textbf{補足}：
+\begin{itemize}
+  \item 投稿版の論文が確定したら定理番号を入れる（v8 の番号）：p.4 の定理 Thm 1.1、各項目 Thm 1.4・Prop 1.5・Thm 1.6・Prop 1.7、Key Lemma $\to$ Lemma 3.4・3.5、p.11 の "see the paper" $\to$ Lemma 3.5
 \end{itemize}
 }
 \end{frame}

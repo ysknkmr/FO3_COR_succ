@@ -3,45 +3,46 @@
 
 % ============================================================
 % Background for non-logicians: what FO^k and model checking are
-\begin{frame}<1-8>{$k$-variable logic $\mathrm{FO}^k$}
+\begin{frame}{$k$-variable logic $\mathrm{FO}^k$}
 
-$\mathrm{FO}^k$: first-order logic with $k$ variables, \ \emph{reusable}.\\
-
-For example, ``a closed walk of length $\ell$ at $x$''\ is expressible in $\FOthree$:
+$\mathrm{FO}^k$: first-order logic with $k$ variables. \ For example, in $\FOthree$:
 
 \begin{center}
-\begin{tikzpicture}[every node/.style={font=\normalfont}]
-  % a closed walk of length 6 drawn as a regular hexagon, starting at x on the left
-  % the variable at vertex i appears together with the edge into it (x from the start)
-  \foreach \i/\v/\c/\s in {0/x/black/1,1/y/cA/2,2/z/cB/3,3/y/cA/4,4/z/cB/5,5/y/cA/6} {
-    \node[pv,minimum size=7pt] (p\i) at (180-\i*60:1.0) {};
-    \node[text=\c,opacity=.15,onslide=<\s->{opacity=1}] at (180-\i*60:1.4) {$\v$};
-  }
-  % edge number s appears on slide s+1 (semi-transparent before, as covered text), with its conjunct
-  \foreach \i/\j/\s in {0/1/2,1/2/3,2/3/4,3/4/5,4/5/6,5/0/7} {
-    \draw[thick,-{Stealth},shorten <=1pt,shorten >=1pt,opacity=.15,onslide=<\s->{opacity=1}] (p\i) -- (p\j);
-  }
-  \node[anchor=west,font=\footnotesize,text=black!55] at (1.8,0) {$\ell = 6$};
+\begin{tikzpicture}[every node/.style={font=\small}]
+  % a 3-cycle through the edge x -> y, drawn as an equilateral triangle; z is existentially quantified
+  \node[pv,minimum size=7pt,label=left:$x$] (x) at (210:.8) {};
+  \node[pv,minimum size=7pt,label=right:$y$] (y) at (330:.8) {};
+  \node[pv,minimum size=7pt,label=above:$z$] (z) at (90:.8) {};
+  \draw[thick,-{Stealth},shorten >=1pt] (x) -- (y);
+  \draw[thick,-{Stealth},shorten >=1pt] (y) -- (z);
+  \draw[thick,-{Stealth},shorten >=1pt] (z) -- (x);
+  \node[anchor=west] at (1.6,0)
+    {$\varphi(x, y) := \exists z\, \bigl(E(x, y) \land E(y, z) \land E(z, x)\bigr)$ \quad \NOTE{(a 3-cycle)}};
 \end{tikzpicture}
-
-\vspace{.4em}
-{\normalfont $\uncover<2->{\exists \textcolor{cA}{y}\, \bigl(E(x, \textcolor{cA}{y})}\uncover<3->{{} \land \exists \textcolor{cB}{z}\, \bigl(E(\textcolor{cA}{y}, \textcolor{cB}{z})}\uncover<4->{{} \land \exists \textcolor{cA}{y}\, \bigl(E(\textcolor{cB}{z}, \textcolor{cA}{y})}\uncover<5->{{} \land \exists \textcolor{cB}{z}\, \bigl(E(\textcolor{cA}{y}, \textcolor{cB}{z})}\uncover<6->{{} \land \exists \textcolor{cA}{y}\, (E(\textcolor{cB}{z}, \textcolor{cA}{y})}\uncover<7->{{} \land E(\textcolor{cA}{y}, x))\bigr)\bigr)\bigr)\bigr)}$}
 \end{center}
 
-\vfill
-\uncover<8->{%
+\FOthree{} also expresses, e.g.,
+\begin{itemize}
+  \item transitivity: $\forall x \forall y \forall z\, (E(x, y) \land E(y, z) \to E(x, z))$,
+  \item the existence of a closed walk of length 4: \
+    $\exists x\, \exists y\, \bigl(E(x, y) \land \exists z\, (E(y, z) \land \exists y\, (E(z, y) \land E(y, x)))\bigr)$
+    \NOTE{(any length $\ell$, by reusing $y$ and $z$)}.
+\end{itemize}
+
+\vspace{1em}
 \emph{Model checking}: \ $\M \models \varphi(a, b)$? \quad \NOTE{(given $\M$ with $n$ elements, a formula $\varphi$, and $a, b \in \M$)}
 
 \pause
 \vspace{.6em}
-\HP{$O(|\varphi| \cdot n^{k})$ for $\mathrm{FO}^k$ by table memoization \fcite{vardi1995}}}
+\HP{$O(|\varphi| \cdot n^{k})$ for $\mathrm{FO}^k$ by table memoization \fcite{vardi1995}}\\
+E.g., $O(n^3)$ for $\varphi$ above: try all $x, y, z$
+\vfill
 
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item $\mathrm{FO}^k$ は変数を使い回せる：長さ $\ell$ の closed walk も 3 変数で書ける
-  \item モデル検査は表のメモ化で $O(|\varphi| \cdot n^k)$
-  \item （補足）$x$ を固定し、$y$ と $z$ を交互に使い回す
+  \item $\mathrm{FO}^k$ とモデル検査の問題設定
+  \item 素直に計算すると $O(|\varphi| \cdot n^k)$。例の 3-cycle なら $O(n^3)$（次のページで $n^{\omega}$ に下がる）
 \end{itemize}
 }
 \end{frame}
@@ -62,7 +63,7 @@ We consider binary relation structures with $n$ elements:
   $\mathrm{FO}^{k}$, \ $k \ge 4$ &
     \renewcommand{\arraystretch}{1}\begin{tabular}[t]{@{}l@{}}
       no $O(n^{k-\varepsilon})$ \\
-      \NOTE{under HyperClique Hypothesis}
+      \NOTE{under Hyperclique Hypothesis}
     \end{tabular} &
     \renewcommand{\arraystretch}{1}\begin{tabular}[t]{@{}l@{}}
       \fcite{BringmannSlusallek2021} \fcite{nakamura-uezato2027}
@@ -92,7 +93,7 @@ Boolean matrix algorithm of \FOthree{} model checking
 via \FOthree{} $\leadsto$ \CoR{} \fcite{tarski1941,tarski-givant1987}:
 
 \begin{center}
-\Large
+\large
 $\exists z.\ P(x, z) \land Q(z, y)
   \quad \leadsto \quad
   (P \tikzmarknode{comp}{\mathbin{;}} Q)(x, y)$
@@ -103,17 +104,15 @@ $\exists z.\ P(x, z) \land Q(z, y)
 \end{tikzpicture}
 
 \pause
-\vspace{.5em}
+\vspace{1.0em}
 \hfill To obtain the form of $\exists z. - \land -$, we use DNF translation.\\
 \hfill $\leadsto$ \ \EMPH{$2^{O(|\varphi|)}$} compositions are used \fcite{nakamura2022}.}
 
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item $k \ge 4$ では $n^k$ が（仮説の下で）最適、\FOthree{} だけ $n^{\omega}$ に下がる
-  \item そのために \FOthree{} を \CoR{} に翻訳：$\exists z.\ P(x,z) \land Q(z,y)$ が合成 $P \mathbin{;} Q$（ブール行列積）
-  \item 代償：$\exists$ の内側の DNF 化で、合成が $2^{O(|\varphi|)}$ 個
-  \item （補足）二項関係のシグネチャを考えている
+  \item $k \ge 4$ では $n^k$ が最適だが、\FOthree{} だけは \CoR{} への翻訳で $n^{\omega}$ まで下がる
+  \item ただし翻訳で合成が $2^{O(|\varphi|)}$ 個に増える
 \end{itemize}
 }
 \end{frame}
@@ -143,9 +142,7 @@ Partial answer \fcite{nakamura2022}: yes for \emph{existential} \CoR{} \fcite{na
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item 例：$k$ 個の論理和の論理積を DNF にすると、合成が $2^k$ 個
-  \item 多項式サイズの翻訳がないことを示せるか？ は未解決だった
-  \item （補足）existential \CoR{} では既知（拡張で保存されることを使う）。一般の \CoR{} には使えない
+  \item 指数個の合成は避けられるか？ が未解決の問題だった
 \end{itemize}
 }
 \end{frame}
@@ -164,36 +161,36 @@ There is no polynomial-size translation from \FOthree{} to \CoR{}.
 \pause
 
 More precisely, there are \FOthree{} formulas $\varphi_1, \varphi_2, \dots$ with $|\varphi_k| = O(k)$
-such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compositions.
+such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compositions,
+even with shared subterms.
 \end{theorem}
 
 \vfill
 \pause
 {\large
 \KEY{Also in this paper}: exponential lower bounds for
-\begin{itemize}
-  \item $\FOthree \leadsto \FOtwo$, binary
-    \quad \NOTE{before:
-      \begin{tabular}[t]{@{}l@{}}
-        exponential gap $\mathrm{FO}^{k}$ vs.\ $\mathrm{FO}^{k-1}$ ($k \ge 4$), higher arity \fcite{vinall-smeeth2024} \\
-        $\FOthree \leadsto \FOtwo$ is polynomial over linear orders \fcite{grohe-schweikardt2005}
+\begin{itemize}\setlength{\itemsep}{0pt}
+  \item $\FOthree \leadsto \FOtwo$, binary\\
+    \NOTE{\begin{tabular}[t]{@{}l@{\ }l@{}}
+        before: & exponential gap $\mathrm{FO}^{k}$ vs.\ $\mathrm{FO}^{k-1}$ ($k \ge 4$), higher arity \fcite{vinall-smeeth2024} \\
+                & $\FOthree \leadsto \FOtwo$ is polynomial over linear orders \fcite{grohe-schweikardt2005}
       \end{tabular}}
+  \item $\CoR{} \leadsto \FOtwo$
   \pause
   \item ARA(3) $\leadsto$ matrix circuits
     \quad \NOTE{asked by \fcite{brijder2019,brijder2022}}
   \pause
-  \item $\FOthree$ $\leadsto$ $\CoR{}$ with RTC \quad \NOTE{(reflexive--transitive closure)}
+  \item $\FOthree$ $\leadsto$ $\CoR{}$ with RTC \quad \NOTE{(reflexive-transitive closure)}
 \end{itemize}}
 
 \vfill
-\HP{Our proof technique applies to them above!}
+\HP{Our proof technique applies to all of them!}
 
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item 答えは YES：$|\varphi_k| = O(k)$ で、同値な \CoR{} 項は合成 $\ge 2^{k-1}$ 個
-  \item 同じ手法で \FOthree{} $\to$ \FOtwo{}、ARA(3) $\to$ 行列回路、RTC（反射推移閉包）付き \CoR{} にも指数下界
-  \item （補足）下界は補・逆など合成以外の演算や、部分項の共有を許しても成り立つ
+  \item 答えは YES：$|\varphi_k| = O(k)$ の式に、合成 $\ge 2^{k-1}$ 個が必要
+  \item 同じ手法が他の設定（\FOtwo{}、行列言語、RTC 付き \CoR{}）にも効く
 \end{itemize}
 }
 \end{frame}

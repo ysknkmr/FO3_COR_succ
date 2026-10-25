@@ -4,7 +4,7 @@
 % ============================================================
 \begin{frame}{Conclusion}
 
-\begin{theorem}[This paper]
+\begin{theorem}
 There are \FOthree{} formulas $\varphi_1, \varphi_2, \dots$ with $|\varphi_k| = O(k)$
 such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compositions.
 \end{theorem}
@@ -20,7 +20,7 @@ Each composition can newly distinguish $\le 2$ of them.
 \begin{itemize}
   \item a superpolynomial gap over a \emph{fixed} finite signature (e.g., one binary relation)?
   \pause
-  \item the domain size from which the blowup begins?
+  \item the domain size from which the blowup begins? \ \NOTE{(known: between $2^k/(8k)$ and $O(k 4^k)$)}
   \pause
   \item the exact number of compositions for $G_k$: between $2^{k-1}$ and $2^{k}$?
 \end{itemize}
@@ -32,9 +32,8 @@ Each composition can newly distinguish $\le 2$ of them.
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item 結果：$|\varphi_k| = O(k)$ の \FOthree{} 式に同値な \CoR{} 項は合成 $\ge 2^{k-1}$ 個。同じ手法が \FOtwo{}、行列言語、RTC 付き \CoR{} にも効く
-  \item 鍵：ランダム彩色 $\M_0$ の $2^k$ 通りの flip。各合成は高々 2 個しか新たに見分けない
-  \item 未解決：固定シグネチャでの差、爆発が始まる領域サイズ、$G_k$ の正確な合成数
+  \item 結果（合成 $\ge 2^{k-1}$）と鍵となるアイデア（$\M_0$ の $2^k$ 通りの flip）のまとめ
+  \item 未解決問題：固定シグネチャ、爆発が始まる領域サイズ、$G_k$ の正確な合成数
 \end{itemize}
 }
 \end{frame}
