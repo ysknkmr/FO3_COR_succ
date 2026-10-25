@@ -14,9 +14,9 @@ We construct structures $\M_0$ and $\M_1, \dots, \M_{2^k}$ such that
     \begin{center}
     \renewcommand{\arraystretch}{1.15}
     \begin{tabular}{@{}w{l}{.6cm}|w{c}{.78cm}|*{7}{w{c}{.78cm}}|w{c}{.9cm}|w{c}{1.25cm}@{}}
-      & $\M_0$ & $\M_{1}$ & $\M_{2}$ & \multicolumn{4}{w{c}{\dimexpr 3.12cm+6\tabcolsep\relax}}{$\cdots$} & $\M_{2^k}$ & \#diff. & \uncover<6->{\#comp.\,$\ge$} \\
+      & $\M_0$ & $\M_{1}$ & $\M_{2}$ & \multicolumn{4}{w{c}{\dimexpr 3.12cm+6\tabcolsep\relax}}{$\cdots$} & $\M_{2^k}$ & \#diff. & \uncover<6->{\#comp.} \\
       \hline
-      $G_k$ & T & \alert{F} & \alert{F} & \multicolumn{4}{w{c}{\dimexpr 3.12cm+6\tabcolsep\relax}}{$\cdots$} & \alert{F} & \alert{$2^k$} & \uncover<6->{$2^k/2$} \\
+      $G_k$ & T & \alert{F} & \alert{F} & \multicolumn{4}{w{c}{\dimexpr 3.12cm+6\tabcolsep\relax}}{$\cdots$} & \alert{F} & \alert{$2^k$} & \uncover<6->{$\ge 2^k/2$} \\
     \end{tabular}
     \end{center}
 }
@@ -28,10 +28,10 @@ then $t$ needs $\ge d/2$ compositions.
 \begin{center}
 \renewcommand{\arraystretch}{1.15}
 \begin{tabular}{@{}w{l}{.6cm}|w{c}{.78cm}|*{7}{w{c}{.78cm}}|w{c}{.9cm}|w{c}{1.25cm}@{}}
-  & $\M_0$ & $\M_{1}$ & $\M_{2}$ & $\M_{3}$ & $\M_{4}$ & $\M_{5}$ & $\cdots$ & $\M_{2^k}$ & \#diff. & \#comp.\,$\ge$ \\
+  & $\M_0$ & $\M_{1}$ & $\M_{2}$ & $\M_{3}$ & $\M_{4}$ & $\M_{5}$ & $\cdots$ & $\M_{2^k}$ & \#diff. & \#comp. \\
   \hline
-  $t$ & T & \alert{F} & T & \alert{F} & T & T & $\cdots$ & T & \alert{$2$} & $1$ \\
-  $t'$ & F & \alert{T} & \alert{T} & \alert{T} & \alert{T} & F & $\cdots$ & F & \alert{$4$} & $2$ \\
+  $t$ & T & \alert{F} & T & \alert{F} & T & T & $\cdots$ & T & \alert{$2$} & $\ge 1$ \\
+  $t'$ & F & \alert{T} & \alert{T} & \alert{T} & \alert{T} & F & $\cdots$ & F & \alert{$4$} & $\ge 2$ \\
 \end{tabular}
 \end{center}
 }}
@@ -44,12 +44,10 @@ then $t$ needs $\ge d/2$ compositions.
 \uncover<7->{\large \KEY{TASK} How can we construct such $\M_0$ and $\M_1, \dots, \M_{2^k}$?}
 
 \note{
-\textbf{スライド概要}：$G_k$ が $\M_0$ で成り立ち、$\M_1, \dots, \M_{2^k}$ で成り立たない構造を作る。$d$ 個を $\M_0$ から見分ける項は、合成を $d/2$ 個以上必要とする。
-
-\textbf{メモ}：
+\textbf{ページ概要}：
 \begin{itemize}
-  \item 表の T/F は、各 $\M_i$ に対応する点対での値（論文の test pair）
-  \item 以降：構造を色付き完全グラフとして見る $\to$ $\M_0$（two-witness property、color-invariant）$\to$ $\M_\lambda$（hub での flip）$\to$ 合成が新たに見分けるのは高々 2 個である理由
+  \item $G_k$ が $\M_0$ で成り立ち、$\M_1, \dots, \M_{2^k}$ で成り立たない構造を作る
+  \item Key Lemma：$d$ 個を $\M_0$ から見分ける項は合成 $\ge d/2$ 個
 \end{itemize}
 }
 \end{frame}
@@ -70,13 +68,13 @@ $P_i \iff i \in \mu$.
   \node[pv,minimum size=7pt,label=left:$x$] (x) at (0,0) {};
   \node[pv,minimum size=7pt,label=right:$y$] (y) at (4.8,0) {};
   \foreach \h in {2.45,3.0} {
-    \node[pv,minimum size=5pt,draw=black!30] (c) at (3.0,\h) {};
+    \node[pv,minimum size=5pt,draw=black!30,fill=black!30] (c) at (3.0,\h) {};
     \draw[densely dashed,black!30,shorten <=2.2cm] (x) -- (c);
   }
   \node[font=\footnotesize,text=black!60] at (3.45,2.72) {$\exists z$};
   \node[pv,minimum size=7pt,label=right:$z$] (z) at (3.0,1.9) {};
-  \draw[thick,cA] (x) -- node[below,text=cA]
-    {color $\mu = \set{1, 3}$: \ $P_1, \ Q_2, \ P_3$} (y);
+  \draw[thick,cA] (x) -- node[below,align=center,text=cA]
+    {color $\mu = \set{1, 3}$:\\ $P_1, \ Q_2, \ P_3$} (y);
   \draw[thick,cB] (x) -- node[pos=.45,above left,align=right,text=cB,font=\footnotesize]
     {color $\mu^c = \set{2}$:\\ $Q_1, \ P_2, \ Q_3$} (z);
   \node[anchor=west,align=left] at (5.8,1.0)
@@ -90,12 +88,10 @@ $P_i \iff i \in \mu$.
 \HP{$G_k(x, y)$ holds iff some $x$-$z$ edge has the color $\mu^c$, where $\mu$ is the color of the $x$-$y$ edge.}
 
 \note{
-\textbf{スライド概要}：構造を色付き完全グラフとして見る。$G_k$ は「補の色の $x$-$z$ 辺がある」と読める。
-
-\textbf{メモ}：
+\textbf{ページ概要}：
 \begin{itemize}
-  \item 各辺で $P_i$ と $Q_i$ のちょうど一方が成り立つ
-  \item 例：$k = 3$、$\set{1,3}$ と $\set{2}$ は互いに補
+  \item 構造を色付き完全グラフとして見る
+  \item $G_k(x,y)$：$x$-$y$ 辺の色の補の色の $x$-$z$ 辺がある
 \end{itemize}
 }
 \end{frame}
@@ -108,12 +104,12 @@ $P_i \iff i \in \mu$.
     \centering
     \input{figs/M0_random}
 
-    \NOTE{$\M_0$: randomly colored, $O(k\,4^k)$ vertices \fcite{jmt1995}}
+    \NOTE{$\M_0$: randomly colored, $O(k\,4^k)$ vertices, cf.~\fcite{jmt1995}}
   \end{column}
   \begin{column}{.55\textwidth}
-    \KEY{Two-witness property} \ For all $u \ne v$ and all colors $\textcolor{cA}{\boldsymbol{\mu}}, \textcolor{cB}{\boldsymbol{\nu}}$,
-    there are at least two \emph{witnesses} $z$ such that
-    the $u$-$z$ and $z$-$v$ edges have colors $\textcolor{cA}{\boldsymbol{\mu}}$ and $\textcolor{cB}{\boldsymbol{\nu}}$, respectively.
+    \KEY{Two-witness property} \ For all $u \ne v$ and all colors $\textcolor{cA}{\boldsymbol{\mu}}, \textcolor{cD}{\boldsymbol{\nu}}$,
+    there are at least two \emph{witnesses} $w$ such that
+    the $u$-$w$ and $w$-$v$ edges have colors $\textcolor{cA}{\boldsymbol{\mu}}$ and $\textcolor{cD}{\boldsymbol{\nu}}$, respectively.
   \end{column}
 \end{columns}
 
@@ -127,12 +123,10 @@ whenever the $u$-$v$ and $u'$-$v'$ edges have the same color.
 Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the (two-)witness property.
 
 \note{
-\textbf{スライド概要}：$\M_0$ はランダム彩色で、two-witness property をもつ。だからどの項も color-invariant（真偽は辺の色だけで決まる）。
-
-\textbf{メモ}：
+\textbf{ページ概要}：
 \begin{itemize}
-  \item 証明は項の帰納法；非自明なのは合成 $t_1 \mathbin{;} t_2$ だけで、witness $z$ の存在が色だけで決まる
-  \item 「2 つ以上」が効くのは $\M_\lambda$ 側（hub を避ける witness が残る）
+  \item $\M_0$：ランダム彩色、two-witness property
+  \item だからどの項も color-invariant（帰納法、合成の場合に two-witness）
 \end{itemize}
 }
 \end{frame}
@@ -143,40 +137,44 @@ Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the
 \KEY{Fix} an arbitrary vertex $\hub$ of $\M_0$, the \emph{hub}.
 
 % Figure 1 of the paper (the fold), redrawn: flipping lambda turns the hub's lambda-edges into
-% lambda^c-edges; afterwards the hub has no lambda-edge. Colors: lambda cB, lambda^c cA.
+% lambda^c-edges; afterwards the hub has no lambda-edge. Colors: lambda cL, lambda^c cA.
 \begin{center}
-\begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=1.1cm,
-    xmark/.style={text=red,font=\large\bfseries,inner sep=0pt}]
-  \foreach \sx/\name/\lab/\vis in {0/0/structure $\M_0$/1-,7.3/1/flipped structure $\M_\lambda$/2-} {
-    \begin{scope}[xshift=\sx cm,visible on=<\vis>]
-      \node at (.6,2.35) {\lab};
-      \node[pv,label=below:$\hub$] (h\name) at (0,0) {};
-      \node[pv,label=below:$v$] (v\name) at (2.4,0) {};
-      \node[pv] (z\name) at (-.5,1.6) {};
-      \node[pv] (w\name) at (.6,1.75) {};
-      \node[pv] (o\name) at (-1.6,.3) {};
-      \draw[black!35] (h\name) -- node[below,font=\scriptsize,text=black!50] {$\mu$ ($\ne \lambda$)} (o\name);
-      \draw[thick,cA] (h\name) -- node[below=2pt,font=\scriptsize] {color $\lambda^c$} (v\name);
+\begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=1.1cm,lbl/.style={fill=normal text.bg,inner sep=2pt,font=\scriptsize}]
+  % drawn like the M_0 slide (vertices on a regular polygon); only the edges at the hub are drawn
+  \foreach \cx/\name/\lab/\vis in {0/0/structure $\M_0$/1-,6.64/1/flipped structure $\M_\lambda$/2-} {
+    \begin{scope}[shift={(\cx,1.2)},visible on=<\vis>]
+      \node at (0,1.55) {\lab};
+      \foreach \t in {0,30,60,90,120,150,180,210,240,270,300,330} {
+        \node[circle,fill=black,inner sep=0pt,minimum size=2.5pt] (\name-\t) at (\t:1.2) {};
+      }
+      \node[nv] (h\name) at (270:1.2) {$\hub$};
+      \node[nv] (v\name) at (0:1.2) {$v$};
+      \node[pv] (a\name) at (120:1.2) {};
+      \node[pv] (w\name) at (60:1.2) {};
+      \node[pv] (o\name) at (180:1.2) {};
+      \draw[thick,black!60] (h\name) -- node[lbl,pos=.55,text=black!60] {$\mu$ ($\ne \lambda$)} (o\name);
+      \draw[thick,cA] (h\name) -- node[lbl,pos=.55,text=cA] {$\lambda^c$} (v\name);
     \end{scope}
   }
-  % M_0: witness edges of color lambda at the hub
-  \draw[thick,cB] (h0) -- node[left,font=\scriptsize] {$\lambda$} (z0);
-  \draw[thick,cB] (h0) -- node[right,font=\scriptsize] {$\lambda$} (w0);
-  \node[font=\normalsize] at (1.2,-1.05) {the hub $\hub$ has $\lambda$-edges};
+  % M_0: lambda-edges at the hub
+  \draw[thick,cL] (h0) -- node[lbl,pos=.6,text=cL] {$\lambda$} (a0);
+  \draw[thick,cL] (h0) -- node[lbl,pos=.6,text=cL] {$\lambda$} (w0);
+  \node[font=\normalsize] at (0,-.85) {$\hub$ has $\lambda$-edges};
   % M_lambda: the same edges are still there, now of color lambda^c (as the h-v edge)
   \begin{scope}[visible on=<2->]
-    \draw[thick,cA] (h1) -- node[left,font=\scriptsize,text=cA] {$\lambda^c$} (z1);
-    \draw[thick,cA] (h1) -- node[right,font=\scriptsize,text=cA] {$\lambda^c$} (w1);
-    \node[font=\normalsize] at (7.3/1.1+1.2,-1.05) {\alert{the hub $\hub$ does not have $\lambda$-edges}};
-    \draw[-{Stealth},thick] (3.3,1.0) -- node[above] {flip $\lambda$} (4.6,1.0);
+    \draw[thick,cA] (h1) -- node[lbl,pos=.6,text=cA] {$\lambda^c$} (a1);
+    \draw[thick,cA] (h1) -- node[lbl,pos=.6,text=cA] {$\lambda^c$} (w1);
+    \node[font=\normalsize,align=center] at (6.64,-1.0) {$\hub$ \alert{does not} have $\lambda$-edges\\
+      \NOTE{(Edges not at $\hub$ are unchanged from $\M_0$.)}};
+    \draw[-{Stealth},thick] (2.6,1.2) -- node[above] {flip $\lambda$} (4.0,1.2);
   \end{scope}
 \end{tikzpicture}
 \end{center}
 
 \vfill
 \onslide<3->{%
-$\M_\lambda$ differs from $\M_0$ only in the $\lambda$-edges at the hub:\\
-for $v$ with the $\hub$-$v$ edge of color $\lambda^c$: \ $\M_0 \models G_k(\hub, v)$ \ but \ $\M_\lambda \not\models G_k(\hub, v)$.}
+% $\M_\lambda$ differs from $\M_0$ only in the $\lambda$-edges at the hub:\\
+For $v$ with the $\hub$-$v$ edge of color $\lambda^c$: \ $\M_0 \models G_k(\hub, v)$ \ but \ $\M_\lambda \not\models G_k(\hub, v)$.}
 
 \vfill
 \onslide<4->{%
@@ -186,91 +184,126 @@ Flipping each of the $2^k$ colors $\lambda$ gives $\M_1, \dots, \M_{2^k}$.
 
 \pause
 \onslide<5->{%
-$\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOTE{(next slide)}.
+$\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOTE{(next slides)}.
 }
 \note{
-\textbf{スライド概要}：hub の色 $\lambda$ の辺を $\lambda^c$ に flip すると $G_k(\hub, v)$ が 1 から 0 に変わる。それ以外の場所では $\M_0$ と見分けられない。
-
-\textbf{メモ}：
+\textbf{ページ概要}：
 \begin{itemize}
-  \item $\hub$-$v$ 辺の色が $\lambda^c$ なので、$G_k(\hub, v)$ には色 $\lambda$ の $\hub$-$z$ 辺が必要（$x$-$y$ 辺の色の補）
-  \item hub から離れた点の組では、two-witness property により hub を避ける witness が残る
+  \item hub の $\lambda$-edges を $\lambda^c$ に flip $\to$ hub に $\lambda$-edges がない
+  \item $\M_0 \models G_k(\hub, v)$ だが $\M_\lambda \not\models G_k(\hub, v)$
   \item 色ごとに 1 つ、計 $2^k$ 個
 \end{itemize}
 }
 \end{frame}
 
 % ============================================================
-\begin{frame}{Why a composition newly distinguishes at most two $\M_\lambda$}
+\begin{frame}{Why a composition newly distinguishes at most two $\M_\lambda$ \ (1/2)}
 
-$(X \mathbin{;} Y)(u, v)$ holds iff there is a witness $z$; \ flipping $\lambda$ changes only edges at the hub $\hub$.
-\\ \NOTE{(in the panels, $X$ holds on the $\lambda$-edges and $Y$ on the $\nu$-edges, $\nu \ne \lambda$)}
+Consider $t \mathbin{;} s$, where $t$ and $s$ do not distinguish $\M_\lambda$ from $\M_0$.\\
+\KEY{Q.} For which pairs $(u, v)$ can \ $\M_0 \models (t \mathbin{;} s)(u, v) \iff \M_\lambda \models (t \mathbin{;} s)(u, v)$ \ fail?
 
-% Figure 2 of the paper, redrawn with one layout for all panels:
-% the pair is the bottom edge, witnesses sit above (and below) it.
-% Colors as on the flipping slide: lambda-edges cB, lambda^c-edges cA, other colors black.
+$t$ are $s$ are color-invariant on both $\M_0$ and $\M_\lambda$:\\
+$w$ is a witness depends only on the colors $(\mu, \nu)$ of the $u$-$w$ and $w$-$v$ edges.
+
+\medskip
+\KEY{Case $\hub \notin \{u, v\}$:} \ Never. \NOTE{(The equivalence is preserved.)}
+
+% M_0 and M_lambda differ only in the edges at the hub (dashed on both sides);
+% for every color pair, a witness can be re-picked away from the hub.
 \begin{center}
-\begin{tikzpicture}[every node/.style={font=\small},x=1.2cm,y=1.2cm,
-    lam/.style={thick,cB}, lamc/.style={thick,cA}]
-  % (a) M_0
-  \begin{scope}
-    \node at (.9,1.75) {(a) $\M_0$, at $(\hub, v)$};
-    \node[pv,label=below:$\hub$] (h) at (0,0) {};
-    \node[pv,label=above:$z$] (z) at (.9,1.0) {};
-    \node[pv,label=below:$v$] (v) at (1.8,0) {};
-    \draw[lam] (h) -- node[above left,text=cB] {$\lambda$} (z);
-    \draw[thick] (z) -- node[above right] {$\nu$} (v);
-    \draw[densely dotted] (h) -- (v);
-    \node[align=center] at (.9,-.85) {witness $z$};
+\begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=.68cm,
+    lbl/.style={fill=normal text.bg,inner sep=2pt,font=\footnotesize},
+    hubwit/.style={wit={$\hub$}}, hubplain/.style={nowit={$\hub$}},
+    zwit/.style={witon=<3->{$w$}}, zplain/.style={nowit={$w$}}]
+  \begin{scope}[visible on=<2->]
+    % M_0: the witness is the hub; M_lambda: re-picked away from the hub, same color pair
+    \foreach \dx/\str/\hst/\zst in {0/{\M_0}/hubwit/zplain, 4.2/{\M_\lambda}/hubplain/zwit} {
+      \begin{scope}[xshift=\dx cm]
+        \node at (1,1.95) {$\str$};
+        \node[pairv] (u) at (0,0) {$u$};
+        \node[pairv] (v) at (2,0) {$v$};
+        \node (h) at (1,1.0) [\hst];
+        \node (w) at (1,-1.0) [\zst];
+        \draw[thick] (u) -- node[lbl] {$\mu$} (w);
+        \draw[thick] (w) -- node[lbl] {$\nu$} (v);
+      \end{scope}
+    }
+    \begin{pgfonlayer}{background}
+      % (a layer does not inherit the scope's overlay, so repeat visible on)
+      \begin{scope}[visible on=<2->]
+      \draw[thick,black!35,densely dashed] (0,0) -- node[lbl,text=black] {$\mu$} (1,1.0);
+      \draw[thick,black!35,densely dashed] (1,1.0) -- node[lbl,text=black] {$\nu$} (2,0);
+      \draw[thick,black!35,densely dashed] (4.2/1.1,0) -- (4.2/1.1+1,1.0) -- (4.2/1.1+2,0);
+      \end{scope}
+    \end{pgfonlayer}
+    \draw[-{Stealth},thick] (2.5,0) -- node[above,font=\scriptsize] {flip $\lambda$} (3.35,0);
+    \node[anchor=west,font=\scriptsize,text=cW] at (1.22,1.2) {(picked as a witness)};
+    % \node[anchor=west,align=left,font=\footnotesize,text=black!60] at (6.3,1.1) {dashed edges at $\hub$\\ are possibly changed by the flip};
   \end{scope}
-  % (b) M_lambda, at the hub: every witness uses an edge at the hub
-  \begin{scope}[xshift=4.4cm,visible on=<2->]
-    \node at (.9,1.75) {(b) $\M_\lambda$, at $(\hub, v)$};
-    \node[pv,label=below:$\hub$] (h) at (0,0) {};
-    \node[pv,label=above:$z$] (z) at (.9,1.0) {};
-    \node[pv,label=below:$v$] (v) at (1.8,0) {};
-    \draw[lamc] (h) -- node[above left,text=cA] {$\lambda^c$} (z);
-    \draw[thick] (z) -- node[above right] {$\nu$} (v);
-    \draw[densely dotted] (h) -- (v);
-    \node[align=center] at (.9,-.85) {\alert{lost}};
-  \end{scope}
-  % (c) M_lambda, away from the hub: the hub is only one of the witnesses
-  \begin{scope}[xshift=8.8cm,visible on=<3->]
-    \node at (.9,1.75) {(c) $\M_\lambda$, at $(u, v)$};
-    \node[pv,label=left:$u$] (u) at (0,0) {};
-    \node[pv,label=above:$\hub$] (h) at (.9,1.0) {};
-    \node[pv,label=right:$v$] (v) at (1.8,0) {};
-    \node[pv,label=below:$z'$] (z) at (.9,-.8) {};
-    \draw[lamc] (u) -- node[above left,text=cA] {$\lambda^c$} (h);
-    \draw[thick] (h) -- node[above right] {$\nu$} (v);
-    \draw[lam] (u) -- node[below left,text=cB] {$\lambda$} (z);
-    \draw[thick] (z) -- node[below right] {$\nu$} (v);
-    \draw[densely dotted] (u) -- (v);
-    \node[align=center] at (.9,-1.5) {$z'$ avoids the hub};
-  \end{scope}
+  \node[font=\footnotesize,text=black!60,visible on=<3->, align= left] at (1,-1.85)
+    {such $w$ exists by\\the \KEY{two-witness property}};
+\end{tikzpicture}
+\end{center}
+\onslide<3->{
+By the \KEY{two-witness property},\\
+We can always pick a correspondence witness $w$ $(\ne \hub)$ with the same colors $(\mu, \nu)$.}
+
+\note{
+\textbf{ページ概要}：
+\begin{itemize}
+  \item $t$, $s$ がまだ見分けていないとき、$t \mathbin{;} s$ はどの点対で iff が崩れうるか
+  \item $\M_0$ と $\M_\lambda$ の違いは hub の辺だけ
+  \item $\hub \notin \{u, v\}$：どの色の組 $(\mu, \nu)$ でも hub 以外で witness を取り直せる（two witnesses）$\to$ iff は保たれる
+\end{itemize}
+}
+\end{frame}
+
+% ============================================================
+\begin{frame}{Why a composition newly distinguishes at most two $\M_\lambda$ \ (2/2)}
+
+\KEY{Case $\hub \in \{u, v\}$,} say $u = \hub$: \ the edge $\hub$-$w$ itself may be flipped.
+\NOTE{($v = \hub$: the same with $s$; \ $u = v = \hub$: similar)}
+
+% Two rows: t holds only on lambda-edges (witness lost) / t also holds on a color mu != lambda
+% (a mu-edge at the hub is not flipped). Colors as on the flipping slide: lambda cL, lambda^c cA.
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=.7cm,
+    lbl/.style={fill=normal text.bg,inner sep=2pt,font=\footnotesize},
+    zA/.style={witon=<2->{$w$}}, zB/.style={witon=<4->{$w$}}, zplain/.style={nowit={$w$}}]
+  \foreach \row/\vis/\cv/\cz/\lz/\czl/\lzl/\zm/\zl/\tl/\cap in {
+      0/1-/2-/cL/{\lambda}/cA/{\lambda^c}/zA/zplain/{t^{c}}/{if $t$ holds \emph{only} on $\lambda$-edges:\\ \alert{no witness} in $\M_\lambda$},
+      -2.7/3-/4-/black/{\mu}/black/{\mu}/zB/zB/t/{if $t$ also holds on a color $\mu \ne \lambda$:\\ a $\mu$-edge at $\hub$ is not flipped}} {
+    \begin{scope}[yshift=\row cm,visible on=<\vis>]
+      \foreach \dx/\str/\col/\clab/\zst/\tlab in {0/{\M_0}/\cz/\lz/\zm/t, 3.6/{\M_\lambda}/\czl/\lzl/\zl/\tl} {
+        \begin{scope}[xshift=\dx cm]
+          \node at (1,2.1) {$\str$};
+          \node[pairv] (h) at (0,0) {$\hub$};
+          \node[pairv] (v) at (2,0) {$v$};
+          \node (w) at (1,1.0) [\zst];
+          \draw[thick,\col] (h) -- node[lbl,text=\col] {$\clab$} (w);
+          \draw[thick] (w) -- node[lbl] {$\nu$} (v);
+        \end{scope}
+      }
+      \draw[-{Stealth},thick] (2.2,.35) -- node[above,font=\scriptsize] {flip $\lambda$} (2.95,.35);
+      \node[anchor=west,align=left,visible on=<\cv>] at (6.3,.35) {\cap};
+    \end{scope}
+  }
 \end{tikzpicture}
 \end{center}
 
 \vfill
-\onslide<2->{%
-\KEY{At the hub} (a, b): \ every witness uses a hub edge, so it can be lost
-\\ \hspace*{1em} \NOTE{--- but only if $X$ holds on $\lambda$-edges only (or $Y$ does).}}
-\\ \onslide<3->{%
-\KEY{Away from the hub} (c): \ a second witness $z'$ avoids the hub $\hub$: \ nothing changes.}
-
-\onslide<4->{%
+\onslide<5->{%
 \begin{center}
-  $X$ picks at most one $\lambda$, and so does $Y$
-  \ $\Rightarrow$ \ \alert{at most two} $\M_\lambda$ per composition.
+  $\M_\lambda$ is newly distinguished only if $t$ or $s$ holds only on $\lambda$-edges
+  \\ $\Rightarrow$ \ \alert{at most two} such $\lambda$ \ \NOTE{(one for $t$, one for $s$)}.
 \end{center}}
 
 \note{
-\textbf{スライド概要}：$\hub$ を含む点対では見分けられうる、含まない点対では見分けられない。だから各合成が新たに見分ける $\M_\lambda$ は高々 2 個（Proof outline の Key Lemma の中身）。
-
-\textbf{メモ}：
+\textbf{ページ概要}：
 \begin{itemize}
-  \item $\hub$ を含まない点対では、$\hub$ を通らない witness $z'$ が残る
-  \item 条件は 3 つ、どれも $\lambda$ を決める $\to$ 高々 2
+  \item $\hub \in \{u, v\}$（例えば $u = \hub$）：$t$ が $\lambda$-edges だけで成り立つときだけ変わる（$s$ も同様）
+  \item だから各合成が新たに見分ける $\M_\lambda$ は高々 2 個
+  \item $(\hub, \hub)$ の場合も高々 2 は変わらない（論文参照）
 \end{itemize}
 }
 \end{frame}

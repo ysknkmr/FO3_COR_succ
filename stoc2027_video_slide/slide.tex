@@ -85,7 +85,16 @@
 \colorlet{colC}{logicgreen}
 
 \tikzset{
-  pv/.style={circle,draw=black,fill=white,inner sep=0pt,minimum size=5pt},
+  pv/.style={circle,draw=black,fill=black,inner sep=0pt,minimum size=5pt},
+  % a named element of a structure: a white circle with its name inside
+  % (unnamed vertices and vertices for variables: pv with an outside label)
+  nv/.style={circle,draw=black,fill=white,inner sep=0pt,minimum size=13pt,font=\small},
+  pairv/.style={nv},
+  % witness (green): wit={$z$}; witon=<3->{$z$} only from slide 3; nowit={$z$} plain.
+  % They set the node contents: write \node (z) at (0,0) [wit={$z$}]; (options last, no {}).
+  wit/.style={nv,draw=cW,text=cW,line width=1.2pt,node contents={#1}},
+  nowit/.style={nv,node contents={#1}},
+  witon/.style args={<#1>#2}{nv,node contents={#2},onslide=<#1>{draw=cW,text=cW,line width=1.2pt}},
   cellvert/.style={circle,fill=black!75,inner sep=0pt,minimum size=4pt},
   anchor vert/.style={circle,draw=black!60,fill=white,thick,inner sep=0pt,minimum size=8pt},
   hubvert/.style={circle,fill=black,inner sep=0pt,minimum size=10pt},
@@ -106,7 +115,9 @@
 % edge colours used only for illustrations of colorings
 \colorlet{cA}{blue!70!black}
 \colorlet{cB}{orange!85!black}
-\colorlet{cC}{green!50!black}
+\colorlet{cC}{black!45}   % (no green: hard to tell from red/orange)
+\colorlet{cW}{orange!85!black}   % witnesses
+\colorlet{cL}{magenta!75!black}  % the flipped color lambda
 \colorlet{cD}{violet!80!black}
 
 \hypersetup{colorlinks=false}
@@ -119,7 +130,7 @@
   \vskip1em\small\raggedright\setlength{\parskip}{.6em}\insertnote}
 
 \title{An Exponential Succinctness Gap between\\Three-Variable Logic and the Calculus of Relations}
-\author{\underline{Yuya Uezato} \and Yoshiki Nakamura}
+\author{Yuya Uezato \and {\color{black!25}Yoshiki Nakamura}}
 \institute{CyberAgent, Inc. \qquad Chiba University}
 \date{STOC 2027 submission \quad\NOTE{(author video for the PC)}}
 
