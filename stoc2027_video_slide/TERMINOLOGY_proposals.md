@@ -11,13 +11,13 @@ fold / notice / prediction などの語はまだ無い。括弧内の数字は v
 | v5 の用語 | スライドでの書き方 | 論文への提案 |
 |---|---|---|
 | read edge (24) / witness edge (17) / accepts (15) | 辺 $xy$ / 辺 $xz$。受理は色で直接: 「$xy$ の色が $\mu$ なら、$G_k(x,y)$ は色 $\mu^c$ の辺 $xz$ があるとき成り立つ」 | 3 語とも削れる候補。$G_k$ の定義直後に「各 $i$ で $xy$, $xz$ の一方が $P_i$、他方が $Q_i$」と書き、以降は色の言葉（$\chi(x,z) = \chi(x,y)^c$）で済ませる |
-| witness (125), outside witness (20), endpoint witness (4) | middle vertex $z$ | 合成 $\exists z$ の $z$ なので "middle vertex" で足りる。outside / endpoint は「$z \notin \{u, v\}$ / $z \in \{u, v\}$」と式で書く |
-| two-witness property (17) | 題「Every color pattern has two middle vertices」 | 名前を残すなら "two-midpoint property" など中身が分かる名前に。または名前なしで性質を直接引用 |
+| witness (125), outside witness (20), endpoint witness (4) | **witness $w$**（構造の頂点。変数 $z$ とは文字を分ける） | witness はそのまま使う。変数 $z$ と構造の頂点 $w$ を文字で区別する。outside / endpoint は「$w \notin \{u, v\}$ / $w \in \{u, v\}$」と式で書く |
+| two-witness property (17) | **two-witness property**（初出で定義：任意の $u \ne v$ と色 $\mu, \nu$ に witness $w$ が 2 つ以上） | 名前は残す。初出で 1 文定義 |
 | reference structure (39) | 単に $\mathcal M_0$ | 名前を外して $\mathcal M_0$ だけでも読める。残すなら初出で 1 文定義 |
-| hub (52) | **hub のまま**（初出で "one vertex $\hbar$, the hub" と定義） | 現状維持。初出の定義を 1 文で明示 |
+| hub (52) | **hub のまま**。文中は "the hub $\hbar$"、式中は $\hbar$ | 現状維持。初出の定義を 1 文で明示（"Fix an arbitrary vertex $\hbar$ of $\mathcal M_0$, the hub"） |
 | anchor (32) | スライドには出さない | 本文で必要な箇所に限定できないか要確認 |
-| fold (147) / folded structure | recoloring $\lambda$ / recolored structure $\mathcal M_\lambda$ | "fold" は意味が推測しにくい。"recoloring (at the hub)" を提案。定義:「$\hbar$ に接する色 $\lambda$ の辺を $\lambda^c$ に塗り替える」 |
-| notice (109) | detect | "detect" の方が通じやすい。定義:「そのゲートで初めて、$\mathcal M_0$ から期待される値とずれる」 |
+| fold (147) / folded structure | **flip $\lambda$** / flipped structure $\mathcal M_\lambda$ | "fold" は意味が推測しにくい。"flip (at the hub)" を提案。定義:「$\hbar$ に接する色 $\lambda$ の辺を $\lambda^c$ にする」。flip 後、hub に $\lambda$-edge はない |
+| notice (109) | **(newly) distinguish $\mathcal M_\lambda$ from $\mathcal M_0$** | "distinguish" に統一（separate / identify / detect も使わない）。"newly"：部分項 $t, s$ はまだ見分けていないが $t \mathbin{;} s$ は見分ける |
 | prediction (53) / predicts | expected value / expected from $\mathcal M_0$ | "the value expected from $\mathcal M_0$" |
 | color table (35) | スライドでは削除 | 「$\mathcal M_0$ 上で計算される関係は、値が辺の色だけで決まる」と性質で述べ、名前は補助的に |
 | test (92) | スライドには出さない | "test for $\lambda$" は fold と組で使われる。fold を言い換えるなら合わせて再検討 |

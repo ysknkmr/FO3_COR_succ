@@ -75,7 +75,7 @@ $P_i \iff i \in \mu$.
   \node[pv,minimum size=7pt,label=right:$z$] (z) at (3.0,1.9) {};
   \draw[thick,cA] (x) -- node[below,align=center,text=cA]
     {color $\mu = \set{1, 3}$:\\ $P_1, \ Q_2, \ P_3$} (y);
-  \draw[thick,cB] (x) -- node[pos=.45,above left,align=right,text=cB,font=\footnotesize]
+  \draw[thick,cD] (x) -- node[pos=.45,above left,align=right,text=cD,font=\footnotesize]
     {color $\mu^c = \set{2}$:\\ $Q_1, \ P_2, \ Q_3$} (z);
   \node[anchor=west,align=left] at (5.8,1.0)
     {for every $i \in [3]$,\\
@@ -108,7 +108,7 @@ $P_i \iff i \in \mu$.
   \end{column}
   \begin{column}{.55\textwidth}
     \KEY{Two-witness property} \ For all $u \ne v$ and all colors $\textcolor{cA}{\boldsymbol{\mu}}, \textcolor{cD}{\boldsymbol{\nu}}$,
-    there are at least two \emph{witnesses} $w$ such that
+    there are at least two \emph{witnesses} $\textcolor{cW}{w}$ such that
     the $u$-$w$ and $w$-$v$ edges have colors $\textcolor{cA}{\boldsymbol{\mu}}$ and $\textcolor{cD}{\boldsymbol{\nu}}$, respectively.
   \end{column}
 \end{columns}
@@ -134,7 +134,7 @@ Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the
 % ============================================================
 \begin{frame}{$\M_\lambda$: flipping at the hub $\hub$}
 
-\KEY{Fix} an arbitrary vertex $\hub$ of $\M_0$, the \emph{hub}.
+\KEY{Hub} $\hub$: a fixed arbitrary vertex of $\M_0$.
 
 % Figure 1 of the paper (the fold), redrawn: flipping lambda turns the hub's lambda-edges into
 % lambda^c-edges; afterwards the hub has no lambda-edge. Colors: lambda cL, lambda^c cA.
@@ -147,11 +147,11 @@ Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the
       \foreach \t in {0,30,60,90,120,150,180,210,240,270,300,330} {
         \node[circle,fill=black,inner sep=0pt,minimum size=2.5pt] (\name-\t) at (\t:1.2) {};
       }
-      \node[nv] (h\name) at (270:1.2) {$\hub$};
+      \node[nv] (h\name) at (180:1.2) {$\hub$};
       \node[nv] (v\name) at (0:1.2) {$v$};
-      \node[pv] (a\name) at (120:1.2) {};
-      \node[pv] (w\name) at (60:1.2) {};
-      \node[pv] (o\name) at (180:1.2) {};
+      \node[pv] (a\name) at (30:1.2) {};
+      \node[pv] (w\name) at (300:1.2) {};
+      \node[pv] (o\name) at (90:1.2) {};
       \draw[thick,black!60] (h\name) -- node[lbl,pos=.55,text=black!60] {$\mu$ ($\ne \lambda$)} (o\name);
       \draw[thick,cA] (h\name) -- node[lbl,pos=.55,text=cA] {$\lambda^c$} (v\name);
     \end{scope}
@@ -198,36 +198,37 @@ $\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOT
 
 % ============================================================
 \begin{frame}{Why a composition newly distinguishes at most two $\M_\lambda$ \ (1/2)}
+\KEY{Definition} \ $r$ \emph{distinguishes} $\M_\lambda$ from $\M_0$ if
+$\M_0 \models r(u, v)$ but $\M_\lambda \not\models r(u', v')$ (or vice versa)\\
+for some $u$-$v$ edge in $\M_0$ and $u'$-$v'$ edge in $\M_\lambda$ of the same color.
 
-Consider $t \mathbin{;} s$, where $t$ and $s$ do not distinguish $\M_\lambda$ from $\M_0$.\\
-\KEY{Q.} For which pairs $(u, v)$ can \ $\M_0 \models (t \mathbin{;} s)(u, v) \iff \M_\lambda \models (t \mathbin{;} s)(u, v)$ \ fail?
-
-$t$ are $s$ are color-invariant on both $\M_0$ and $\M_\lambda$:\\
-$w$ is a witness depends only on the colors $(\mu, \nu)$ of the $u$-$w$ and $w$-$v$ edges.
+\KEY{Q.} \ If $t$ and $s$ do not distinguish $\M_\lambda$ from $\M_0$, when can $t \mathbin{;} s$?
 
 \medskip
-\KEY{Case $\hub \notin \{u, v\}$:} \ Never. (The equivalence is always preserved.)
+\KEY{Case $\hub \notin \{u, v\}$:} \ Never. ($t \mathbin{;} s$ cannot distinguish $\M_{\lambda}$ from $\M_0$ at such $(u, v)$.)
 
 % M_0 and M_lambda differ only in the edges at the hub (dashed on both sides);
 % for every color pair, a witness can be re-picked away from the hub.
 \begin{center}
 % trim: center the two panels (the annotations may stick out)
-\begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=.68cm,
-    trim left={(-.35,0)}, trim right={(5.6/1.1+2.98,0)},
+\begin{tikzpicture}[every node/.style={font=\small},x=1.3cm,y=.85cm,
+    trim left={(-.35,0)}, trim right={(6.4/1.3+4.3,0)},
     lbl/.style={fill=normal text.bg,inner sep=2pt,font=\footnotesize},
     hubwit/.style={wit={$\hub$}}, hubplain/.style={nowit={$\hub$}},
     zwit/.style={witon=<4->{$w$}}, zplain/.style={nowit={$w$}}]
   \begin{scope}[visible on=<2->]
     % M_0: the witness is the hub; M_lambda: re-picked away from the hub, same color pair
-    \foreach \dx/\str/\hst/\zst in {0/{\M_0}/hubwit/zplain, 5.6/{\M_\lambda}/hubplain/zwit} {
+    \foreach \dx/\str/\hst/\zst in {0/{\M_0}/hubwit/zplain, 6.4/{\M_\lambda}/hubplain/zwit} {
       \begin{scope}[xshift=\dx cm]
-        \node at (1,1.95) {$\str$};
+        \node at (1,1.75) {$\str$};
         \node[pairv] (u) at (0,0) {$u$};
         \node[pairv] (v) at (2,0) {$v$};
         \node (h) at (1,1.0) [\hst];
-        \node (w) at (1,-1.0) [\zst];
-        \draw[thick] (u) -- node[lbl] {$\mu$} (w);
-        \draw[thick] (w) -- node[lbl] {$\nu$} (v);
+        \begin{scope}[visible on=<3->]
+          \node (w) at (1,-1.0) [\zst];
+          \draw[thick] (u) -- node[lbl] {$\mu$} (w);
+          \draw[thick] (w) -- node[lbl] {$\nu$} (v);
+        \end{scope}
       \end{scope}
     }
     \begin{pgfonlayer}{background}
@@ -235,28 +236,33 @@ $w$ is a witness depends only on the colors $(\mu, \nu)$ of the $u$-$w$ and $w$-
       \begin{scope}[visible on=<2->]
       \draw[thick,black!35,densely dashed] (0,0) -- node[lbl,text=black] {$\mu$} (1,1.0);
       \draw[thick,black!35,densely dashed] (1,1.0) -- node[lbl,text=black] {$\nu$} (2,0);
-      \draw[thick,black!35,densely dashed] (5.6/1.1,0) -- (5.6/1.1+1,1.0) -- (5.6/1.1+2,0);
+      \draw[thick,black!35,densely dashed] (6.4/1.3,0) -- (6.4/1.3+1,1.0) -- (6.4/1.3+2,0);
       \end{scope}
     \end{pgfonlayer}
-    \draw[-{Stealth},thick,black!40] (2.75,0) -- node[above,font=\scriptsize,text=black!50] {flip $\lambda$} (4.0,0);
-    \node[anchor=west,align=left,font=\scriptsize] at (1.22,1.2) {($\hub$ picked\\as a witness)};
-    \node[anchor=west,align=left,font=\scriptsize,text=cW,visible on=<4->] at (5.6/1.1+1.22,-1.2)
-      {(We can pick $w$ as\\ the corresponding witness)};
+    \draw[-{Stealth},thick,black!40] (2.65,0) -- node[above,font=\scriptsize,text=black!50] {flip $\lambda$} (4.0,0);
+    \node[anchor=north west,align=left,font=\scriptsize,text=cW] (n1) at (1.5,1.27) {$\hub$ picked\\as a witness};
+    \node[stepno,anchor=north east] at ([xshift=-2pt,yshift=-3pt]n1.north west) {1};
+    \node[anchor=west,align=left,font=\scriptsize,text=cW,visible on=<4->] (n3) at (6.4/1.3+1.6,-1.2)
+      {We can pick $w$ as\\ the corresponding witness};
+    \node[stepno,anchor=north east,draw=cW,text=cW,visible on=<4->] at ([xshift=-2pt,yshift=-3pt]n3.north west) {3};
     % \node[anchor=west,align=left,font=\footnotesize,text=black!60] at (6.3,1.1) {dashed edges at $\hub$\\ are possibly changed by the flip};
   \end{scope}
-  \node[font=\footnotesize,text=black!60,visible on=<3->, align= left] at (1,-1.85)
+  \node[font=\footnotesize,text=black!60,visible on=<3->,align=left,anchor=north west] (n2) at (-.1,-1.45)
     {
     The \KEY{two-witness property} shows\\
     there is $w$ with the same colors $(\mu, \nu)$};
+  \node[stepno,anchor=north east,visible on=<3->] at ([xshift=-2pt,yshift=-3pt]n2.north west) {2};
 \end{tikzpicture}
 \end{center}
+\onslide<5->{\NOTE{Similarly for the converse direction (from $\M_\lambda$ to $\M_0$).}}
 
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item $t$, $s$ がまだ見分けていないとき、$t \mathbin{;} s$ はどの点対で iff が崩れうるか
-  \item $\M_0$ と $\M_\lambda$ の違いは hub の辺だけ
-  \item $\hub \notin \{u, v\}$：どの色の組 $(\mu, \nu)$ でも hub 以外で witness を取り直せる（two witnesses）$\to$ iff は保たれる
+  \item distinguish の定義：同じ色の辺（$\M_0$ の $u$-$v$ と $\M_\lambda$ の $u'$-$v'$）で真偽が食い違う
+  \item $t$, $s$ が見分けないとき、$t \mathbin{;} s$ はいつ見分けうるか
+  \item $t$, $s$ は color-invariant $\to$ 答えは、その点対で witness が実現する色の組 $(\mu, \nu)$ の集合だけで決まる
+  \item $\hub \notin \{u, v\}$：$\M_\lambda$ でも全ての色の組が実現される（$\hub$ が witness でも two-witness property で $w \ne \hub$ が取れる）$\to$ 変わらない
 \end{itemize}
 }
 \end{frame}
@@ -264,49 +270,62 @@ $w$ is a witness depends only on the colors $(\mu, \nu)$ of the $u$-$w$ and $w$-
 % ============================================================
 \begin{frame}{Why a composition newly distinguishes at most two $\M_\lambda$ \ (2/2)}
 
-\KEY{Case $\hub \in \{u, v\}$,} say $u = \hub$: \ the edge $\hub$-$w$ itself may be flipped.
-\NOTE{($v = \hub$: the same with $s$; \ $u = v = \hub$: similar)}
+\KEY{Case $u = \hub$} (similarly for $v = \hub$): \ the $\hub$-$w$ edge itself may be flipped.
 
-% Two rows: t holds only on lambda-edges (witness lost) / t also holds on a color mu != lambda
-% (a mu-edge at the hub is not flipped). Colors as on the flipping slide: lambda cL, lambda^c cA.
+% Same layout as (1/2): (1) a witness w via a lambda-edge at the hub in M_0; the flip turns it into
+% lambda^c; (2) if t also holds on mu != lambda, there is w' with colors (mu, nu) (two-witness
+% property), and its mu-edge at the hub is not flipped; (3) w' is the corresponding witness.
+% Colors as on the flipping slide: lambda cL, lambda^c cA.
 \begin{center}
-\begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=.7cm,
+% trim: center the two panels (the annotations may stick out)
+\begin{tikzpicture}[every node/.style={font=\small},x=1.3cm,y=.95cm,
+    trim left={(-.35,0)}, trim right={(6.4/1.3+4.3,0)},
     lbl/.style={fill=normal text.bg,inner sep=2pt,font=\footnotesize},
-    zA/.style={witon=<2->{$w$}}, zB/.style={witon=<4->{$w$}}, zplain/.style={nowit={$w$}}]
-  \foreach \row/\vis/\cv/\cz/\lz/\czl/\lzl/\zm/\zl/\tl/\cap in {
-      0/1-/2-/cL/{\lambda}/cA/{\lambda^c}/zA/zplain/{t^{c}}/{if $t$ holds \emph{only} on $\lambda$-edges:\\ \alert{no witness} in $\M_\lambda$},
-      -2.7/3-/4-/black/{\mu}/black/{\mu}/zB/zB/t/{if $t$ also holds on a color $\mu \ne \lambda$:\\ a $\mu$-edge at $\hub$ is not flipped}} {
-    \begin{scope}[yshift=\row cm,visible on=<\vis>]
-      \foreach \dx/\str/\col/\clab/\zst/\tlab in {0/{\M_0}/\cz/\lz/\zm/t, 3.6/{\M_\lambda}/\czl/\lzl/\zl/\tl} {
-        \begin{scope}[xshift=\dx cm]
-          \node at (1,2.1) {$\str$};
-          \node[pairv] (h) at (0,0) {$\hub$};
-          \node[pairv] (v) at (2,0) {$v$};
-          \node (w) at (1,1.0) [\zst];
-          \draw[thick,\col] (h) -- node[lbl,text=\col] {$\clab$} (w);
-          \draw[thick] (w) -- node[lbl] {$\nu$} (v);
-        \end{scope}
-      }
-      \draw[-{Stealth},thick,black!40] (2.2,.35) -- node[above,font=\scriptsize,text=black!50] {flip $\lambda$} (2.95,.35);
-      \node[anchor=west,align=left,visible on=<\cv>] at (6.3,.35) {\cap};
-    \end{scope}
-  }
+    wA/.style={wit={$w$}}, wplain/.style={nowit={$w$}},
+    wpA/.style={nowit={$w'$}}, wpB/.style={witon=<4->{$w'$}}]
+  \begin{scope}[visible on=<2->]
+    \foreach \dx/\str/\col/\clab/\wst/\wpst in {0/{\M_0}/cL/{\lambda}/wA/wpA, 6.4/{\M_\lambda}/cA/{\lambda^c}/wplain/wpB} {
+      \begin{scope}[xshift=\dx cm]
+        \node at (1,1.75) {$\str$};
+        \node[pairv] (h) at (0,0) {$\hub$};
+        \node[pairv] (v) at (2,0) {$v$};
+        \node (w) at (1,1.0) [\wst];
+        \draw[thick,\col] (h) -- node[lbl,text=\col] {$\clab$} (w);
+        \draw[thick] (w) -- node[lbl,pos=.65] {$\nu$} (v);
+        % the other lambda-neighbors of the hub: their edges are flipped too
+        \foreach \p in {(.55,-1.15), (1.45,-.75)} {
+          \node[pv] (x) at \p {};
+          \draw[thick,\col] (h) -- node[lbl,pos=.55,text=\col] {$\clab$} (x);
+        }
+      \end{scope}
+    }
+    \draw[-{Stealth},thick,black!40] (2.65,0) -- node[above,font=\scriptsize,text=black!50] {flip $\lambda$} (4.0,0);
+    \node[anchor=north west,align=left,font=\scriptsize] (n1) at (1.5,1.14) {$w$ picked\\as a witness};
+    \node[stepno,anchor=north east] at ([xshift=-2pt,yshift=-3pt]n1.north west) {1};
+  \end{scope}
+  \node[anchor=north west,align=left,font=\scriptsize,visible on=<3->] (n2) at (6.4/1.3+2.55,.32)
+    {Here we cannot pickup a witness\\
+    with the same colors $(\lambda, \nu)$};
+  \node[stepno,anchor=north east,visible on=<3->] at ([xshift=-2pt,yshift=-3pt]n2.north west) {2};
 \end{tikzpicture}
 \end{center}
 
-\vfill
+\onslide<4->{%
+So the answer changes only if $t$ holds on some $\lambda$-edges, and only on them \NOTE{($v = \hub$: the same for $s$)}.
+}
 \onslide<5->{%
-\begin{center}
-  $\M_\lambda$ is newly distinguished only if $t$ or $s$ holds only on $\lambda$-edges
-  \\ $\Rightarrow$ \ \alert{at most two} such $\lambda$ \ \NOTE{(one for $t$, one for $s$)}.
-\end{center}}
+Such $\lambda$ is uniquely determined for $t$ and for $s$.}
+
+\onslide<6->{
+Each composition newly distinguishes \alert{at most two} of them.}
 
 \note{
 \textbf{ページ概要}：
 \begin{itemize}
-  \item $\hub \in \{u, v\}$（例えば $u = \hub$）：$t$ が $\lambda$-edges だけで成り立つときだけ変わる（$s$ も同様）
-  \item だから各合成が新たに見分ける $\M_\lambda$ は高々 2 個
-  \item $(\hub, \hub)$ の場合も高々 2 は変わらない（論文参照）
+  \item $u = \hub$：hub の $\lambda$-edges が全て $\lambda^c$ になる $\to$ $\M_\lambda$ で実現されるのは $\mu \ne \lambda$ の組だけ
+  \item 答えが変わるのは、$t$ が成り立つ色が $\lambda$ だけのとき（$v = \hub$ は $s$ について同様）
+  \item そのような $\lambda$ は $t$ と $s$ に 1 つずつ $\to$ 各合成が新たに見分ける $\M_\lambda$ は高々 2 個
+  \item $(\hub, \hub)$ や端点の witness（$w \in \{u, v\}$）も同じ考え方で処理できる（論文参照）
 \end{itemize}
 }
 \end{frame}

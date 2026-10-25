@@ -4,17 +4,18 @@
 % ============================================================
 \begin{frame}{Conclusion}
 
-\KEY{Result} \ Tarski's translation from \FOthree{} to \CoR{} is optimal in the worst case:
-\begin{itemize}
-  \item some \FOthree{} formulas of size $O(k)$ need $2^{\Omega(k)}$ compositions in every equivalent \CoR{} term,
-    even with complement, converse, and shared subterms;
-  \item the same technique: \FOthree{} vs.\ \FOtwo{}, matrix query languages, \CoR{} with closure.
-\end{itemize}
+\begin{theorem}[This paper]
+There are \FOthree{} formulas $\varphi_1, \varphi_2, \dots$ with $|\varphi_k| = O(k)$
+such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compositions.
+\end{theorem}
+Our proof also applies to \FOthree{} vs.\ \FOtwo{}, matrix query languages, and \CoR{} with TC.
 
-\KEY{Technique} \ $2^k$ flips of one structure $\M_0$; each composition newly distinguishes $\le 2$ of them.
+\medskip
+\KEY{Key Idea} \ $2^k$ flips of the randomly colored structure $\M_0$.\\
+Each composition can newly distinguish $\le 2$ of them.
 
 \pause
-\vspace{.4em}
+\vfill
 \begin{problem}[Open Questions]
 \begin{itemize}
   \item a superpolynomial gap over a \emph{fixed} finite signature (e.g., one binary relation)?
@@ -26,9 +27,7 @@
 \end{problem}
 
 \vfill
-\begin{center}
-  \emph{Thank you for your attention!}
-\end{center}
+\emph{Thank you for your attention!}
 
 \note{
 \textbf{ページ概要}：

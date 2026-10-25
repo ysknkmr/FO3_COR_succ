@@ -90,6 +90,8 @@
   % (unnamed vertices and vertices for variables: pv with an outside label)
   nv/.style={circle,draw=black,fill=white,inner sep=0pt,minimum size=13pt,font=\small},
   pairv/.style={nv},
+  % small circled step number for annotations read in order: \node[stepno] {1};
+  stepno/.style={circle,draw,inner sep=.8pt,font=\tiny\bfseries},
   % witness (green): wit={$z$}; witon=<3->{$z$} only from slide 3; nowit={$z$} plain.
   % They set the node contents: write \node (z) at (0,0) [wit={$z$}]; (options last, no {}).
   wit/.style={nv,draw=cW,text=cW,line width=1.2pt,node contents={#1}},
@@ -117,8 +119,9 @@
 \colorlet{cB}{orange!85!black}
 \colorlet{cC}{black!45}   % (no green: hard to tell from red/orange)
 \colorlet{cW}{orange!85!black}   % witnesses
-\colorlet{cL}{magenta!75!black}  % the flipped color lambda
-\colorlet{cD}{violet!80!black}
+\colorlet{cL}{magenta!75}  % the flipped color lambda
+\colorlet{cD}{magenta!75}   % pink (violet was hard to tell from blue)
+\colorlet{cE}{cyan!60!black}  % extra edge color (no orange on edges)
 
 \hypersetup{colorlinks=false}
 
