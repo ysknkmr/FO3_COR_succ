@@ -138,7 +138,7 @@ Proof by induction on $t$: the case $t = t_1 \mathbin{;} t_2$ follows from the (
 % Figure 1 of the paper (the fold), redrawn: flipping lambda turns the hub's lambda-edges into
 % lambda^c-edges; afterwards the hub has no lambda-edge. Colors: lambda cL, lambda^c cA.
 \begin{center}
-\begin{tikzpicture}[every node/.style={font=\small},x=1.0cm,y=.85cm,lbl/.style={fill=normal text.bg,inner sep=2pt,font=\scriptsize}]
+\begin{tikzpicture}[every node/.style={font=\small},x=1.05cm,y=.95cm,lbl/.style={fill=normal text.bg,inner sep=2pt,font=\footnotesize}]
   % drawn like the M_0 slide (vertices on a regular polygon); only the edges at the hub are drawn
   \foreach \cx/\name/\lab/\vis in {0/0/structure $\M_0$/1-,6.64/1/flipped structure $\M_\lambda$/2-} {
     \begin{scope}[shift={(\cx,1.2)},visible on=<\vis>]
@@ -163,8 +163,7 @@ Proof by induction on $t$: the case $t = t_1 \mathbin{;} t_2$ follows from the (
   \begin{scope}[visible on=<2->]
     \draw[thick,cA] (h1) -- node[lbl,pos=.6,text=cA] {$\lambda^c$} (a1);
     \draw[thick,cA] (h1) -- node[lbl,pos=.6,text=cA] {$\lambda^c$} (w1);
-    \node[font=\normalsize,align=center] at (6.64,-1.0) {$\hub$ \alert{does not} have $\lambda$-edges\\
-      \NOTE{(Edges not at $\hub$ are unchanged from $\M_0$.)}};
+    \node[font=\normalsize,align=center] at (6.64,-1.0) {$\hub$ \alert{does not} have $\lambda$-edges};
     \draw[-{Stealth},thick] (2.6,1.2) -- node[above] {flip $\lambda$} (4.0,1.2);
   \end{scope}
 \end{tikzpicture}
@@ -187,8 +186,7 @@ $\M_0 \models r(u, v)$ but $\M_\lambda \not\models r(u', v')$ (or vice versa)
 for some $u$-$v$ edge in $\M_0$ and $u'$-$v'$ edge in $\M_\lambda$ of the same color.}
 
 \onslide<6->{%
-$\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOTE{(next slides)}.\\
-\NOTE{(Boolean operations and converse act pair by pair, so they newly distinguish none.)}
+$\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOTE{(next slides)}.
 }
 \note{
 \textbf{ページ概要}：
@@ -235,14 +233,14 @@ $\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOT
       % (a layer does not inherit the scope's overlay, so repeat visible on)
       \begin{scope}[visible on=<2->]
       \draw[thick,black!35,densely dashed] (0,0) -- node[lbl,text=black] {$\mu$} (1,1.0);
-      \draw[thick,black!35,densely dashed] (1,1.0) -- node[lbl,text=black] {$\nu$} (2,0);
+      \draw[thick,black!35,densely dashed] (1,1.0) -- node[lbl,pos=.78,text=black] {$\nu$} (2,0);
       \draw[thick,black!35,densely dashed] (6.4/1.3,0) -- (6.4/1.3+1,1.0) -- (6.4/1.3+2,0);
       \end{scope}
     \end{pgfonlayer}
     \draw[-{Stealth},thick,black!40] (2.65,0) -- node[above,font=\scriptsize,text=black!50] {flip $\lambda$} (4.0,0);
-    \node[anchor=north west,align=left,font=\scriptsize,text=cW] (n1) at (1.5,1.27) {$\hub$ picked\\as a witness};
+    \node[anchor=north west,align=left,font=\footnotesize,text=cW] (n1) at (1.5,1.27) {$\hub$ picked\\as a witness};
     \node[stepno,anchor=north east] at ([xshift=-2pt,yshift=-3pt]n1.north west) {1};
-    \node[anchor=west,align=left,font=\scriptsize,text=cW,visible on=<4->] (n3) at (6.4/1.3+1.6,-1.2)
+    \node[anchor=west,align=left,font=\footnotesize,text=cW,visible on=<4->] (n3) at (6.4/1.3+1.6,-1.2)
       {We can pick $w$ as\\ the corresponding witness};
     \node[stepno,anchor=north east,draw=cW,text=cW,visible on=<4->] at ([xshift=-2pt,yshift=-3pt]n3.north west) {3};
     % \node[anchor=west,align=left,font=\footnotesize,text=black!60] at (6.3,1.1) {dashed edges at $\hub$\\ are possibly changed by the flip};
@@ -289,7 +287,7 @@ $\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOT
         \node[pairv] (v) at (2,0) {$v$};
         \node (w) at (1,1.0) [\wst];
         \draw[thick,\col] (h) -- node[lbl,text=\col] {$\clab$} (w);
-        \draw[thick] (w) -- node[lbl,pos=.65] {$\nu$} (v);
+        \draw[thick] (w) -- node[lbl,pos=.55] {$\nu$} (v);
         % the other lambda-neighbors of the hub: their edges are flipped too
         \foreach \p in {(.55,-1.15), (1.45,-.75)} {
           \node[pv] (x) at \p {};
@@ -298,10 +296,10 @@ $\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOT
       \end{scope}
     }
     \draw[-{Stealth},thick,black!40] (2.65,0) -- node[above,font=\scriptsize,text=black!50] {flip $\lambda$} (4.0,0);
-    \node[anchor=north west,align=left,font=\scriptsize] (n1) at (1.5,1.14) {$w$ picked\\as a witness};
-    \node[stepno,anchor=north east] at ([xshift=-2pt,yshift=-3pt]n1.north west) {1};
+    \node[anchor=west,font=\footnotesize] (n1) at (1.55,1.0) {$w$ picked as a witness};
+    \node[stepno,anchor=east] at ([xshift=-2pt]n1.west) {1};
   \end{scope}
-  \node[anchor=north west,align=left,font=\scriptsize,visible on=<3->] (n2) at (6.4/1.3+.15,-1.3)
+  \node[anchor=north west,align=left,font=\footnotesize,visible on=<3->] (n2) at (6.4/1.3+.15,-1.3)
     {Here we cannot pick a witness\\
     with the same colors $(\lambda, \nu)$};
   \node[stepno,anchor=north east,visible on=<3->] at ([xshift=-2pt,yshift=-3pt]n2.north west) {2};
