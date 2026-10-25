@@ -5,8 +5,10 @@
 % Background for non-logicians: what FO^k and model checking are
 \begin{frame}{$k$-variable logic $\mathrm{FO}^k$}
 
-$\mathrm{FO}^k$: first-order logic with $k$ variables. \ For example, in $\FOthree$:
+$\mathrm{FO}^k$: first-order logic with $k$ variables.
 
+For example, in $\FOthree$:
+$\varphi(x, y) := \exists z\, \bigl(E(x, y) \land E(y, z) \land E(z, x)\bigr)$ \quad \NOTE{(triangle detection)}
 \begin{center}
 \begin{tikzpicture}[every node/.style={font=\small}]
   % a 3-cycle through the edge x -> y, drawn as an equilateral triangle; z is existentially quantified
@@ -17,7 +19,7 @@ $\mathrm{FO}^k$: first-order logic with $k$ variables. \ For example, in $\FOthr
   \draw[thick,-{Stealth},shorten >=1pt] (y) -- (z);
   \draw[thick,-{Stealth},shorten >=1pt] (z) -- (x);
   \node[anchor=west] at (1.6,0)
-    {$\varphi(x, y) := \exists z\, \bigl(E(x, y) \land E(y, z) \land E(z, x)\bigr)$ \quad \NOTE{(triangle)}};
+    {};
 \end{tikzpicture}
 \end{center}
 
