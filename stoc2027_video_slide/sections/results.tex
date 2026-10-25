@@ -26,17 +26,23 @@
   \draw[thick,cB] (x) -- (z);
   \node[font=\footnotesize,text=black!60] at (2.45,1.45) {$\exists z$};
 \node[anchor=west,align=left] at (4.0,.6)
-    {at every $i$: one of the edges $xy$, $xz$ is in $P_i$,\\
-     the other is in $Q_i$};
+    {for every $i \in [k]$,\\
+    the $x$-$y$ and $x$-$z$ edges\\
+    have labels $P_i$ and $Q_i$, in either order.};
 \end{tikzpicture}
 \end{center}
 
-\vspace{1em}
-DNF: \ $G_k \equiv \bigcup_{A \subseteq [k]} \bigl[ H_A \cap (H_{A^c} \mathbin{;} \one) \bigr]$
-\ : \ \EMPH{$2^k$ compositions}
-\ \NOTE{($H_A \defeq \bigcap_{i \in A} P_i \cap \bigcap_{i \notin A} Q_i$)}
-\\ \hspace*{2.6em} $\Rightarrow$ optimal up to a factor of $2$: \ every equivalent \CoR{} term needs $\ge 2^{k-1}$ compositions
+\pause
+\vfill
+CoR: \ \EMPH{$2^k$ compositions}
+\[
+  G_k \equiv \bigcup_{A \subseteq [k]}
+  \Bigl[ \Bigl(\bigcap_{i \in A} P_i \cap \bigcap_{i \notin A} Q_i\Bigr)
+  \cap \Bigl(\Bigl(\bigcap_{i \in A} Q_i \cap \bigcap_{i \notin A} P_i\Bigr) \mathbin{;} \one\Bigr) \Bigr]
+\]
 
+\vfill
+We show that every \CoR{} term, equivalent to $G_k$, needs $2^{\Omega(k)}$ compositions.
 
 \note{
 \textbf{スライド概要}：$G_k$ は DNF で合成 $2^k$ 個、これは 2 倍を除いて最適。
@@ -44,7 +50,7 @@ DNF: \ $G_k \equiv \bigcup_{A \subseteq [k]} \bigl[ H_A \cap (H_{A^c} \mathbin{;
 \textbf{メモ}：
 \begin{itemize}
   \item 各 $i$ で、辺 $xy$ と辺 $xz$ の一方が $P_i$、他方が $Q_i$
-  \item 下界は合成以外の演算（補・逆・共有）を無料にしても成り立つ
+  \item 下界は合成以外の演算（補・逆・部分項の共有）を自由に使えても成り立つ
 \end{itemize}
 }
 \end{frame}
