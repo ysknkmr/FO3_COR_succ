@@ -17,16 +17,15 @@ $\mathrm{FO}^k$: first-order logic with $k$ variables. \ For example, in $\FOthr
   \draw[thick,-{Stealth},shorten >=1pt] (y) -- (z);
   \draw[thick,-{Stealth},shorten >=1pt] (z) -- (x);
   \node[anchor=west] at (1.6,0)
-    {$\varphi(x, y) := \exists z\, \bigl(E(x, y) \land E(y, z) \land E(z, x)\bigr)$ \quad \NOTE{(a 3-cycle)}};
+    {$\varphi(x, y) := \exists z\, \bigl(E(x, y) \land E(y, z) \land E(z, x)\bigr)$ \quad \NOTE{(triangle)}};
 \end{tikzpicture}
 \end{center}
 
 \FOthree{} also expresses, e.g.,
 \begin{itemize}
   \item transitivity: $\forall x \forall y \forall z\, (E(x, y) \land E(y, z) \to E(x, z))$,
-  \item the existence of a closed walk of length 4: \
-    $\exists x\, \exists y\, \bigl(E(x, y) \land \exists z\, (E(y, z) \land \exists y\, (E(z, y) \land E(y, x)))\bigr)$
-    \NOTE{(any length $\ell$, by reusing $y$ and $z$)}.
+  \item closed walk of length 4: \
+    $\exists x\, \exists y\, \bigl(E(x, y) \land \exists z\, (E(y, z) \land \exists y\, (E(z, y) \land E(y, x)))\bigr)$.
 \end{itemize}
 
 \vspace{1em}
@@ -81,7 +80,7 @@ We consider binary relation structures with $n$ elements:
     \end{tabular} \\
   \uncover<2->{\renewcommand{\arraystretch}{1}\begin{tabular}[t]{@{}l@{}}
       \KEY{\CoR} \ \fcite{tarski1941} \\
-      \NOTE{Tarski's calculus of relations}
+      \NOTE{Tarski's Calculus of Relations}
     \end{tabular}} &
     \uncover<2->{\KEY{$O(|\varphi| \cdot n^{\omega})$}} & \\
   \bottomrule
@@ -160,6 +159,7 @@ Partial answer \fcite{nakamura2022}: yes for \emph{existential} \CoR{} \fcite{na
 There is no polynomial-size translation from \FOthree{} to \CoR{}.
 \pause
 
+\normalfont
 More precisely, there are \FOthree{} formulas $\varphi_1, \varphi_2, \dots$ with $|\varphi_k| = O(k)$
 such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compositions,
 even with shared subterms.
@@ -171,7 +171,7 @@ even with shared subterms.
 \KEY{Also in this paper}: exponential lower bounds for
 \begin{itemize}\setlength{\itemsep}{0pt}
   \item $\FOthree \leadsto \FOtwo$, binary\\
-    \NOTE{\begin{tabular}[t]{@{}l@{\ }l@{}}
+    \hspace{3em}\NOTE{\begin{tabular}[t]{@{}l@{\ }l@{}}
         before: & exponential gap $\mathrm{FO}^{k}$ vs.\ $\mathrm{FO}^{k-1}$ ($k \ge 4$), higher arity \fcite{vinall-smeeth2024} \\
                 & $\FOthree \leadsto \FOtwo$ is polynomial over linear orders \fcite{grohe-schweikardt2005}
       \end{tabular}}
@@ -180,11 +180,11 @@ even with shared subterms.
   \item ARA(3) $\leadsto$ matrix circuits
     \quad \NOTE{asked by \fcite{brijder2019,brijder2022}}
   \pause
-  \item $\FOthree$ $\leadsto$ $\CoR{}$ with RTC \quad \NOTE{(reflexive-transitive closure)}
+  \item $\FOthree$ $\leadsto$ $\CoR{}$ with RTC \NOTE{(reflexive-transitive closure)}
 \end{itemize}}
 
 \vfill
-\HP{Our proof technique applies to all of them!}
+Our proof technique applies to all of them!
 
 \note{
 \textbf{ページ概要}：

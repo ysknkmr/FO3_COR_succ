@@ -7,7 +7,7 @@
 \KEY{Goal Lemma} \ Every \CoR{} term equivalent to $G_k$ needs $2^{\Omega(k)}$ compositions.
 
 \vfill
-We construct structures $\M_0$ and $\M_1, \dots, \M_{2^k}$ such that
+\KEY{Approach} We construct structures $\M_0$ and $\M_1, \dots, \M_{2^k}$ such that
 \begin{itemize}
 \uncover<2->{%
   \item $G_k$ distinguishes all of $\M_1, \dots, \M_{2^k}$ from $\M_0$:
@@ -31,7 +31,7 @@ then $t$ needs $\ge d/2$ compositions.
   & $\M_0$ & $\M_{1}$ & $\M_{2}$ & $\M_{3}$ & $\M_{4}$ & $\M_{5}$ & $\cdots$ & $\M_{2^k}$ & \#diff. & \#comp. \\
   \hline
   $t$ & T & \alert{F} & T & \alert{F} & T & T & $\cdots$ & T & \alert{$2$} & $\ge 1$ \\
-  $t'$ & F & \alert{T} & \alert{T} & \alert{T} & \alert{T} & F & $\cdots$ & F & \alert{$4$} & $\ge 2$ \\
+  \uncover<5->{$t'$} & \uncover<5->{F} & \uncover<5->{\alert{T}} & \uncover<5->{\alert{T}} & \uncover<5->{\alert{T}} & \uncover<5->{\alert{T}} & \uncover<5->{F} & \uncover<5->{$\cdots$} & \uncover<5->{F} & \uncover<5->{\alert{$4$}} & \uncover<5->{$\ge 2$} \\
 \end{tabular}
 \end{center}
 }}
@@ -202,10 +202,10 @@ $\leadsto$ Each composition newly distinguishes \alert{at most two} of them \NOT
 % ============================================================
 \begin{frame}{Why a composition newly distinguishes at most two $\M_\lambda$ \ (1/2)}
 
-\KEY{Q.} \ If $t$ and $s$ do not distinguish $\M_\lambda$ from $\M_0$, when can $t \mathbin{;} s$?
+\KEY{Q.} \ If $t$ and $s$ do not distinguish $\M_\lambda$ from $\M_0$, when can $t \mathbin{;} s$ newly distinguish $\M_{\lambda}$?
 
 \medskip
-\KEY{Case $\hub \notin \{u, v\}$:} \ Never. ($t \mathbin{;} s$ cannot distinguish $\M_{\lambda}$ from $\M_0$ at such $(u, v)$.)
+\KEY{Case $\hub \notin \{u, v\}$:} \ Never: $t \mathbin{;} s$ cannot distinguish $\M_{\lambda}$ from $\M_0$ at such $(u, v)$.
 
 % M_0 and M_lambda differ only in the edges at the hub (dashed on both sides);
 % for every color pair, a witness can be re-picked away from the hub.
@@ -316,6 +316,7 @@ Such $\lambda$ is uniquely determined for $t$ and for $s$.}
 
 \onslide<6->{
 $\leadsto$ Each composition newly distinguishes \alert{at most two} $\M_\lambda$.\\
+
 \NOTE{(The remaining cases: loops $(u, u)$, including $(\hub, \hub)$, and witnesses $w \in \{u, v\}$. See the paper for details.)}}
 
 \note{
