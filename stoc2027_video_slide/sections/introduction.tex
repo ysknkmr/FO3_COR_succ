@@ -130,16 +130,15 @@ DNF translation is used, for example:
   \uncover<3->{\leadsto_{\text{\NOTE{(to \CoR)}}}} \ & \uncover<3->{\Bigl(\bigcup_{A \subseteq [k]}
     \Bigl(\bigcap_{i \in A} P_i\Bigr) \mathbin{;} \Bigl(\bigcap_{i \notin A} Q_i\Bigr) \Bigr)(x, y)}
 \end{align*}
-\uncover<3->{\NOTE{(In this translation, we use $2^k$ compositions)}}
+\uncover<3->{\NOTE{(In this translation, we use $2^k$ compositions, since the number of subsets $A \subseteq [k]$ is $2^k$.)}}
 
 \vfill
 \onslide<4->{%
 \begin{problem}[Open \fcite{FletcherEtAl2015,nakamura2022,nakamura-uezato2027}]
 Can we prove that there is no polynomial-size translation from \FOthree{} to \CoR{}?
 \end{problem}
-\NOTE{Partial answer: Yes for $\Sigma_1$\CoR{} (with transitive closure) \fcite{nakamura2022}},}
-
-\onslide<4->{\NOTE{which has the same expressive power as \emph{existential} $\mathrm{FO}^3$, which is closed under \emph{extensions}.}}
+\NOTE{Partial answer \fcite{nakamura2022}: yes for \emph{existential} \CoR{} \fcite{nakamura2023} ($\equiv$ existential $\mathrm{FO}^3$),
+\onslide<5->{via preservation under \emph{extensions}, which fails for full \CoR{}.}}}
 
 \note{
 \textbf{スライド概要}：この指数個の合成は必要か？ 未解決だった（$\Sigma_1$\CoR{} のみ既知）。
@@ -174,7 +173,7 @@ such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compos
 {\large
 \KEY{Also in this paper}: exponential lower bounds for
 \begin{itemize}
-  \item $\FOthree \leadsto \FOtwo$
+  \item $\FOthree \leadsto \FOtwo$, binary
     \quad \NOTE{before:
       \begin{tabular}[t]{@{}l@{}}
         exponential gap $\mathrm{FO}^{k}$ vs.\ $\mathrm{FO}^{k-1}$ ($k \ge 4$), higher arity \fcite{vinall-smeeth2024} \\
@@ -184,7 +183,7 @@ such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compos
   \item ARA(3) $\leadsto$ matrix circuits
     \quad \NOTE{asked by \fcite{brijder2019,brijder2022}}
   \pause
-  \item $\FOthree$ $\leadsto$ $\CoR{}$ with transitive closure $X^{*}$
+  \item $\FOthree$ $\leadsto$ $\CoR{}$ with TC
 \end{itemize}}
 
 \vfill

@@ -2,55 +2,49 @@
 \section{Technical overview}
 
 % ============================================================
-\begin{frame}{Proof idea: telling $\M_0$ apart from $2^k$ structures}
+\begin{frame}{Proof outline (at high-level)}
 
-\KEY{Goal} \ $C \equiv G_k$ \ $\Longrightarrow$ \ $C$ has $2^{\Omega(k)}$ compositions
-\NOTE{\ ($C$: any \CoR{} term or circuit)}
+\KEY{Goal Lemma} \ Every \CoR{} term equivalent to $G_k$ needs $2^{\Omega(k)}$ compositions.
 
-\vspace{.3em}
+\vfill
+We construct structures $\M_0$ and $\M_1, \dots, \M_{2^k}$ such that
+\begin{itemize}
 \uncover<2->{%
-$C$ must tell $\M_0$ apart from each of $2^k$ structures $\M_\lambda$:
-\ $G_k = 1$ on $\M_0$, \ $G_k = 0$ on $\M_\lambda$}
-
-\begin{center}
-\begin{tikzpicture}[every node/.style={font=\small}]
-  \node (M0) at (6.1,1.0) {$\M_0$};
-  \foreach \i in {1,...,8} {
-    \node[visible on=<2->] (L\i) at (1.4+\i*1.05,0) {$\M_{\lambda_{\i}}$};
-    \draw[densely dashed,black!40,visible on=<2->] (M0.south) -- (L\i.north);
-  }
-  \node[visible on=<2->] at (11.0,0) {$\cdots$};
-  % each composition newly tells M_0 apart from at most two of them
-  \foreach \i/\j/\g in {1/2/1,3/4/2,5/6/3,7/8/4} {
-    \draw[decorate,decoration={brace,mirror,amplitude=4pt},thick,chibasub,visible on=<4->]
-      ($(L\i.south west)+(.05,-.05)$) -- ($(L\j.south east)+(-.05,-.05)$)
-      node[midway,below=4pt,font=\scriptsize] {composition $;_{\g}$};
-  }
-\end{tikzpicture}
-\end{center}
-
+  \item $G_k$ distinguishes all of $\M_1, \dots, \M_{2^k}$ from $\M_0$:
+    \begin{center}
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{@{}w{l}{.6cm}|w{c}{.78cm}|*{7}{w{c}{.78cm}}|w{c}{.9cm}|w{c}{1.25cm}@{}}
+      & $\M_0$ & $\M_{1}$ & $\M_{2}$ & \multicolumn{4}{w{c}{\dimexpr 3.12cm+6\tabcolsep\relax}}{$\cdots$} & $\M_{2^k}$ & \#diff. & \uncover<5->{\#comp.\,$\ge$} \\
+      \hline
+      $G_k$ & T & \alert{F} & \alert{F} & \multicolumn{4}{w{c}{\dimexpr 3.12cm+6\tabcolsep\relax}}{$\cdots$} & \alert{F} & \alert{$2^k$} & \uncover<5->{$2^k/2$} \\
+    \end{tabular}
+    \end{center}
+}
 \uncover<3->{%
-\begin{center}
-\small
-\renewcommand{\arraystretch}{1.05}
-\begin{tabular}{@{}lll@{}}
-  \toprule
-  \CoR{} operation & meaning & newly tells $\M_0$ apart from \\
-  \midrule
-  $\zero, \one, \id$, \ $\cup, \cap, \overline{\,\cdot\,}$, \ $X^{\conv}$ & constants, Boolean operations, converse & no $\M_\lambda$ \\
-  $X \mathbin{;} Y$ & composition $=$ Boolean matrix product & \alert{$\le 2$ of the $\M_\lambda$} \\
-  \bottomrule
-\end{tabular}
-\end{center}}
-
+   \item 
+\KEY{Key Lemma} \ If a \CoR{} term $t$ distinguishes $d$ structures among $\M_1, \dots, \M_{2^k}$ from $\M_0$,
+then $t$ needs $\ge d/2$ compositions.
 \uncover<4->{%
 \begin{center}
-  every $\M_\lambda$ needs a composition that tells it apart
-  \quad $\Longrightarrow$ \quad \alert{$2^k \le 2 \cdot \#\text{compositions}(C)$}
-\end{center}}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}w{l}{.6cm}|w{c}{.78cm}|*{7}{w{c}{.78cm}}|w{c}{.9cm}|w{c}{1.25cm}@{}}
+  & $\M_0$ & $\M_{1}$ & $\M_{2}$ & $\M_{3}$ & $\M_{4}$ & $\M_{5}$ & $\cdots$ & $\M_{2^k}$ & \#diff. & \#comp.\,$\ge$ \\
+  \hline
+  $t$ & T & \alert{F} & T & \alert{F} & T & T & $\cdots$ & T & \alert{$2$} & $1$ \\
+  $t'$ & F & \alert{T} & \alert{T} & \alert{T} & \alert{T} & F & $\cdots$ & F & \alert{$4$} & $2$ \\
+\end{tabular}
+\end{center}
+}}
+\end{itemize}
+
+\vfill
+\uncover<6->{\HP{if $t \equiv G_k$, then $t$ needs $\ge 2^k/2$ compositions.}}
+
+\vfill
+\uncover<7->{\KEY{TASK} \large How can we construct such $\M_0$ and $\M_1, \dots, \M_{2^k}$?}
 
 \note{
-\textbf{スライド概要}：$C$ は $\M_0$ と $2^k$ 個の $\M_\lambda$ を見分けねばならない。合成 1 個が新たに見分けられるのは高々 2 個。
+\textbf{スライド概要}：$G_k$ が $\M_0$ で成り立ち、$2^k$ 個の $\M_\lambda$ で成り立たない構造を作る。$d$ 個を見分ける項は合成を $d/2$ 個以上必要とする。
 
 \textbf{メモ}：
 \begin{itemize}
