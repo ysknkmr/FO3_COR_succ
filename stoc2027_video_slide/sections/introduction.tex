@@ -109,7 +109,7 @@ $\exists z.\ P(x, z) \land Q(z, y)
 \hfill $\leadsto$ \ \EMPH{$2^{O(|\varphi|)}$} compositions are used \cite{nakamura2022}.}
 
 \note{
-\textbf{スライド概要}：$k \ge 4$ では $n^k$ が最適、\FOthree{} だけ $n^{\omega}$ に下がる。代償は翻訳の $2^{O(|\varphi|)}$。
+\textbf{スライド概要}：$k \ge 4$ では $n^k$ が最適、\FOthree{} だけ $n^{\omega}$ に下がる。代償は、\CoR{} への翻訳で合成が $2^{O(|\varphi|)}$ 個に増えること。
 
 \textbf{メモ}：
 \begin{itemize}
@@ -146,7 +146,7 @@ Can we prove that there is no polynomial-size translation from \FOthree{} to \Co
 \textbf{メモ}：
 \begin{itemize}
   \item 例の式は素直に訳すと合成 $2^k$ 個
-  \item 今回はサイズの無条件下界
+  \item 既知の部分的な答えは existential \CoR{}（拡張で保存）だけ；その論法は一般の \CoR{} には効かない
 \end{itemize}
 }
 \end{frame}
@@ -190,14 +190,13 @@ such that every \CoR{} term equivalent to $\varphi_k$ needs $\ge 2^{k-1}$ compos
 \HP{Our proof technique can apply to all the above!}
 
 \note{
-\textbf{スライド概要}：答えは YES（主定理）。同じ手法で \FOtwo{}、行列言語、閉包付き \CoR{} にも指数下界。
+\textbf{スライド概要}：答えは YES。$|\varphi_k| = O(k)$ の式の族で、同値な \CoR{} 項は合成 $\ge 2^{k-1}$ 個（共有を許しても）。同じ手法で \FOtwo{}、行列言語、閉包付き \CoR{} にも指数下界。
 
 \textbf{メモ}：
 \begin{itemize}
   \item \FOtwo{}：$O(k)$ サイズの \FOthree{} 文、同値な \FOtwo{} 文は量化子 $\ge 2^k$
-  \item 行列：集約ゲート $\ge 2^k/(3\beta)$（$\beta$：半環の join breadth）
+  \item 行列：集約ゲート $\ge 2^k/(3\beta)$（$\beta$：半環の join breadth）；Brijder--Gyssens--Van den Bussche の問いに答える
   \item 閉包付き \CoR：$2\cdot\#\text{合成} + \#\text{閉包} \ge 2^k$
-  \item 行列言語：Brijder--Gyssens--Van den Bussche の問いに答える
   \item 変わるのは「1 演算が新たに見分けられる構造の数」だけ（量化子 1、集約 $3\beta$、閉包 1）
   \item 論文には他に：\CoR{} 等式、逆なし回路（ちょうど $2^k$）、乱択回路、ランダム入力
 \end{itemize}

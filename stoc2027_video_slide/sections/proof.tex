@@ -49,7 +49,7 @@ then $t$ needs $\ge d/2$ compositions.
 \textbf{メモ}：
 \begin{itemize}
   \item 表の T/F は、各 $\M_i$ に対応する点対での値（論文の test pair）
-  \item 以降：$\M_0$ の作り方、$\M_i$ ＝ hub での塗り替え $\M_\lambda$、合成が新たに見分けるのは高々 2 個である理由
+  \item 以降：構造を色付き完全グラフとして見る $\to$ $\M_0$（two-witness property、color-invariant）$\to$ $\M_\lambda$（hub での flip）$\to$ 合成が新たに見分けるのは高々 2 個である理由
 \end{itemize}
 }
 \end{frame}
@@ -82,8 +82,7 @@ $P_i \iff i \in \mu$.
   \node[anchor=west,align=left] at (5.8,1.0)
     {for every $i \in [3]$,\\
     the $x$-$y$ and $x$-$z$ edges\\
-    have labels $P_i$ and $Q_i$, in either order\\
-    $\Rightarrow$ \ $G_3(x, y)$ \ \NOTE{($k = 3$)}};
+    have labels $P_i$ and $Q_i$, in either order};
 \end{tikzpicture}
 \end{center}
 
@@ -128,26 +127,27 @@ whenever the $u$-$v$ and $u'$-$v'$ edges have the same color.
 Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the (two-)witness property.
 
 \note{
-\textbf{スライド概要}：$\M_0$ ではどの色の道のパターンにも中間の頂点がある。だから項は「色 $\mapsto$ T/F」の表になる。
+\textbf{スライド概要}：$\M_0$ はランダム彩色で、two-witness property をもつ。だからどの項も color-invariant（真偽は辺の色だけで決まる）。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item 例：$P_1 \mathbin{;} Q_1$ はどの辺でも T（色 $\set{1}$ と $\emptyset$ の道が必ずある）、ループでは F
-  \item 「2 つ以上」が効くのは $\M_\lambda$ 側（hub を避ける中間の頂点が残る）
+  \item 証明は項の帰納法；非自明なのは合成 $t_1 \mathbin{;} t_2$ だけで、witness $z$ の存在が色だけで決まる
+  \item 「2 つ以上」が効くのは $\M_\lambda$ 側（hub を避ける witness が残る）
 \end{itemize}
 }
 \end{frame}
 
 % ============================================================
-\begin{frame}{$\M_\lambda$: recoloring at the hub $\hub$}
+\begin{frame}{$\M_\lambda$: flipping at the hub $\hub$}
 
-% Figure 1 of the paper, redrawn around the mechanism: the read edge at the hub
-% accepts only witness edges of color lambda, and the fold recolors exactly those.
-% Colors as on the slide of G_k: read edge cA, witness edges cB.
+\KEY{Fix} an arbitrary vertex $\hub$ of $\M_0$, the \emph{hub}.
+
+% Figure 1 of the paper (the fold), redrawn: flipping lambda turns the hub's lambda-edges into
+% lambda^c-edges; afterwards the hub has no lambda-edge. Colors: lambda cB, lambda^c cA.
 \begin{center}
 \begin{tikzpicture}[every node/.style={font=\small},x=1.1cm,y=1.1cm,
     xmark/.style={text=red,font=\large\bfseries,inner sep=0pt}]
-  \foreach \sx/\name/\lab/\vis in {0/0/structure $\M_0$/1-,7.3/1/recolored structure $\M_\lambda$/2-} {
+  \foreach \sx/\name/\lab/\vis in {0/0/structure $\M_0$/1-,7.3/1/flipped structure $\M_\lambda$/2-} {
     \begin{scope}[xshift=\sx cm,visible on=<\vis>]
       \node at (.6,2.35) {\lab};
       \node[pv,label=below:$\hub$] (h\name) at (0,0) {};
@@ -155,46 +155,48 @@ Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the
       \node[pv] (z\name) at (-.5,1.6) {};
       \node[pv] (w\name) at (.6,1.75) {};
       \node[pv] (o\name) at (-1.6,.3) {};
-      \draw[black!35] (h\name) -- node[below,font=\scriptsize,text=black!50] {$\mu \ne \lambda$} (o\name);
-      \draw[line width=1.4pt,cA] (h\name) -- node[below=2pt,font=\scriptsize] {color $\lambda^c$} (v\name);
+      \draw[black!35] (h\name) -- node[below,font=\scriptsize,text=black!50] {$\mu$ ($\ne \lambda$)} (o\name);
+      \draw[thick,cA] (h\name) -- node[below=2pt,font=\scriptsize] {color $\lambda^c$} (v\name);
     \end{scope}
   }
   % M_0: witness edges of color lambda at the hub
   \draw[thick,cB] (h0) -- node[left,font=\scriptsize] {$\lambda$} (z0);
   \draw[thick,cB] (h0) -- node[right,font=\scriptsize] {$\lambda$} (w0);
-  \node[font=\scriptsize,text=cB] at (-.2,2.0) {color $\lambda$};
-  \node at (1.2,-1.05) {$G_k(\hub, v) = 1$};
-  % M_lambda: the same edges, recolored to lambda^c, are no longer witnesses
+  \node[font=\normalsize] at (1.2,-1.05) {the hub $\hub$ has $\lambda$-edges};
+  % M_lambda: the same edges are still there, now of color lambda^c (as the h-v edge)
   \begin{scope}[visible on=<2->]
-    \draw[thick,black!35,densely dashed] (h1) -- node[left,font=\scriptsize,text=black!60] {$\lambda^c$} (z1);
-    \draw[thick,black!35,densely dashed] (h1) -- node[right,font=\scriptsize,text=black!60] {$\lambda^c$} (w1);
-    \node[xmark] at ($(h1)!.75!(z1)$) {$\times$};
-    \node[xmark] at ($(h1)!.75!(w1)$) {$\times$};
-    \node at (7.3/1.1+1.2,-1.05) {$G_k(\hub, v) = \textcolor{red}{0}$};
-    \draw[-{Stealth},thick] (3.3,1.0) -- node[above] {recolor $\lambda$} (4.6,1.0);
+    \draw[thick,cA] (h1) -- node[left,font=\scriptsize,text=cA] {$\lambda^c$} (z1);
+    \draw[thick,cA] (h1) -- node[right,font=\scriptsize,text=cA] {$\lambda^c$} (w1);
+    \node[font=\normalsize] at (7.3/1.1+1.2,-1.05) {\alert{the hub $\hub$ does not have $\lambda$-edges}};
+    \draw[-{Stealth},thick] (3.3,1.0) -- node[above] {flip $\lambda$} (4.6,1.0);
   \end{scope}
 \end{tikzpicture}
 \end{center}
 
 \vfill
-\begin{center}
-  $G_k(\hub, v)$ needs a $\hub$-$z$ edge of color $\lambda$
-  \onslide<2->{\\ recoloring $\lambda$ changes \emph{exactly those edges at $\hub$}, \ and nothing else}
-\end{center}
+\onslide<3->{%
+Each $\M_\lambda$ differs from $\M_0$ only at the hub, in one color.
+
+Then $\M_0 \models G_k(\hub, v)$ \ but \ $\M_\lambda \not\models G_k(\hub, v)$
+\ \NOTE{($G_k(\hub, v)$ needs a $\lambda$-edge at the hub $\hub$)}.}
 
 \vfill
-\onslide<3->{%
-\begin{center}
-  $2^k$ recolored structures $\M_\lambda$, one for each color $\lambda$ \ \NOTE{($=$ the $\M_1, \dots, \M_{2^k}$ of the outline)}
-  \\ away from $\hub$, terms cannot distinguish $\M_\lambda$ from $\M_0$ \NOTE{(of the $\ge 2$ middle vertices, one avoids $\hub$)}
-\end{center}}
+\onslide<4->{%
+Doing this for each of the $2^k$ colors $\lambda$ gives $\M_1, \dots, \M_{2^k}$.
+% Each $\M_\lambda$ differs from $\M_0$ only at the hub, in one color.
+}
 
+\pause
+\onslide<5->{%
+$\leadsto$ One composition can only distinguish \alert{at most two} of them \NOTE{(next slide)}.
+}
 \note{
-\textbf{スライド概要}：塗り替えで $G_k$ が 1 から 0 に変わる。
+\textbf{スライド概要}：hub の色 $\lambda$ の辺を $\lambda^c$ に flip すると $G_k(\hub, v)$ が 1 から 0 に変わる。それ以外の場所では $\M_0$ と見分けられない。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item $\hub$ に接する色 $\lambda$ の辺だけ塗り替える
+  \item $\hub$-$v$ 辺の色が $\lambda^c$ なので、$G_k(\hub, v)$ には色 $\lambda$ の $\hub$-$z$ 辺が必要（$x$-$y$ 辺の色の補）
+  \item hub から離れた点の組では、two-witness property により hub を避ける witness が残る
   \item 色ごとに 1 つ、計 $2^k$ 個
 \end{itemize}
 }
@@ -220,7 +222,7 @@ Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the
     \draw[thick] (h) -- node[above left] {$\lambda$} (z);
     \draw[thick] (z) -- node[above right] {$\nu$} (v);
     \draw[densely dotted] (h) -- (v);
-    \node[align=center] at (.9,-.85) {middle vertex $z$:\\ $(X \mathbin{;} Y)(\hub, v) = 1$};
+    \node[align=center] at (.9,-.85) {witness $z$:\\ $(X \mathbin{;} Y)(\hub, v) = 1$};
   \end{scope}
   % (b) M_lambda, at the hub: every witness uses an edge at the hub
   \begin{scope}[xshift=4.4cm,visible on=<2->]
@@ -232,7 +234,7 @@ Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the
     \node[xmark] at ($(h)!.5!(z)$) {$\times$};
     \draw[thick] (z) -- node[above right] {$\nu$} (v);
     \draw[densely dotted] (h) -- (v);
-    \node[align=center] at (.9,-.85) {every middle vertex is lost:\\ \alert{distinguished}};
+    \node[align=center] at (.9,-.85) {every witness is lost:\\ \alert{distinguished}};
   \end{scope}
   % (c) M_lambda, away from the hub: the hub is only one of the witnesses
   \begin{scope}[xshift=8.8cm,visible on=<3->]
@@ -247,7 +249,7 @@ Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the
     \draw[kept] (u) -- node[below left] {$\lambda$} (z);
     \draw[kept] (z) -- node[below right] {$\nu$} (v);
     \draw[densely dotted] (u) -- (v);
-    \node[align=center] at (.9,-1.45) {a second middle vertex $z'$\\ avoids $\hub$: \ not distinguished};
+    \node[align=center] at (.9,-1.45) {a second witness $z'$\\ avoids the hub $\hub$: \ not distinguished};
   \end{scope}
 \end{tikzpicture}
 \end{center}
@@ -261,11 +263,11 @@ Proof by induction on $t$: the case, $t = t_1 \mathbin{;} t_2$, follows from the
 \end{center}}
 
 \note{
-\textbf{スライド概要}：$\hub$ を含む点対では見分けられうる、含まない点対では見分けられない。
+\textbf{スライド概要}：$\hub$ を含む点対では見分けられうる、含まない点対では見分けられない。だから各合成が新たに見分ける $\M_\lambda$ は高々 2 個（Proof outline の Key Lemma の中身）。
 
 \textbf{メモ}：
 \begin{itemize}
-  \item $\hub$ を含まない点対では、$\hub$ を通らない中間の頂点 $z'$ が残る
+  \item $\hub$ を含まない点対では、$\hub$ を通らない witness $z'$ が残る
   \item 条件は 3 つ、どれも $\lambda$ を決める $\to$ 高々 2
 \end{itemize}
 }
