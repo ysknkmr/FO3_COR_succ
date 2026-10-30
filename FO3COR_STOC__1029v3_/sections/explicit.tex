@@ -1,0 +1,40 @@
+\section{Explicit two-witness colorings}\label{app:explicit}
+This appendix gives a deterministic version of Lemma~\ref{lem:palette} on
+selected domain sizes. The affine-plane construction follows the
+direction-partition method of Jipsen, Maddux, and
+Tuza~\citep{jipsen-maddux-tuza1995}. Their assignment of at least two
+directions to every color already guarantees two witnesses at plane
+order at least four; we include the verification because this is the
+property used here.
+
+\begin{proposition}[Explicit two-witness colorings]\label{prop:explicit-graphs}
+For every palette size $N\ge2$, a graph with the two-witness property
+of Lemma~\ref{lem:palette} can be constructed deterministically on fewer
+than $16N^2$ vertices.
+\end{proposition}
+\begin{proof}
+Let $s$ be the smallest power of two with $s\ge2N-1$, and let
+$\mathbb F_s$ be the field of $s$ elements. Use vertex set $V\coloneqq\mathbb F_s^2$.
+There are $s+1$ directions of affine lines. Partition these directions
+into sets $\operatorname{Dir}_\mu$, $\mu\in\Lambda$, each of size at least
+two. Color distinct points $u,v$ by the unique $\mu$ containing the
+direction of their joining line. Since $N\ge2$, we have $s\ge4$ and
+$|V|=s^2<16N^2$.
+
+Fix distinct $u,v$ and requested colors $\mu,\nu$.
+If $\mu=\nu=\chi(u,v)$, all $s-2\ge2$ other points of the line $uv$
+are witnesses. Otherwise, choose a direction from
+$\operatorname{Dir}_\mu$ at $u$ and a direction from
+$\operatorname{Dir}_\nu$ at $v$, neither equal to the direction of $uv$,
+and choose the two directions to be distinct. Their two lines intersect
+at a unique witness outside $\{u,v\}$. There are at least two choices:
+if the colors differ, their direction sets are disjoint and at most one
+set loses a direction to $uv$; if they agree but differ from $\chi(u,v)$,
+two directions from their common set can be taken in either order.
+Distinct direction pairs give distinct intersection points, since a
+point outside $\{u,v\}$ determines both directions uniquely. Thus the
+coloring has the two-witness property.
+\end{proof}
+For $N=2^k$, one can choose $s=2N$, giving $4^{k+1}$ vertices.
+This construction supplies selected domain sizes, rather than every large
+size; induced subgraphs need not retain the two-witness property.

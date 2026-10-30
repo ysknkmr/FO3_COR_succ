@@ -1,0 +1,164 @@
+\subsection{Main results}\label{sec:main-results}
+
+\def\cordom{\mathbb{D}}
+
+\defn{\CoR\ terms} denote binary relations on a nonempty domain $\cordom$,
+built from relation symbols,
+the constants
+$\mathbf{0} \coloneqq \varnothing$, 
+$\mathbf{1} \coloneqq \cordom^2$,
+and $\id \coloneqq \set{(u,u) : u\in \cordom}$,
+using union $X \cup Y$, intersection $X \cap Y$, 
+complement $\overline X \coloneqq \cordom^2\setminus X$ (also written $\neg X$),
+converse $X^\smile \coloneqq \set{(v,u):(u,v)\in X}$, and composition $X;Y$, defined by
+\[
+X;Y \coloneqq \set{(u,v):\text{some }w\in\cordom\text{ satisfies }
+ (u,w)\in X \text{ and } (w,v)\in Y}.
+\]
+Composition implements the elimination step
+$\exists z\,(P(x,z)\land Q(z,y))\equiv(P;Q)(x,y)$; a vertex $z$
+with $P(x,z)$ and $Q(z,y)$ is a \defn{witness} for $(x,y)$.
+
+A \CoR\ term $T$ is a syntax tree with $|T|$ nodes and $\cost T$
+compositions.
+A \defn{\CoR\ circuit} $C$ is a DAG (rather than a tree) and may share subterms;
+its total size $|C|$ and $\gcost C$ count its distinct nodes and composition gates.
+For an FO formula $\varphi$,
+we write $T\eqfin\varphi$ or $C\eqfin\varphi$ for equivalence on all finite
+structures over the input signature, identifying formulas, terms, and circuits with the binary queries they define.
+
+\smallskip
+\customparagB{Our hard family and its translation into \CoR\ (upper bound).}
+We use the following single-quantifier positive \FOthree\ formula over $2k$ binary relation symbols $P_1,\ldots,P_k,Q_1,\ldots,Q_k$:
+\[
+ G_k(x,y)\coloneqq\exists z\,\smash{\bigwedge_{i=1}^k}
+ \Bigl[\bigl(P_i(x,y)\land Q_i(x,z)\bigr)\lor\bigl(Q_i(x,y)\land P_i(x,z)\bigr)\Bigr].
+\]
+The signature of $G_k$ consists only of binary relations, but grows with $k$: $|G_k| = O(k)$.
+It asks whether the queried pair $(x,y)$, the \defn{read edge}, \defn{accepts} some \defn{witness edge} $(x,z)$: at every coordinate $i\in\set{1,\ldots,k}$, one of the two edges satisfies $P_i$ and the other $Q_i$.
+The choice may differ across coordinates, but the same witness $z$ must serve all of them.
+
+%\paragraph{CoR term of $G_k$ (Upper bound).}
+The natural way to translate $G_k$ into \CoR\ is to expand it into disjunctive normal form (DNF),
+choosing one of the two disjuncts at each coordinate.
+Let $[k]\coloneqq\set{1,\ldots,k}$.
+For $A\subseteq[k]$, let $A^c \coloneqq [k]\setminus A$ and
+$H_A \coloneqq (\bigcap_{i\in A}P_i)\cap(\bigcap_{i\notin A}Q_i)$,
+where an empty intersection is $\mathbf{1}$.
+\begin{align*}
+G_k(x,y)
+&\equiv \exists z\!\!\bigvee_{A\subseteq[k]}
+\Bigl[
+\bigwedge_{\mathclap{i\in A}}(P_i(x,y)\land Q_i(x,z))
+\land
+\bigwedge_{\mathclap{i\notin A}}(Q_i(x,y)\land P_i(x,z))
+\Bigr]
+\equiv \exists z\bigvee_{\mathclap{A\subseteq[k]}}
+\bigl[H_A(x,y)\land H_{A^c}(x,z)\bigr]
+\\
+&\equiv \bigvee_{A\subseteq[k]}
+\bigl[H_A(x,y)\land\exists z\,H_{A^c}(x,z)\bigr]
+\equiv \Bigl(\bigcup_{A\subseteq[k]}
+\bigl[H_A\cap(H_{A^c};\mathbf{1})\bigr]\Bigr)(x,y).
+\end{align*}
+The last step uses row projection:
+$(X;\mathbf{1})(x,y)\equiv\exists z\,X(x,z)$.
+The DNF yields a \CoR\ term $T_k$ with $2^k$ compositions and $O(k2^k)$ nodes. By sharing partial intersections among the $H_A$, it also yields a \CoR\ circuit $C_k$ with $2^k$ composition gates and only $O(2^k)$ nodes.
+Thus, we have
+$\cost{T_k}=\gcost{C_k}=2^k$,
+$|T_k|=O(k2^k)$, and $|C_k|=O(2^k)$.
+
+The same idea underlies the classical translation of arbitrary \FOthree\ formulas into \CoR: DNF expansion allows quantifiers to be eliminated using relational composition.
+\begin{proposition*}[Classical upper bound; see Appendix~\ref{app:classical-translation}]
+Every \FOthree\ formula $\varphi$ over binary relations with at most two
+free variables has an equivalent \CoR\ term, and hence a circuit, of total
+size $2^{O(|\varphi|)}$.
+\end{proposition*}
+
+\smallskip
+\customparagB{Main result: lower bound.}
+One might hope that the DNF expansion can be substantially compressed using more sophisticated \CoR\ terms.
+Surprisingly, the straightforward translation is already optimal within a factor of two in the number of compositions.
+
+\begin{restatable}[Exponential lower bounds]{theorem}{mainbounds}\label{thm:main}\label{main:G}
+For every $k\ge1$, every \CoR\ circuit $C\eqfin G_k$ has at least
+$2^{k-1}$ composition gates, and every \CoR\ term $T\eqfin G_k$ has at
+least $2^{k-1}$ compositions.
+\end{restatable}
+It counts only compositions: all other operations are unrestricted and free.
+% Since $G_k$ has only $8k$ syntax-tree nodes, 
+Since $|G_k|=O(k)$, the theorem establishes an unconditional exponential succinctness gap from \FOthree\ to \CoR, even when the target is a circuit rather than a term.
+%
+Together with the classical single-exponential upper bound, this settles the worst-case size of the \FOthree-to-\CoR\ translation.
+
+The gap is not an artifact of free variables: the \FOthree\ sentence
+$G_k^\forall\coloneqq\forall x\,\forall y\,(x=y\lor G_k(x,y))$
+has size $O(k)$, yet every equivalent \CoR\ equation requires at
+least $2^{k-1}-1$ compositions, even with shared intermediate gates
+(Corollary~\ref{cor:equations}).
+Thus, compiling \FOthree\ sentences into \CoR\ equations for model
+checking also entails an unavoidable exponential blowup in expression size.
+
+\paragraph{Domain size.}
+Theorem~\ref{thm:main} concerns circuits $C\eqfin G_k$, which compute $G_k$ on all finite structures.
+How large must the domain be before the exponential
+lower bound becomes unavoidable?
+We show that exponentially large domains already
+suffice, even for circuits specialized to a fixed
+domain size.
+
+\begin{restatable}[Domain size]{proposition}{domainsize}\label{prop:domain-size}
+For some constant $c>0$, for every $k\ge1$
+and $n\ge ck4^k$, every \CoR\ circuit
+computing $G_k$ on all $n$-element structures
+has at least $2^{k-1}$ composition gates.
+\end{restatable}
+
+In contrast, for $n<2^k/(8k)$, Proposition~\ref{prop:small-domains} gives
+circuits with only $4kn\,(< 2^{k-1})$ compositions
+that compute $G_k$ on all structures with at most $n$ elements.
+Whether the domain-size bound $ck4^k$ is
+asymptotically optimal remains open.
+
+\paragraph{Over a single binary relation.}
+How large is the succinctness gap from \FOthree\ to \CoR\ over a single binary relation? By encoding the $2k$ input relations of $G_k$ into one binary relation,
+with only a logarithmic factor increase in formula size, we obtain a \textbf{subexponential} lower bound.
+
+\begin{theorem}[Subexponential bounds;
+see Theorem~\ref{thm:fixed-vocabulary:formal}]
+\label{thm:fixed-vocabulary}
+Over a single binary relation, every \FOthree\ query $\varphi(x, y)$, with $|\varphi|$ its syntax-tree size,
+has an equivalent \CoR\ circuit of size $2^{O(|\varphi|/\log |\varphi|)}$ (upper bound),
+and some queries $\psi(x, y)$ require
+$2^{\Omega(|\psi|/\log |\psi|)}$ composition gates (lower bound).
+% Over a single binary relation,
+% \begin{description}
+% \item[Upper bound:] Every \FOthree\ binary query $\varphi(x, y)$ has an equivalent CoR circuit of size $2^{O(|\varphi|/\log |\varphi|)}$.
+% \item[Lower bound:] Some query $\psi(x, y)$ requires
+% $2^{\Omega(|\psi|/\log |\psi|)}$ composition gates.
+% \end{description}
+\end{theorem}
+
+Whether a corresponding subexponential upper bound holds for \CoR\ terms remains open.
+
+\smallskip
+\customparag{Model-checking consequence.}
+The constructive upper bound yields a
+$2^{O(m/\log m)}n^{\omega+\eta}$-time algorithm for model checking \FOthree\ sentences of size $m$ on $n$-vertex directed graphs, for every fixed $\eta>0$ (see \S\ref{sec:fixed-model-checking}).
+%
+This improves the previous $2^{O(m)}n^{\omega+\eta}$-time algorithm~\citep[Theorem~10]{nakamura-uezato2027}.
+%
+Moreover, under the low-dimensional 3-OV hypothesis, the $m/\log m$ exponent is conditionally optimal for truly subcubic algorithms~\citep[Theorem~72]{nakamura-uezato2027}.
+
+\if0
+Let $\varphi$ be an $m$-size ($|\varphi| = m$) \FOthree\ binary query.
+By the upper bound,
+we can check whether $\varphi$ holds on directed graphs of $n$ elements in
+$2^{O(m/\log m)}n^{\omega+\varepsilon}$-time
+for every fixed $\varepsilon>0$
+(see also \S\ref{sec:fixed-model-checking}).
+To our knowledge, this is the first formula-size subexponential and domain-size subcubic \FOthree\ algorithm.
+In particular, under the low-dimensional 3-OV hypothesis, this dependence on $m$ is conditionally tight.
+Indeed, the result~\citep[Theorem~72]{nakamura-uezato2027} rules out $2^{o(m/\log(m+2))}n^{3-\delta}$ time for every fixed
+$\delta>0$.
+\fi

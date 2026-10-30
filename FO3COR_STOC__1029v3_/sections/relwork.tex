@@ -1,0 +1,163 @@
+\subsection{Related work}\label{sec:relwork}
+
+\paragraph{The calculus of relations: history and expressiveness.}
+The calculus of relations (\CoR) predates first-order logic as a formal
+system. De Morgan introduced relational composition and converse in his
+work on the syllogism in the 1850s and 1860s
+\citep{demorgan1856,demorgan1864}; Peirce developed the logic of
+relatives~\citep{peirce1870,peirce1880}, and Schr\"oder devoted a volume
+to it in 1895~\citep{schroeder1895}. This was before first-order logic
+was isolated in Hilbert's lectures and Hilbert and Ackermann's
+textbook~\citep{hilbert-lectures,hilbert-ackermann1928,moore1988}.
+The central expressiveness problem was whether every quantified statement
+about relations could be \emph{condensed} into this variable-free calculus.
+Schr\"oder claimed that it could~\citep[p.~551]{schroeder1895}, but
+Korselt found a counterexample, published by L\"owenheim in
+1915~\citep{loewenheim1915,loewenheim1967}. In modern terms, the \FOfour\ sentence
+$
+\forall a_1\,a_2\,a_3\,a_4.\bigvee_{i,j; i\neq j} a_i = a_j
+$
+states that the domain has at most three elements, but is expressible
+neither in \FOthree\ nor by a \CoR\ equation.
+
+Tarski raised the expressiveness question in 1941~\citep{tarski1941}
+and, according to Tarski and Givant, soon obtained the three-variable
+characterization: \CoR\ defines exactly the \FOthree-definable binary
+queries. A full proof appeared only in their 1987
+monograph~\citep{tarski-givant1987}; see
+also~\citep{maddux2006}. For historical accounts, see
+\citep{pratt1992,maddux1991,burris-legris,brady2000}.
+Their original recursive translation~\citep[\S3.9]{tarski-givant1987}
+did not analyze its size. A straightforward bottom-up translation using
+DNF conversion~\citep{hilbert-ackermann1928,kleene1952,schoening1989}
+and quantifier elimination by relational composition gives a
+single-exponential upper bound (Appendix~\ref{app:classical-translation});
+the reverse \CoR-to-\FOthree\ translation is linear.
+
+\paragraph{Relational computation and quantifier elimination.}
+The operations underlying \CoR\ have long served as computational
+primitives, often in calculi distinct from full \CoR.
+Copilowish gave a matrix-based treatment of the calculus over finite
+domains~\citep{copilowish1948}, while Levien and Maron applied relational
+operations to retrieval and inference
+\citep{levien-maron1965,levien-maron1967,levien1969}.
+Codd's relational algebra laid the foundations of database querying
+\citep{Codd1970,Codd1972}, followed by work on relational-expression
+equivalence, optimization, and efficient join evaluation
+\citep{aho-sagiv-ullman1979equiv,aho-sagiv-ullman1979opt,
+SelingerEtAl1979,yannakakis1981}.
+Binary relational-expression evaluation became an algorithmic subject
+\citep{hunt-szymanski-ullman1974,hunt-szymanski-ullman1977,
+szymanski-ullman1975,szymanski-ullman1977}, with applications to parsing
+and recursive database queries
+\citep{sippu-soisalon-soininen1985,grahne-sippu-soisalon-soininen1987,
+grahne-sippu-soisalon-soininen1991}.
+Related algebras also appear in relational programming, temporal
+reasoning, database execution, and graph querying
+\citep{maclennan1981,montanari1974,allen1983,boncz-kersten1999,
+cruz-mendelzon-wood1987,FletcherEtAl2015,HellingsEtAl2021,
+HellingsEtAl2022}.
+
+A second line of work exploits relational composition as existential
+quantifier elimination, using matrix multiplication for fast evaluation.
+Early examples include transitive closure
+\citep{furman1970,fischer-meyer1971,munro1971,oneil-oneil1973,
+galil-margalit1993} and algorithms for triangles, cliques, cycles,
+and small subgraphs
+\citep{itai-rodeh1978,nesetril-poljak1985,alon-yuster-zwick1997,
+kloks-kratsch-mueller2000,eisenbrand-grandoni2004,yuster-zwick2004}.
+Already in 1977, Chandra and Merlin studied generalized join--project
+operations and their evaluation by rectangular Boolean matrix
+multiplication~\citep{ChandraMerlin1977}.
+Williams's algorithm for prenex first-order graph properties
+\citep{Williams2014} can be viewed in the same algebraic framework:
+DNF-based quantifier elimination yields ordinary \CoR\ composition
+for three quantifiers and typed composition over tuples for larger
+prenex formulas, evaluated using rectangular matrix multiplication
+(as in \citep{ChandraMerlin1977}).
+Gao and Impagliazzo\ \citep{GaoImpagliazzo2019} also treated general
+\FOthree\ formulas, beyond prenex normal form, using matrix-based
+evaluation.
+Related techniques appear in first-order graph algorithms
+\citep{BringmannFischerKunnemann2019} and database join--project
+and join--aggregate evaluation
+\citep{DeepHuKoutris2020,hu-yi2020,Hu2024,AboKhamisHuSuciu2025}.
+Most directly, our earlier work used the \FOthree-to-\CoR\ translation
+for truly subcubic \FOthree\ model checking
+\citep{nakamura-uezato2027}.
+
+\paragraph{Succinctness results.}
+Nakamura proved exponential lower bounds for positive \CoR\ and
+$\Sigma_1\CoR$, even for circuits, and a superpolynomial separation over
+one binary relation~\citep[\S6]{nakamura2022}. The case of full \CoR\
+remained open (see \S\ref{sec:natural-approaches}). In our earlier
+work~\citep[Corollary~40]{nakamura-uezato2027}, we ruled out
+polynomial-time \FOthree-to-\CoR\ translations under the 3-OV
+hypothesis, but not the existence of small equivalent representations.
+Theorem~\ref{thm:main} gives an unconditional exponential lower bound
+even for \CoR\ circuits, while Theorem~\ref{thm:fixed-vocabulary}
+gives tight subexponential circuit bounds over one binary relation.
+
+On finite linear orders with no additional relations, Grohe and Schweikardt proved a polynomial-size translation from \FOthree\ to \FOtwo\ sentences~\citep[Theorem~4.3]{grohe-schweikardt2005}. Since \FOtwo\ translates linearly into \CoR, this also yields polynomial-size \CoR\ equations. By contrast, our exponential succinctness gaps from \FOthree\ to both \FOtwo\ and \CoR\ hold even for sentences over general finite structures.
+%
+They also showed that full first-order logic is exponentially more
+succinct than \FOthree\ on the same orders, already witnessed by
+\FOfour~\citep[Theorem~5.3]{grohe-schweikardt2005}. The short \FOfour\
+formulas combine divide-and-conquer for distances~\citep{savitch1970}
+with the classical quantifier-based abbreviation trick, which avoids
+duplicating recursive subformulas
+\citep{fischer-rabin1974,stockmeyer1974,ferrante-rackoff1979,compton-henson1990,vorobyov1996,stockmeyer-meyer2002}.
+The \FOthree\ lower bound draws on Adler--Immerman formula-size
+games~\citep{adler-immerman2003}. However, the resulting distance
+predicates admit linear-size \CoR\ circuits by repeated squaring,
+$S_{i+1}=S_i;S_i$; our lower bound holds even with such sharing.
+
+Vinall-Smeeth established exponential succinctness gaps from
+$\mathrm{FO}^{\ell+1}$ to $\mathrm{FO}^{\ell}$ for every $\ell\ge 3$,
+using higher-arity (non-binary) relations~\citep[Theorem~2]{vinall-smeeth2024}.
+Our result establishes the \FOthree-to-\FOtwo\ case over binary
+signatures, with an exponential lower bound on the number of
+quantifiers. The linear \FOtwo-to-\CoR\ translation was already
+known~\citep{nakamura2022}, while Proposition~\ref{prop:reverse}
+gives an exponential gap in the reverse direction.
+
+\paragraph{Lower-bound methods.}
+As explained in \S\ref{sec:natural-approaches}, the witness-crossing
+argument underlying Nakamura's formula-size-game proof for $\Sigma_1\CoR$
+\citep{adler-immerman2003,nakamura2022} relies on embeddings, which fail
+under unrestricted complement. We also considered other standard
+lower-bound techniques, but their usual resource measures do not directly
+fit our setting. Formula-size games
+\citep{grohe-schweikardt2005,french2013,hella-vilander2019},
+Ehrenfeucht--Fra\"{\i}ss\'e and pebble games
+\citep{fraisse1954classif,ehrenfeucht1961,immerman1982,libkin2004},
+and multi-structural games
+\citep{immerman1981,fagin2021,carmosino2024} address formula size,
+quantifier depth, variable count, or quantifier number, rather than the
+number of distinct composition gates in circuits with sharing. Indeed,
+$G_k$ has only one quantifier and admits a \CoR\ expression of
+composition depth one; the issue is the \emph{number} of compositions.
+Monotone-circuit lower bounds~\citep{razborov1985,alon-boppana1987}
+are natural candidates for our positive query, but equivalent full-\CoR\
+circuits may use unrestricted complement. Switching-lemma and
+random-restriction methods~\citep{hastad1986} typically exploit
+shallow Boolean-circuit structure, whereas we impose no restrictions on
+Boolean nesting and charge only compositions.
+
+Communication complexity suggests further approaches. Rank,
+discrepancy, and Karchmer--Wigderson techniques
+\citep{mehlhorn-schmidt1982,kushilevitz-nisan1997,karchmer-wigderson1990,jukna2012}
+do not directly bound compositions when Boolean operations are free.
+For example, set disjointness has rank $2^k$, yet its $1$-entries form
+the complement of a union of only $k$ rectangles. Alternating existential
+and universal witness tests also resemble the nondeterministic and
+co-nondeterministic levels of the communication polynomial hierarchy
+\citep{babai-frankl-simon1986,goos-pitassi-watson2018}, but we know of
+no direct transfer of lower bounds to our circuit model. These approaches did not yield the required composition-count bound.
+
+Our proof instead draws on the affine-plane and random colorings of
+Jipsen, Maddux, and Tuza~\citep{jipsen-maddux-tuza1995}, which, as
+explained in the technical overview, already yield the two-witness
+property needed here. The new ingredient is our fold-based argument:
+it bounds how many local folds each distinct operation can notice,
+even with unrestricted complement and circuit sharing.

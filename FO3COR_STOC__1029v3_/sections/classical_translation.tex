@@ -1,0 +1,84 @@
+\section{The classical single-exponential translation}\label{app:classical-translation}
+We include the size analysis for the classical expressive equivalence
+\citep{tarski-givant1987,maddux2006}. The relevant point is that successive
+quantifier eliminations need not create a tower of exponentials: an
+already translated subformula is treated as one leaf of the next Boolean
+expansion, without expanding its algebraic representation again.
+
+\begin{proposition}[Classical translation]\label{prop:upper-translation}
+Every \FOthree\ formula $\varphi$ over binary relations with at most two
+free variables has an equivalent \CoR\ term of size $2^{O(|\varphi|)}$
+on all nonempty structures, constructible in time $2^{O(|\varphi|)}$.
+Here size counts syntax-tree nodes.
+\end{proposition}
+\begin{proof}
+We use the binary-assignment convention of \S\ref{sec:prelim-logic}:
+represent each subformula with at most two free variables on an
+ordered pair containing them. An unused coordinate is a dummy, so
+moving the representation to another suitable pair requires only
+converse (if the coordinates are exchanged). A sentence is represented
+by $\zero$ or $\one$.
+
+The atomic translations are those of \S\ref{sec:FOtwo-translation},
+with the two relevant variables renamed or reordered: distinct-variable
+atoms use the input relation or its converse, reflexive atoms use a
+diagonal test followed by a projection, and equality uses $\id$ or
+$\one$. All have constant size. Boolean operations on a fixed
+variable pair become intersection, union, and complement.
+
+Process quantified subformulas from the inside out. Consider
+$\exists w\,\psi$, and let $u,v$ be the other two variable names, in
+that order. Its free variables are contained in $\{u,v\}$.
+In the body $\psi$, regard each atom and each maximal quantified
+subformula as one leaf of a Boolean formula, called its \defn{shell}.
+Each leaf has at most two free variables: this is immediate for binary
+atoms, and a quantifier binds one of the three available names.
+The quantified leaves have already been translated. Crucially, the
+shell expansion treats each of their translations as an opaque term.
+
+If the shell has $r$ leaf occurrences, a truth-table DNF has at most
+$2^r$ clauses, each using at most $r$ literals. Repeated or logically
+dependent leaves cause no problem; the propositional identity remains
+valid after substituting their actual interpretations. In each clause,
+assign its literals to three groups according to the free-variable pair:
+$(u,v)$, $(u,w)$, or $(w,v)$. A literal with only one free variable is
+assigned to any group containing it; a closed literal can be put in the
+first group. Use converse to orient each translated literal for its
+chosen pair, and use complement for a negative literal.
+Writing the conjunctions of the groups as $A(u,v)$, $B(u,w)$, and
+$C(w,v)$, apply the identity~\eqref{eq:prelim-elimination}:
+\[
+ \exists w\,(A(u,v)\land B(u,w)\land C(w,v))
+       \quad\longmapsto\quad A\cap(B;C).
+\]
+An empty group is represented by $\one$. This identity also covers
+vacuous quantification because domains are nonempty.
+Take the union of the translated clauses. Universal quantification uses
+$\forall w\,\psi\equiv\neg\exists w\,\neg\psi$, which introduces no
+subformula duplication. At the root, any remaining Boolean shell with
+at most two free variables is translated directly, after orienting its
+leaves to a common ordered pair. This proves correctness on all nonempty
+structures by induction.
+
+For the size bound, cut the original syntax tree at
+quantifiers into the shells just used. Count each child quantified
+subformula as one leaf of its parent's shell. The sum of the shell sizes,
+including these boundary leaves, is $O(|\varphi|)$: each original node is counted
+once, with only one extra boundary occurrence per quantified subformula.
+A shell of size $s$ creates at most $2^{O(s)}$ local nodes and at most
+$2^{O(s)}$ copies of each child translation. Along any path from an
+original leaf or a newly introduced local node to the final output,
+the resulting duplication factor is therefore at most
+\[
+ \prod_{\text{shells on the path}}2^{O(s)}
+       \le 2^{O(|\varphi|)}.
+\]
+There are $O(|\varphi|)$ original nodes and shell locations, and the local
+exponential creation factor is included in this same bound. Summing
+their contributions gives $|\varphi|\,2^{O(|\varphi|)}=2^{O(|\varphi|)}$ nodes.
+No step expands the internal Boolean structure of a translated child,
+which is what prevents an iterated-exponential recurrence.
+Enumerating the shell assignments and writing the resulting term
+takes a polynomial factor in $|\varphi|$ times the same exponential
+bound, hence also $2^{O(|\varphi|)}$ time.
+\end{proof}

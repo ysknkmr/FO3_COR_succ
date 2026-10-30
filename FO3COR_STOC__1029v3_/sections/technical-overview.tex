@@ -1,0 +1,131 @@
+\subsection{Technical overview}\label{sec:approach}\label{sec:overview}\label{ov:structure}
+
+Rather than extending the fooling-set argument in~\S\ref{sec:natural-approaches}, we abandon witness crossing and embeddings altogether. Instead, we compare a reference structure with its local modifications using exact predictions that commute with complement.
+
+\smallskip
+\customparagB{Our technique: The two-witness property.}
+We use a complete undirected graph $\mathbb{G} = (V,\chi)$ whose edges are colored by the $2^k$ subsets of $[k]$.
+We write $\chi(u,v)=\chi(v,u)$ for the color of the edge between distinct vertices $u$ and $v$,
+and use $\lambda,\mu,\nu$ for colors.
+The key property of $\mathbb{G}$ is the \defn{two-witness property}: for all distinct
+$u,v\in V$ and all colors $\mu,\nu$,
+\[
+\text{at least two vertices $z\notin\{u,v\}$ satisfy $\chi(u,z)=\mu$ and
+ $\chi(z,v)=\nu$.}
+ \qquad
+ \begin{tikzpicture}[baseline={([yshift=-0.55ex]u.center)},
+   every node/.style={font=\footnotesize},vtx/.style={circle,draw,inner sep=1.2pt}]
+ \node[vtx,label={[font=\small]left:$u$}] (u) at (0,0) {};
+ \node[vtx,label={[font=\small]right:$v$}] (v) at (2.4,0) {};
+ \node[vtx,label={[label distance=-1pt]above:$z$}] (z) at (1.2,0.46) {};
+ \node[vtx,label={[label distance=-1pt]below:$z'$}] (z2) at (1.2,-0.46) {};
+ \draw (u) -- node[above left=-2.5pt] {$\mu$} (z);
+ \draw (z) -- node[above right=-2.5pt] {$\nu$} (v);
+ \draw (u) -- node[below left=-2.5pt] {$\mu$} (z2);
+ \draw (z2) -- node[below right=-2.5pt] {$\nu$} (v);
+ \draw[densely dotted] (u) -- (v);
+ \end{tikzpicture}
+\]
+We call such vertices $z$ \defn{witnesses}.
+A coloring with this property exists whenever
+$|V|\ge n_0(2^k)$, where
+$n_0(N)\coloneqq\lceil12N^2\ln(2N)\rceil+3$, since a uniformly random
+coloring has it with positive probability
+(Lemma~\ref{lem:palette}). These colorings go back to Jipsen, Maddux, and
+Tuza~\citep{jipsen-maddux-tuza1995}.
+
+\paragraph{Roadmap.}
+In \S\ref{ov:fold}, we construct $2^k$ folds of the reference structure $\mathcal M_0$, each changing the answer of $G_k$ at an unchanged edge.
+%
+In \S\ref{ov:types}, we show that every circuit gate on $\mathcal M_0$ is constant on each edge-color class and on the diagonal. This allows us to define predictions under each fold.
+Boolean operations, including complement, and converse preserve these predictions; only composition can violate them.
+%
+In \S\ref{ov:twocolors}, we show that, thanks to the two-witness property, each composition can violate the prediction for at most two folds. Since every fold must be detected, any circuit for $G_k$ requires at least $2^{k-1}$ compositions, even with sharing.
+
+\subsubsection{Folding the reference structure}\label{ov:outline}\label{ov:fold}
+
+We use the reference coloring $\chi$ to define an input structure $\mathcal M_0$ for $G_k$.
+On an edge of color $\mu$, we interpret $P_i$ as true exactly when $i\in\mu$, and $Q_i$ exactly when $i\notin\mu$. No input relation holds on loops, which carry the separate label $\id$.
+Consequently, a read edge of color $\mu$ accepts exactly witness edges of color $\mu^c$: for distinct $u,v$,
+\[
+\mathcal M_0 \models G_k(u,v)\iff
+\exists z \notin \set{u, v}.\ \chi(u,z)=\chi(u,v)^c.
+\]
+By the two-witness property, every vertex
+has edges of every color, so $G_k$ holds
+at every non-loop pair of $\mathcal M_0$.
+
+Fix a vertex $\hub \in V$, the \defn{hub}, and for each color $\mu$ choose $v_\mu$ with $\chi(\hbar,v_\mu)=\mu$.
+%
+For each color $\lambda$, let $\chi_\lambda$ be obtained from $\chi$ by recoloring every $\lambda$-colored edge incident to $\hub$ as $\lambda^c$, leaving all other edges unchanged.
+Let $\mathcal M_\lambda$ be the input structure induced by $\chi_\lambda$ in the same way as $\mathcal M_0$.
+In $\mathcal M_\lambda$, the hub has no edge of color $\lambda$, but the read edge $(\hub,v_{\lambda^c})$ remains unchanged (Figure~\ref{fig:fold}).
+
+\begin{figure}[H]
+\begin{minipage}[c]{0.27\linewidth}
+\setlength{\abovecaptionskip}{0pt}
+\caption[The fold of $\lambda$]{\raggedright The fold of $\lambda$. Only edges at the hub $\hub$ are drawn.}
+\label{fig:fold}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.71\linewidth}
+\centering
+\begin{tikzpicture}[scale=0.85,every node/.style={font=\small},
+  vtx/.style={circle,draw,inner sep=2pt}]
+\foreach \xs/\col/\val/\name in
+  {0/\lambda/1/{reference structure $\mathcal M_0$},
+   7.6/\lambda^{\color{red}c}/{\color{red}0}/{folded structure $\mathcal M_\lambda$}}{
+\begin{scope}[xshift=\xs cm]
+\node at (-0.2,2.75) {\name};
+\node[vtx,label={[label distance=2pt]below:$\hub$}] (h) at (0,0) {};
+\node[vtx] (a1) at (-2.4,0.8) {};
+\node[vtx] (a2) at (-1.1,2.0) {};
+\node[vtx] (x) at (0.2,2.05) {};
+\node[vtx,label=right:$v_{\lambda^c}$] (v) at (2.0,1.4) {};
+\draw (h)--node[below=1pt,pos=0.6] {$\col$} (a1);
+\draw (h)--node[left=2pt,pos=0.8] {$\col$} (a2);
+\draw (h)--node[right=1pt,pos=0.7] {$\mu\ne\lambda$} (x);
+\draw[very thick] (h)--node[below right=0pt,pos=0.62] {$\lambda^c$} (v);
+\node at (0,-1.1) {$G_k(\hub,v_{\lambda^c})=\val$};
+\end{scope}}
+\draw[->,thick] (3.2,0.8)--node[above]{fold of $\lambda$} (4.6,0.8);
+\end{tikzpicture}
+\end{minipage}
+\end{figure}
+
+The read edge $(\hub,v_{\lambda^c})$ requires a $\lambda$-colored edge at $\hub$; the fold removes all such edges. 
+Hence
+\[
+\chi_\lambda(\hbar,v_{\lambda^c})
+ =\chi(\hbar,v_{\lambda^c})=\lambda^c,\ 
+\mathcal M_0\models G_k(\hbar,v_{\lambda^c}),\ 
+\mathcal M_\lambda\not\models G_k(\hbar,v_{\lambda^c}).
+\]
+We call $(\mathcal M_0,\mathcal M_\lambda,(\hub,v_{\lambda^c}))$ the \defn{test} for $\lambda$.
+Thus $G_k$ yields $2^k$ tests, one for each color.
+
+\if0
+Fix, for each color $\mu$, a vertex $v_\mu$ with $\chi(\hub,v_\mu)=\mu$.
+The read edge $(\hub,v_{\lambda^c})$, which the fold of $\lambda$ does not
+recolor since $\lambda^c\ne\lambda$, accepts exactly the witness edges of
+color $\lambda$. So $G_k(\hub,v_{\lambda^c})$ holds exactly when $\hub$
+has an edge of color $\lambda$. Writing $\sem\varphi{\mathcal M}$ also for
+the relation that a gate $\varphi$ computes on $\mathcal M$, with value
+$\sem\varphi{\mathcal M}(u,v)\in\{0,1\}$ at a pair $(u,v)$, we therefore
+get
+\[
+ \mathcal M_0\xrightarrow{\ \text{fold }\lambda\ }\mathcal M_\lambda
+ \quad(\lambda\subseteq[k]),\qquad
+ \sem{G_k}{\mathcal M_0}(\hub,v_{\lambda^c})=1\ne0
+ =\sem{G_k}{\mathcal M_\lambda}(\hub,v_{\lambda^c}).
+\]
+We call $\mathcal M_0$, $\mathcal M_\lambda$, and the read edge
+$(\hub,v_{\lambda^c})$ the \defn{test} for $\lambda$. So for every color
+$\lambda$, every circuit computing $G_k$ has different outputs at the read
+edge on $\mathcal M_0$ and on $\mathcal M_\lambda$, although the fold does
+not recolor this edge.
+\fi
+
+
+\input{sections/ov_colors.tex}
+
+\input{sections/ov_notice_two.tex}

@@ -1,0 +1,160 @@
+\subsubsection{Circuits see only colors}\label{ov:types}
+
+\paragraph{Color-determined relations.}
+A relation $X\subseteq V^2$ is
+\defn{color-determined} if
+$\chi(u,v)=\chi(u',v') \implies X(u,v)=X(u',v')$ holds.
+Here loops carry the separate label $\id$.
+Equivalently, $X$ is a union of edge-color
+classes, possibly together with the diagonal.
+Write $X[\mu]$ for its common value on edges
+of color $\mu$, $X[\id]$ for its value on
+loops.
+
+Every gate of an arbitrary \CoR\ circuit computes a color-determined relation on $\mathcal M_0$ (Lemma~\ref{lem:tables}).
+We can prove this by induction on the
+circuit gates. Input relations and constants are
+color-determined, while Boolean operations and
+converse preserve this property.
+The only nontrivial step is composition $X;Y$.
+
+For distinct $u,v$, the two-witness property realizes every pair of colors $\mu,\nu$ along a path $u\xrightarrow{\mu}z\xrightarrow{\nu}v$ with $z\notin\set{u,v}$.
+%
+The case $z\in\set{u,v}$ depends only on $\chi(u,v)$ and the diagonal values of $X,Y$.
+Hence $(X;Y)(u,v)$ depends only on $\chi(u,v)$.
+For a loop $(u,u)$, both edges of a path $u-z-u$ have the same color, and every color occurs at every vertex. 
+Together with the case $z=u$, this makes $(X;Y)(u,u)$ independent of $u$, completing the induction.
+
+
+\paragraph{Predicting and noticing a fold.}
+A color-determined relation $X$ assigns a value $X[\mu]$ to each color $\mu$.
+To predict the effect of a fold, we keep these values fixed and read them at the new edge colors:
+\[
+\defn{(Prediction)}\quad
+X^{(\lambda)}(u,v):=X[\chi_\lambda(u,v)].
+\]
+Thus a recolored edge reads $X[\lambda^c]$ rather than $X[\lambda]$; all other pairs retain their values.
+%
+This predicts what a gate would compute if its color-dependent behavior on $\mathcal M_0$ remained unchanged after the fold;
+its actual value on $\mathcal M_\lambda$ may differ.
+
+Input relations and constants behave exactly as predicted.
+Moreover, Boolean operations and converse commute with prediction
+(Proposition~\ref{prop:prediction-commutation}); in particular,
+$\overline{X^{(\lambda)}}=(\overline X)^{(\lambda)}$.
+Unlike the embedding inclusion $(\diamond)$ of \S1.2,
+this equality survives unrestricted complement.
+
+Figure~\ref{fig:prediction} compares three operations for any two
+distinct colors $\lambda,\mu$: $X$ selects the $\lambda$-colored
+edges, and $Y$ the $\mu$-colored edges (both exclude loops).
+The thick edge $e=(\hub,v_\mu)$ is unchanged by the fold of
+$\lambda$, which removes all $X^{(\lambda)}$-edges at $\hub$.
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[c]{0.58\linewidth}
+    \centering
+\begin{tikzpicture}[
+      >=Latex,
+      vertex/.style={circle,draw,fill=white,inner sep=0pt,minimum size=3.2pt},
+      edge/.style={line width=.5pt},
+      read/.style={line width=1.05pt},
+      folded/.style={draw=red!65!black,densely dashed,line width=.75pt},
+      every node/.style={font=\scriptsize},
+    ]
+      % These four vertices show two of the witnesses; the full arena
+      % contains further vertices and satisfies the two-witness property.
+      \coordinate (h0) at (0,0);
+      \coordinate (v0) at (2.65,0);
+      \coordinate (z0) at (1.325,0.98);
+      \coordinate (w0) at (1.325,-0.98);
+      \draw[read] (h0)--node[below,pos=.54] {$\mu$} (v0);
+      \draw[edge] (h0)--node[above left] {$\lambda$} (z0);
+      \draw[edge] (h0)--node[below left] {$\lambda$} (w0);
+      \draw[edge] (z0)--node[above right] {$\mu$} (v0);
+      \draw[edge] (w0)--node[below right] {$\mu$} (v0);
+      \node[vertex,label=left:{$\hub$}] at (h0) {};
+      \node[vertex,label=right:{$v_\mu$}] at (v0) {};
+      \node[vertex,label=above:{$z$}] at (z0) {};
+      \node[vertex,label=below:{$z'$}] at (w0) {};
+      \node[font=\small] at (.1, 1.2) {$\mathcal M_0$};
+      \draw[-{Latex[length=2mm]},line width=.7pt]
+        (3.4,0)--node[above] {fold $\lambda$} (4.85,0);
+      \begin{scope}[xshift=5.30cm]
+        \coordinate (h1) at (0,0);
+        \coordinate (v1) at (2.65,0);
+        \coordinate (z1) at (1.325,0.98);
+        \coordinate (w1) at (1.325,-0.98);
+        \draw[read] (h1)--node[below,pos=.54] {$\mu$} (v1);
+        \draw[folded] (h1)--node[above left,black] {$\lambda^c$} (z1);
+        \draw[folded] (h1)--node[below left,black] {$\lambda^c$} (w1);
+        \draw[edge] (z1)--node[above right] {$\mu$} (v1);
+        \draw[edge] (w1)--node[below right] {$\mu$} (v1);
+        \node[vertex,label=left:{$\hub$}] at (h1) {};
+        \node[vertex,label=right:{$v_\mu$}] at (v1) {};
+        \node[vertex,label=above:{$z$}] at (z1) {};
+        \node[vertex,label=below:{$z'$}] at (w1) {};
+        \node[font=\small] at (.1, 1.2) {$\mathcal M_\lambda$};
+      \end{scope}
+    \end{tikzpicture}
+  \end{minipage}\hfill%
+  \begin{minipage}[c]{0.40\linewidth}
+    \centering
+    {\footnotesize
+    \renewcommand{\arraystretch}{1.16}%
+    \begin{tabular}{@{}lccc@{}}
+      \toprule
+      Operation & Predicted & Actual & Notice? \\
+      \midrule
+      $X;Y$         & $1$ & $0$ & Yes \\
+      $X\cup Y$     & $1$ & $1$ & No \\
+      $\overline X$ & $1$ & $1$ & No \\
+      \bottomrule
+    \end{tabular}}
+  \end{minipage}
+  \caption{At $e=(\hub,v_\mu)$, only composition notices the fold of $\lambda$.
+    Only two witness paths are shown; all $\lambda$-edges at $\hub$ are recolored to $\lambda^c$.}
+  \label{fig:prediction}
+\end{figure}
+
+\if0
+An operation \defn{notices} a fold at given color-determined
+operands if applying it after prediction differs from predicting its
+result. In Figure~\ref{fig:prediction}, composition notices the fold:
+$X^{(\lambda)};Y^{(\lambda)}\ne(X;Y)^{(\lambda)}$.
+Union and complement do not notice it; indeed, Proposition~\ref{prop:prediction-commutation}
+shows that no Boolean operation or converse can ever notice a fold.
+\fi
+
+An operation \defn{notices} a fold at given
+color-determined operands if applying it to
+their predictions differs from predicting
+its result. In Figure~\ref{fig:prediction}, composition notices
+the fold at $e$, since
+\[
+(X^{(\lambda)};Y^{(\lambda)})(e)
+=0\ne 1=(X;Y)^{(\lambda)}(e).
+\]
+By contrast, union and complement do not
+notice the fold. More generally, no Boolean
+operation or converse can notice any fold
+(Proposition~\ref{prop:prediction-commutation}).
+
+Every fold must be noticed by some composition gate.
+Now let $C$ be any circuit computing $G_k$.
+If no composition gate notices the fold of
+$\lambda$, Lemma~\ref{lem:unnoticed} implies that the output
+on $\mathcal M_\lambda$ is the prediction
+of the output on $\mathcal M_0$.
+Since the test edge $e_\lambda=(\hub,v_{\lambda^c})$ is unchanged,
+\[
+\sem{C}{\mathcal M_\lambda}(e_\lambda)
+=
+\bigl(\sem{C}{\mathcal M_0}
+\bigr)^{(\lambda)}(e_\lambda)
+=
+\sem{C}{\mathcal M_0}(e_\lambda),
+\]
+contradicting the test for $\lambda$, whose outputs are $0$ on $\mathcal M_{\lambda}$ and $1$ on $\mathcal M_0$.
+

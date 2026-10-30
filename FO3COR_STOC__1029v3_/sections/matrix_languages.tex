@@ -1,0 +1,398 @@
+\section{Scalar aggregation and matrix query languages}\label{sec:matrix}
+We extend the fold argument from binary relations to semiring-valued
+matrix computations. We first describe the short three-attribute
+expression, then the matrix circuit model, and finally the fold
+sensitivity bounds that force exponential arity-elimination overhead.
+
+\Needspace{10\baselineskip}
+\subsection{The three-attribute query and its matrix interpretation}\label{sec:weightedG}
+Let $\mathfrak S\coloneqq(S,\oplus,\otimes,0_S,1_S)$ be a commutative
+semiring and $V$ a finite common index set, with inputs
+$P_i,Q_i:V^2\to S$. An \emph{annotated relation} assigns an
+$S$-value to each tuple. In positive annotated relational algebra,
+union adds annotations, natural join multiplies them, and projection
+sums over eliminated attributes; renaming changes attribute names.
+ARA$(3)$ restricts intermediate relations to at most three attributes,
+analogous to the ternary assignment relations of \FOthree\
+(\S\ref{sec:prelim-logic}). Over Boolean annotations it corresponds
+to positive three-variable computation.
+
+For an explicit ARA$(3)$ expression, let $P_i^{xy}$ denote $P_i$
+with attributes $(x,y)$, and similarly for $P_i^{xz}$, $Q_i^{xy}$,
+and $Q_i^{xz}$. Our semiring-valued query is
+\[
+ \mathcal G_k\coloneqq\pi_{xy}\!\left(
+ \mathop{\bowtie}_{i=1}^{k}
+ \bigl[(P_i^{xy}\bowtie Q_i^{xz})
+       \cup(Q_i^{xy}\bowtie P_i^{xz})\bigr]\right).
+\]
+Every intermediate relation has at most the three attributes
+$(x,y,z)$: the $k$ conditions are combined with the \emph{same} $z$, which is
+eliminated only at the final projection. Thus the ARA$(3)$ expression
+has size $O(k)$. Equivalently, its scalar value is
+\[
+ \mathcal G_k(x,y)=\bigoplus_{z\in V}\ \bigotimes_{i=1}^{k}
+ \bigl[(P_i(x,y)\otimes Q_i(x,z))
+        \oplus(Q_i(x,y)\otimes P_i(x,z))\bigr].
+\]
+For $S=\mathbb B$ with $\oplus=\lor$ and $\otimes=\land$, this
+is precisely $G_k(x,y)$, without negation or universal quantification. For integer min--plus, take
+$\mathfrak S\coloneqq(\mathbb Z\cup\{+\infty\},\min,+,+\infty,0)$;
+then the same query becomes
+\[
+ \mathcal G_k(x,y)=\min_{z\in V}\sum_{i=1}^{k}
+ \min\{P_i(x,y)+Q_i(x,z),\,Q_i(x,y)+P_i(x,z)\}.
+\]
+
+\paragraph{An explicit MATLANG expression.}
+Although MATLANG retains only matrices, vectors, and scalars,
+the DNF of \S\ref{sec:main-results} gives an expression for
+$\mathcal G_k$ using matrix--vector products. For $A\subseteq[k]$,
+let $H_A$ be the pointwise semiring analogue of the relation in
+\S\ref{sec:main-results}:
+\[
+ H_A(x,y)\coloneqq
+ \bigotimes_{i\in A}P_i(x,y)\ \otimes
+ \bigotimes_{i\in A^c}Q_i(x,y),
+\]
+where an empty product is $1_S$.
+Let $\mathbf 1_S$ be the constant column vector with every entry
+$1_S$. Computing the column vector $r_A$ and then broadcasting it
+along the rows gives
+\begin{equation}\label{eq:matlang-dnf}
+ r_A\coloneqq H_{A^c}\mathbf 1_S,\qquad
+ \mathcal G_k(x,y)=\bigoplus_{A\subseteq[k]}
+       H_A(x,y)\otimes r_A(x).
+\end{equation}
+Distributivity expands the $k$ clauses and interchanges the finite
+aggregations over $A$ and $z$, proving the identity for arbitrary
+$S$-valued inputs. Each $r_A$ uses one matrix--vector product;
+all other steps are entrywise operations or row broadcasting.
+Thus $2^k$ such products suffice, even without matrix--matrix
+products. Our lower bound shows that an exponential number of
+data-index aggregations remains necessary even if both kinds of
+products, other permitted operations, and sharing are allowed.
+
+\subsection{Typed matrix circuits}\label{sec:typed}
+In the idempotent case, write semiring addition as $\vee$. The circuit
+model below permits arbitrary binary kernels, rather than only
+semiring multiplication; it therefore includes the corresponding
+MATLANG operations. This strengthening is useful because the lower
+bound charges only data-index aggregations.
+
+We use the dimension symbols $n$ and $1$. Intermediate arrays have
+shapes $n\times n$, $n\times1$, $1\times n$, or $1\times1$---matrices,
+column vectors, row vectors, and scalars. A data-index contraction
+of an $a\times n$ and an $n\times c$ array is
+\[
+ Z(i,j)\coloneqq\bigvee_{z=1}^n\kappa(X(i,z),Y(z,j)),
+ \qquad a,c\in\{1,n\},
+\]
+where the kernel $\kappa:S\times S\to S$ may vary by gate and
+need not be associative, monotone, or zero-preserving.
+Contractions over an index of size one apply the kernel without
+aggregating over data, and are not charged.
+We also allow arbitrary uniform entrywise functions, transpose,
+scalar and vector broadcasting, diagonal extraction and formation,
+uniform constant vectors, and a diagonal mask with two fixed values,
+one on and one off the diagonal. These operations are not charged.
+Standard MATLANG operations are described in
+\citep{brijder2019tods,brijder2022}.
+
+All circuits have fixed directed acyclic wiring. Functions, kernels,
+and uniform scalar constants are fixed before the input is seen,
+though they may depend on $n$ and $k$ in a size-specific circuit.
+``Uniform'' means that the same entrywise function is applied at
+every position of its type and cannot access vertex names.
+A kernel receives only its two scalar arguments, not the output
+position $(i,j)$, the contracted index $z$, a third matrix entry,
+or an encoding of the entire input unless computed by permitted
+gates. Data-dependent values and tests are allowed, but there is
+no primitive for data-dependent rewiring or arbitrary indexed
+access. The input arrays are square $n\times n$ matrices; no order,
+vertex identifiers, arbitrary input vectors, or vertex-dependent
+constant arrays are supplied for free.
+
+Write $\mvcount C$ for the number of matrix--vector and
+vector--matrix data-index contractions and $\mmcount C$ for the
+number of matrix--matrix data-index contractions, counting each
+distinct gate once. All other operations, including vector inner
+products, are free in the resource measure. We next show that these
+free operations notice no folds, even though some of them may
+require compositions when expressed in CoR.
+
+\subsection{Fold sensitivity and finite join breadth}\label{sec:breadth}
+Let $(S,\vee,0_S)$ be a join-semilattice with least element $0_S$.
+Its \emph{join breadth} $\beta$ is the least nonnegative integer such
+that every finite join equals the join of at most $\beta$ of its
+summands (the empty join is $0_S$). We assume $\beta<\infty$.
+For a totally ordered semiring with min or max as addition,
+$\beta=1$: one summand attains the aggregate. In a product with
+$b$ independent coordinates, different summands can determine
+the result in different coordinates, and breadth can be $b$.
+
+The significance for folds is immediate. Each fold removes one
+color from the hub. If a join is already determined by at most
+$\beta$ summands, removing a color outside those summands
+cannot change its value. We now make this observation precise
+for the three kinds of output pairs involving the hub.
+
+Let $V$ be the common finite index set of the input matrices and
+$n\coloneqq|V|$. For color-determined square arrays $X,Y$ and
+any kernel $\kappa:S\times S\to S$, put
+\[
+ (X\agg\kappa Y)(u,v)\coloneqq
+ \bigvee_{z\in V}\kappa(X(u,z),Y(z,v)).
+\]
+Kernels may differ between gates; no order or monotonicity assumption
+is made on $\kappa$. Reference arrays are color-determined as in
+\S\ref{sec:types}, now with entries $X[\diagc],X[\mu]\in S$.
+Their predictions read the same table at the folded coloring
+$\chi_\lambda$. Entrywise functions and transpose notice no fold.
+For $J\subseteq\Lambda$, define
+\begin{align*}
+ \kappa_J^{\mathrm L}&\coloneqq\bigvee_{\mu\in J,\,\nu\in\Lambda}
+                          \kappa(X[\mu],Y[\nu]),&
+ \kappa_J^{\mathrm R}&\coloneqq\bigvee_{\mu\in J,\,\nu\in\Lambda}
+                          \kappa(X[\nu],Y[\mu]),\\
+ \kappa_J^{\mathrm D}&\coloneqq\bigvee_{\mu\in J}\kappa(X[\mu],Y[\mu]),&
+ \kappa_*&\coloneqq\kappa_\Lambda^{\mathrm L}
+                     =\kappa_\Lambda^{\mathrm R}.
+\end{align*}
+The reference product $Z\coloneqq X\agg\kappa Y$ has the table
+\begin{align*}
+ Z[\diagc]&=\kappa(X[\diagc],Y[\diagc])
+            \vee\kappa_\Lambda^{\mathrm D},\\
+ Z[\mu]&=\kappa(X[\diagc],Y[\mu])
+          \vee\kappa(X[\mu],Y[\diagc])\vee\kappa_*.
+\end{align*}
+The calculation of \S\ref{sec:responses} remains valid, with
+endpoint contributions formed by $\kappa$ and, away from the hub,
+outside-witness contributions $\kappa_*$ off the diagonal and
+$\kappa_\Lambda^{\mathrm D}$ on it. For the fold of $\lambda$,
+put $J\coloneqq\Lambda\setminus\{\lambda\}$. Outside-witness contributions
+in the hub row, hub column, and hub diagonal become
+$\kappa_J^{\mathrm L}$, $\kappa_J^{\mathrm R}$, and
+$\kappa_J^{\mathrm D}$, respectively; their predictions use
+$J=\Lambda$. This follows from the same pairs of witness colors,
+while idempotence makes their multiplicities irrelevant.
+
+\begin{lemma}[Scalar local bounds]\label{lem:scalar}
+A scalar aggregation gate notices at most $3\beta$ folds.
+If one operand is constant across off-diagonal colors, it notices
+at most $\beta$; if both are, it notices none. For Boolean scalars
+with arbitrary kernels, the general bound improves to two.
+\end{lemma}
+\begin{proof}
+By the calculation above, the gate notices the fold of $\lambda$
+only if one of the joins $\kappa_J^{\mathrm L}$,
+$\kappa_J^{\mathrm R}$, and $\kappa_J^{\mathrm D}$ with
+$J=\Lambda\setminus\{\lambda\}$ differs from its value at
+$J=\Lambda$. Choose at most $\beta$ summands of
+$\kappa_\Lambda^{\mathrm L}$ whose join is
+$\kappa_\Lambda^{\mathrm L}$, and let $K^{\mathrm L}$ be the
+set of their row colors, the row color of
+$\kappa(X[\mu],Y[\nu])$ being $\mu$. If
+$\lambda\notin K^{\mathrm L}$, all chosen summands also occur in
+$\kappa_J^{\mathrm L}$, so
+$\kappa_\Lambda^{\mathrm L}\le
+\kappa_J^{\mathrm L}\le\kappa_\Lambda^{\mathrm L}$.
+Define $K^{\mathrm R}$ in the same way from the column colors of
+summands of $\kappa_\Lambda^{\mathrm R}$, and $K^{\mathrm D}$
+from the colors of summands of $\kappa_\Lambda^{\mathrm D}$.
+Hence the gate notices the fold of $\lambda$ only if
+$\lambda\in K^{\mathrm L}\cup K^{\mathrm R}\cup K^{\mathrm D}$,
+a set of at most $3\beta$ colors.
+
+If $Y[\mu]$ is independent of $\mu$, then
+$\kappa_J^{\mathrm L}=\kappa_J^{\mathrm D}$ and
+$\kappa_J^{\mathrm R}=\kappa_*$ for every nonempty $J$;
+only $K^{\mathrm L}$ is needed. The case of $X$ is symmetric.
+If both are constant, all three joins are unchanged.
+For Boolean scalars, if $\kappa_\Lambda^{\mathrm D}=1$, a single
+color $\mu$ with $\kappa(X[\mu],Y[\mu])=1$ supplies a summand
+of value one to all three joins whenever $\mu\in J$, so only the
+fold of $\mu$ can be noticed. Otherwise the diagonal join is
+always zero, and one color for each of the other two joins suffices.
+\end{proof}
+The displayed reference table is color-determined, so these
+calculations also establish the closure required by
+Theorem~\ref{thm:test-cost}.
+
+On the reference structure, every vector is constant over its data
+index, and every scalar is a single value. Encode a column vector
+$\mathbf c$ as the square array $(u,v)\mapsto\mathbf c(u)$,
+a row vector $\mathbf r$ as $(u,v)\mapsto\mathbf r(v)$, and a
+scalar as a constant square array. Encoded reference vectors are
+constant across all edge colors and on the diagonal and are
+unchanged by prediction. Diagonal formation and extraction,
+broadcasting, and permitted constants notice no folds.
+Matrix--vector and vector--matrix contractions notice at most
+$\beta$ folds by Lemma~\ref{lem:scalar}; a vector inner product
+notices none, since both operands are constant.
+Products over an index of size one also notice none.
+
+\begin{lemma}[Cost of typed products]\label{lem:typed-cost}
+Every typed matrix circuit $C$ in this model satisfies
+\[
+ \tcost(C)\le\beta(\mvcount C+3\mmcount C).
+\]
+For Boolean scalars and arbitrary kernels, the bound improves to
+$\mvcount C+2\mmcount C$.
+\end{lemma}
+\begin{proof}
+Sum Lemma~\ref{lem:scalar} over the distinct aggregation gates.
+All other permitted gates notice none, as shown above.
+\end{proof}
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{p{0.62\linewidth}l}
+\toprule
+Operation & Folds noticed, at most\\
+\midrule
+Uniform entrywise function, transpose, permitted constant & $0$\\
+Diagonal formation or extraction, broadcasting & $0$\\
+Product over an index of size one & $0$\\
+Vector inner product & $0$\\
+Matrix--vector or vector--matrix contraction & $\beta$\\
+Square matrix--matrix contraction & $3\beta$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The cost counts noticed folds, not the time needed to evaluate a gate.
+
+\paragraph{Why join breadth matters.}
+The factor $\beta$ in the local matrix--vector bound cannot in
+general be replaced by a constant. For $b\ge1$, the finite-set
+semiring $(2^{[b]},\cup,\cap)$ has join breadth exactly $b$:
+every union is determined by at most $b$ sets, whereas the union
+of the $b$ singletons requires all of them. The same is true of
+$\mathsf{Trop}_{\mathbb Z}^{b}$: different coordinates can attain
+their minima at different summands.
+Moreover, when $2^{k-1}\ge b$, choose distinct colors
+$\lambda_1,\ldots,\lambda_b$ with no two complementary, and put
+$X[\lambda_j]=\{j\}$ and $X[\mu]=\varnothing$ for all other
+colors and on the diagonal. Matrix--vector aggregation of $X$
+against the constant column $[b]$, using union for aggregation
+and intersection as kernel, yields $[b]$ at the hub on the
+reference structure. Folding $\lambda_j$ changes this value to
+$[b]\setminus\{j\}$. Thus one aggregation notices $b$ folds.
+This is local tightness, not a claim that the overall circuit bound
+is sharp in $\beta$.
+
+\subsection{Exponential arity-elimination lower bounds}\label{sec:arity-bounds}
+We now apply Theorem~\ref{thm:test-cost} to the $2^k$ original fold
+tests. The inputs are encoded by the two distinct semiring values
+$0_S,1_S$. On every test, idempotence makes $\mathcal G_k$
+return $1_S$ or $0_S$ according to the Boolean truth of $G_k$,
+so each fold still changes the answer at the unchanged read edge.
+For natural and integer min--plus the two values are $+\infty$
+and $0$, respectively. Intermediate gates, however, may take
+arbitrary values of $S$, which is why the scalar analysis of the
+previous subsection is needed.
+
+\tropicalmatrixbounds*
+\begin{proof}
+Both tropical semirings have join breadth $\beta=1$.
+Use the $2^k$ fold tests of Lemma~\ref{lem:G-tests},
+encoded as $0_S,1_S$. Theorem~\ref{thm:test-cost} and
+Lemma~\ref{lem:typed-cost} give
+$2^k\le\mvcount C+3\mmcount C$.
+The ARA$(3)$ upper bound was constructed in \S\ref{sec:weightedG}.
+\end{proof}
+
+\begin{theorem}[Exponential arity-elimination overhead]\label{cor:matrix}
+Let $S$ be a nontrivial commutative idempotent semiring of finite
+join breadth $\beta$. For every $k\ge1$, the query $\mathcal G_k$
+has a positive ARA$(3)$ expression of size $O(k)$, but every typed
+matrix circuit $C$ computing it on all finite inputs satisfies
+\[
+ \beta(\mvcount C+3\mmcount C)\ge2^k.
+\]
+In particular, at least $2^k/(3\beta)$ aggregation gates are
+necessary. Conversely, $2^k$ matrix--vector products suffice.
+\end{theorem}
+\begin{proof}
+The $0_S,1_S$ encodings above supply $2^k$ fold tests.
+Theorem~\ref{thm:test-cost} and Lemma~\ref{lem:typed-cost} give
+the lower bound. Since
+$\mvcount C+3\mmcount C\le3(\mvcount C+\mmcount C)$,
+there must be at least $2^k/(3\beta)$ aggregation gates.
+
+For the upper bound, the explicit MATLANG expression
+\eqref{eq:matlang-dnf} uses exactly $2^k$ matrix--vector
+aggregations; all remaining operations are entrywise or broadcasts.
+Its correctness for arbitrary semiring-valued inputs follows from
+distributivity, as verified in \S\ref{sec:weightedG}.
+Reusing partial products in the $H_A$ as in
+\S\ref{sec:main-results} gives $O(2^k)$ total nodes.
+\end{proof}
+
+\begin{theorem}[Boolean arity-elimination overhead]\label{thm:boolean-matrix}
+Over the Boolean semiring $\mathbb B$, every typed matrix circuit
+$C$ computing $G_k$ on all finite inputs satisfies
+$\mvcount C+2\mmcount C\ge2^k$.
+This holds with arbitrary uniform entrywise functions and
+aggregation kernels.
+\end{theorem}
+\begin{proof}
+The $2^k$ Boolean tests, Theorem~\ref{thm:test-cost}, and the
+Boolean refinement of Lemma~\ref{lem:typed-cost} give the claim.
+\end{proof}
+
+\paragraph{Why the Boolean case is not just a restatement of the CoR bound.}
+Boolean matrix multiplication is relational composition, so total-size
+lower bounds for ordinary Boolean matrix expressions are closely
+related to Theorem~\ref{thm:main}. Here we count only aggregations:
+all other permitted matrix operations are free. For example,
+diagonal extraction followed by broadcasting obtains the matrix
+$(u,v)\mapsto R(u,u)$ without aggregation, whereas a CoR expression
+for it is $(R\cap\id);\one$, which uses a composition.
+Consequently, the aggregation count of a matrix circuit cannot be
+identified with the composition count of its CoR translation.
+We instead bound the fold sensitivity of the typed operations directly;
+that analysis also works over non-Boolean semirings.
+
+Examples of breadth-one semirings include
+$\mathsf{Trop}_{\mathbb N}$, $\mathsf{Trop}_{\mathbb Z}$,
+the integer max--plus semiring
+$(\mathbb Z\cup\{-\infty\},\max,+)$, and max--min on $[0,1]$.
+All require at least $2^k/3$ aggregations, even in our enlarged
+kernel model.
+
+\subsection{Positive computations without idempotence}\label{sec:positive}
+A separate transfer handles positive arithmetic, for which join breadth
+is not available. Let $(S,+,\otimes,0_S,1_S)$ be a nontrivial commutative
+semiring satisfying
+\begin{equation*}\tag{NV}\label{eq:positive-characteristic}
+ r\,1_S\ne0_S\qquad\text{for every integer }r\ge1,
+\end{equation*}
+where $r\,1_S$ is the sum of $r$ copies of $1_S$.
+Restrict the target to positive entrywise addition and multiplication,
+semiring matrix products, transpose, broadcasting, diagonal operations,
+and constants in $\mathbb N1_S\coloneqq\{r\,1_S:r\ge0\}$.
+Arbitrary entrywise decoding and negative constants are not allowed here.
+Replace joins in $\mathcal G_k$ by sums to define its positive
+semiring version.
+
+On Boolean-encoded inputs, every intermediate belongs to $\mathbb N1_S$.
+The map sending $0_S$ to zero and every other element of this subsemiring
+to one is a homomorphism to the Boolean semiring. Indeed, sums and products
+of positive multiples of $1_S$ are again nonzero by the nonvanishing
+condition~\eqref{eq:positive-characteristic}. Applying this map to every gate of
+a target circuit $C$ gives a Boolean matrix circuit with exactly the same
+typed product counts.
+Its output is $G_k$. The Boolean lower bound therefore gives
+$\mvcount{C}+2\mmcount{C}\ge2^k$.
+Here the cost is applied to the Booleanized computation; no argument by
+predictions is claimed for the original scalar circuit.
+The $2^k$-product expansion still works by distributivity. This includes
+positive computations over $\mathbb N$ and nonnegative reals.
+
+The restriction on the operations matters: with nonidempotent addition
+and arbitrary entrywise decoding, a single aggregation along each row
+can encode how many edges $(x,z)$ have each profile of
+\S\ref{sec:domain-size}, and these counts determine $G_k$. The
+arbitrary-kernel result of Theorem~\ref{cor:matrix} avoids this because
+finite join breadth limits how many colors can support a single
+aggregation.

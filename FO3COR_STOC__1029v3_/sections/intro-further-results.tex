@@ -1,0 +1,272 @@
+% Requires mathrsfs for \mathscr{P} and TikZ (arrows.meta) for Figure~\ref{fig:reverse-fold}.
+\subsection{Further results}\label{sec:additional-results}
+In \S\ref{sec:overview}, we explained how folds of a reference structure
+prove our main theorem. We now use this approach to establish further
+exponential succinctness gaps: from $\FOthree$ to $\FOtwo$, from
+$\CoR$ to $\FOtwo$, and from three-attribute relational algebra to
+matrix query languages. To explain these extensions, we first summarize
+the counting argument of \S\ref{sec:overview}.
+
+Recall that the folds in \S\ref{sec:overview} are indexed by colors
+$\lambda\in\Lambda=2^{[k]}$. For a circuit $C\eqfin G_k$, let
+$D_g\subseteq\Lambda$ be the set of colors whose folds are noticed by
+gate $g$. Every color belongs to some $D_g$: otherwise, the circuit
+could not detect the change at the read edge left unchanged by that
+fold (\S\ref{ov:types}). Thus $\bigcup_{g\in C}D_g=\Lambda$, and
+counting gives
+\begin{equation}\tag{$\dagger$}\label{eq:fold-counting}
+  2^k\le \sum_{g\in C}|D_g|.
+\end{equation}
+For \CoR, Boolean operations and converse notice no folds, while each
+composition notices at most two (\S\ref{ov:twocolors}). Hence
+$\sum_{g\in C}|D_g|\le 2\gcost C$, recovering Theorem~\ref{thm:main}.
+The applications below use the same counting argument, with different
+bounds on the folds noticed by the target operations and, when needed,
+a different reference structure.
+
+\paragraph{\texorpdfstring{{\boldmath\FOthree\ to \FOtwo}}{FO3 to FO2}.}
+The same query $G_k$ is also \FOtwo-definable: the DNF expansion in
+\S\ref{sec:main-results} gives
+\[
+ G_k(x,y)\equiv\bigvee_{A\subseteq[k]}
+ \bigl[H_A(x,y)\land\exists y\,H_{A^c}(x,y)\bigr]
+\]
+where $H_A$ is \FOtwo-definable.
+Here the quantifier binds $y$ only in the second conjunct.
+\begin{restatable}{theorem}{sentencebounds}\label{cor:sentences}
+For every $k\ge1$, every \FOtwo\ formula equivalent to $G_k(x,y)$
+over finite structures has at least $2^k$ quantifiers.
+\end{restatable}
+The displayed expansion uses exactly $2^k$ quantifiers, so the bound
+is tight. To our knowledge, this is the first exponential succinctness
+gap from \FOthree\ to \FOtwo\ over general finite structures. The gap
+also holds for sentences. On pure finite linear orders, by contrast,
+\FOthree\ sentences admit polynomial-size \FOtwo\ translations
+\citep{grohe-schweikardt2005}, while Vinall-Smeeth's exponential
+separations over general structures start at three target variables
+\citep{vinall-smeeth2024} (see \S\ref{sec:relwork}).
+
+The same reference structure $\mathcal M_0$ and folds from \S\ref{sec:overview} suffice.
+Indeed, regard each \FOtwo\ subformula $\psi$ as a binary relation
+$X_\psi$ of assignments to $(x,y)$, with any unused coordinate treated
+as a dummy. Quantifying a variable is then a special case of relational
+composition:
+\[
+  X_{\exists y\,\psi}=X_\psi;\one,
+  \qquad
+  X_{\exists x\,\psi}=\one;X_\psi.
+\]
+Thus their assignment relations remain color-determined on $\mathcal M_0$,
+just like the CoR gate values in \S\ref{sec:overview}.
+Since one operand of each composition is $\one$, each quantifier can
+notice at most one fold (\S\ref{ov:twocolors}), rather than the two
+possible for general composition. Atomic formulas and Boolean
+connectives notice none; universal quantifiers are handled by
+complement. The counting inequality~\eqref{eq:fold-counting} therefore
+requires at least $2^k$ quantifiers. We also obtain a lower bound of $k2^k$ relation-atom occurrences and
+optimal tree size $\Theta(k2^k)$, for both queries and sentences
+(\S\ref{sec:sentences}).
+
+For \CoR\ itself, we also determine the optimal tree size of $G_k$
+as $(2+o(1))k2^k$, whereas its optimal circuit size is $\Theta(2^k)$
+(Theorem~\ref{thm:tree}).
+
+\paragraph{\texorpdfstring{{\boldmath\CoR\ to \FOtwo}}{CoR to FO2}.}
+An exponential succinctness gap also occurs from \CoR\ to \FOtwo.
+We need a different query, since $G_k$ already requires exponentially
+many \CoR\ compositions. Put $\mathscr P_i^1\coloneqq\id\cap P_i$
+and $\mathscr P_i^0\coloneqq\id\cap\overline{P_i}$, and let
+$\vartheta_A(u)\coloneqq\bigwedge_{i\in A}P_i(u,u)\land
+\bigwedge_{i\notin A}\neg P_i(u,u)$ for $A\subseteq[k]$.
+Consider the following linear-size \CoR\ term and its \FOtwo\ expansion:
+\[
+\defn{\CoR}:
+ U_k \coloneqq R;\bigcap_{i=1}^k
+ \left[(\mathscr P_i^0;\one;\mathscr P_i^0)
+ \cup(\mathscr P_i^1;\one;\mathscr P_i^1)\right]
+ \longrightarrow
+\defn{\FOtwo}:
+ \bigvee_{A\subseteq[k]}
+ \left[\vartheta_A(y)\land\exists y\,
+    (R(x,y)\land\vartheta_A(y))\right]
+\]
+Thus $U_k$ asks whether $x$ has an $R$-successor with the same
+$k$-bit loop pattern as $y$.
+\begin{restatable}{proposition}{reverse}\label{prop:reverse}
+For every $k\ge1$, every \FOtwo\ formula equivalent to $U_k$
+over finite structures has at least $2^k$ quantifiers.
+\end{restatable}
+
+The displayed expansion uses exactly $2^k$ quantifiers, so the bound
+is tight.
+%
+For the lower bound, take a new reference structure $\mathcal W_0$
+with several vertices of each loop pattern and a hub $h$ having
+$R$-successors of every pattern (Figure~\ref{fig:reverse-fold}).
+The fold of $A\subseteq[k]$ deletes all $R$-edges from $h$ to
+vertices of pattern $A$.
+Thus $U_k(h,y_A)$ changes from true to false
+for a vertex $y_A$ of pattern $A$, even when $(h,y_A)$ is unchanged.
+
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}[
+  >=Stealth,
+  every node/.style={font=\small},
+  patternclass/.style={draw=black!55, fill=black!3,
+      rounded corners=2pt, minimum width=2.9cm, minimum height=.78cm},
+  member/.style={circle, fill=black, inner sep=1.55pt},
+  testmember/.style={circle, fill=black!50, inner sep=1.55pt},
+  redge/.style={->, semithick, shorten >=2pt},
+]
+\begin{scope}
+  \node[font=\bfseries\small] at (0.5, 1.0) {Reference $\mathcal W_0$};
+  \node[draw,circle,inner sep=2pt] (h0) at (.20,0) {$h$};
+  \node[patternclass] at (4.10,.69) {};
+  \node[font=\scriptsize,anchor=south] at (4.10,1.10) {pattern $A$};
+  \node[member,label={[font=\scriptsize]right:$z_A$}] (za0) at (3.54,.64) {};
+  \node[testmember,label={[font=\scriptsize]right:$y_A$}] at (4.66,.64) {};
+  \node[patternclass] at (4.10,-.78) {};
+  \node[font=\scriptsize,anchor=south] at (4.10,-.37) {pattern $B\ne A$};
+  \node[member,label={[font=\scriptsize]right:$z_B$}] (zb0) at (3.60,-.84) {};
+  \draw[redge] (h0) -- (za0);
+  \draw[redge] (h0) -- (zb0);
+  \node[font=\scriptsize] at (2.78,-1.62) {$U_k(h,y_A)=1$};
+\end{scope}
+\begin{scope}[xshift=7.1cm]
+  \node[font=\bfseries\small] at  (0.5, 1.0) 
+  {Folded $A$: $\mathcal W_A$};
+  \node[draw,circle,inner sep=2pt] (h1) at (.20,0) {$h$};
+  \node[patternclass] at (4.10,.69) {};
+  \node[font=\scriptsize,anchor=south] at (4.10,1.10) {pattern $A$};
+  \node[member,label={[font=\scriptsize]right:$z_A$}] (za1) at (3.54,.64) {};
+  \node[testmember,label={[font=\scriptsize]right:$y_A$}] at (4.66,.64) {};
+  \node[patternclass] at (4.10,-.78) {};
+  \node[font=\scriptsize,anchor=south] at (4.10,-.37) {pattern $B\ne A$};
+  \node[member,label={[font=\scriptsize]right:$z_B$}] (zb1) at (3.60,-.84) {};
+  \draw[redge,dashed,black!35] (h1) -- (za1);
+  \node[font=\large, text=black!70] at (2.25,.39) {$\times$};
+  \draw[redge] (h1) -- (zb1);
+  \node[font=\scriptsize] at (2.78,-1.62) {$U_k(h,y_A)=0$};
+\end{scope}
+\end{tikzpicture}
+\caption{The fold of $A$ removes all $R$-edges from $h$ to vertices of loop pattern $A$ (schematic).}
+\label{fig:reverse-fold}
+\end{figure}
+
+The original folds cannot give this separation: on their reference
+structure, every composition notices at most two folds, ruling out a
+short \CoR\ term that distinguishes all those tests. In the new
+structure, the outer composition of $U_k$ can notice all $2^k$ folds,
+whereas each \FOtwo\ quantifier, viewed as a projection, still notices
+at most one. The latter bound uses redundant representatives of each
+atomic pair type. Applying the same counting argument~\eqref{eq:fold-counting}
+to the new tests proves the lower bound (\S\ref{sec:reverse}).
+
+\paragraph{Arity elimination in matrix query languages.}
+Brijder~et~al.\ compared two formalisms for semiring-valued queries:
+ARA$(3)$, which allows intermediate tables with up to three columns,
+and MATLANG, which computes with matrices, vectors, and scalars.
+They showed that the two have the same expressive power when inputs
+and outputs have at most two columns~\cite{brijder2022}.
+Their translation from ARA$(3)$ to MATLANG can grow exponentially,
+but whether this blowup is unavoidable was left open~\citep[p.~9]{brijder2019}.
+We establish an exponential lower bound using a semiring-valued
+analogue of our hard query $G_k$.
+
+Let $\mathfrak S=(S,\oplus,\otimes,0_S,1_S)$ be a commutative semiring,
+with input relations $P_i,Q_i:V^2\to S$. Define
+\[
+  \mathcal G_k(x,y)\coloneqq
+  \bigoplus_{z\in V}\ \bigotimes_{i=1}^k
+  \Bigl[(P_i(x,y)\otimes Q_i(x,z))
+  \oplus(Q_i(x,y)\otimes P_i(x,z))\Bigr].
+\]
+This query has an ARA$(3)$ expression of size $O(k)$: all $k$
+conditions are combined over $(x,y,z)$ before $z$ is aggregated away.
+Over Boolean annotations ($S=\mathbb B$, with $\oplus=\lor$ and
+$\otimes=\land$), $\mathcal G_k$ specializes to $G_k$.
+
+In MATLANG, the usual semiring matrix--vector (mv) and matrix--matrix
+(mm) products take the form
+\[
+  (A \cdot v)(x) \coloneqq \smash{\bigoplus_{z\in V}} A(x,z)\otimes v(z)
+  \quad\text{(mv)},\qquad
+  (A \cdot B)(x,y) \coloneqq \smash{\bigoplus_{z\in V}} A(x,z)\otimes B(z,y)
+  \quad\text{(mm)}.
+\]
+
+Both eliminate their aggregated index immediately.
+The DNF of \S\ref{sec:main-results} also gives an explicit MATLANG
+representation of $\mathcal G_k$. Here $H_A$ is obtained from the expression in \S\ref{sec:main-results}
+by replacing intersections with pointwise $\otimes$, and
+$\mathbf 1_S$ is the all-$1_S$ column vector. Then
+\[
+  \mathcal G_k(x,y)=\smash{\bigoplus_{A\subseteq[k]}}
+       H_A(x,y)\otimes (H_{A^c}\mathbf \cdot \mathbf{1}_S)(x).
+\]
+
+This uses $2^k$ mv products, together with row broadcasting and
+entrywise operations; more general computations may also use mm
+products and shared intermediate results.
+For a circuit $C$, let $\mvcount C$ count matrix--vector and
+vector--matrix aggregations, and $\mmcount C$ count matrix--matrix
+aggregations, with shared gates counted once. All other permitted
+operations are free.
+
+For a concrete non-Boolean case, consider the natural and integer
+min--plus semirings
+$\mathsf{Trop}_D=(D\cup\{+\infty\},\min,+,+\infty,0)$,
+where $D\in\{\mathbb N,\mathbb Z\}$.
+
+\begin{restatable}[Tropical arity-elimination overhead]{theorem}{tropicalmatrixbounds}\label{thm:tropical-matrix}
+For every $k\ge1$ and $\mathfrak S\in\{\mathsf{Trop}_{\mathbb N},\mathsf{Trop}_{\mathbb Z}\}$,
+the query $\mathcal G_k$ has an ARA$(3)$ expression of size $O(k)$,
+but every typed matrix circuit $C$ over $\mathfrak S$ computing it
+on all finite inputs satisfies $\mvcount C+3\mmcount C\ge2^k$.
+\end{restatable}
+The lower bound holds even with arbitrary uniform entrywise functions
+and aggregation kernels. Its proof uses the fold-counting principle
+\eqref{eq:fold-counting} (\S\ref{sec:matrix}).
+
+The argument extends uniformly beyond tropical matrices.
+Examples include the Boolean semiring $(\{0,1\},\lor,\land)$
+and the max--min semiring $([0,1],\max,\min)$.
+It also covers integer max--plus
+$(\mathbb Z\cup\{-\infty\},\max,+)$ and, for each fixed $b\ge1$,
+finite-set annotations $(2^{[b]},\cup,\cap)$ and $b$-dimensional
+min--plus $\mathsf{Trop}_{\mathbb Z}^{b}$.
+One property covers all these examples: \emph{finite join breadth},
+meaning that every finite join is determined by a bounded number
+of its summands. It bounds how many folds an aggregation can notice,
+giving exponential lower bounds for every fixed nontrivial
+commutative idempotent semiring of finite join breadth
+(Theorem~\ref{cor:matrix}). Over Boolean matrices, we also obtain
+the sharper bound $\mvcount C+2\mmcount C\ge2^k$.
+Positive computations over nonidempotent semirings such as
+$(\mathbb N,+,\times)$ are handled separately by Booleanization
+(\S\ref{sec:positive}).
+
+\paragraph{Robustness: closure and randomization.}
+
+The lower bound persists even when \CoR\ is extended with reflexive–transitive closure 
+$X^* \coloneqq \bigcup_{m\ge 0}X^m$,
+which can be evaluated in $O(n^\omega)$ time~\citep{fischer-meyer1971,munro1971,furman1970}.
+Each closure gate notices at most one fold.
+
+
+\begin{restatable}[Closure does not help]{proposition}{closure}\label{prop:star}
+Let $C$ be a \CoR\ circuit with closure gates $(-)^*$
+and let $g_*(C)$ count its distinct closure gates.
+If $C\eqfin G_k$, then $2\gcost C+g_*(C)\ge2^k$.
+\end{restatable}
+
+The lower bound also extends to bounded-error randomized circuits, even when circuits are specialized to each sufficiently large domain size.
+
+\begin{restatable}[Fixed sizes and bounded error]{corollary}{randomizedbounds}\label{cor:randomized}
+
+For some constant $c>0$, for every $k\ge 1$, $n\ge ck4^k$, and $0\le\varepsilon<1/2$, every input-independent distribution of size-specific \CoR\ circuits whose output at each pair $(u,v)$ is correct with probability at least $1-\varepsilon$ on every $n$-element input satisfies
+\[
+\mathbb E[g_{;}(C)]\ge(1-2\varepsilon)2^{k-1}.
+\]
+\end{restatable}
