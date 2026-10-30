@@ -36,6 +36,10 @@
 % Alphabetic citations; author names are written explicitly in the text.
 \newcommand{\citep}{\cite}
 \usepackage{xcolor}
+% Author comments; use [disable] to hide all of them.
+\usepackage{todonotes}
+\usepackage{CJKutf8} % Japanese in author comments
+\newcommand{\nakamura}[1]{\todo[color=blue!10,size=\tiny,author=Nakamura]{\begin{CJK}{UTF8}{min}#1\end{CJK}}}
 \definecolor{linkgreen}{RGB}{0,110,65}
 % Unique PDF anchors also for shared theorem counters and restatements.
 \usepackage[hypertexnames=false,colorlinks,citecolor=linkgreen,linkcolor=linkgreen,urlcolor=linkgreen]{hyperref}
