@@ -1,5 +1,16 @@
-\subsection{Limits of the natural approach via the relational fooling-set argument}\label{sec:natural-approaches}
+\subsection{Limits of the relational fooling-set argument}\label{sec:natural-approaches}
 % \subsection{Natural approaches that fail}\label{sec:natural-approaches}
+A natural approach is to extend
+the earlier exponential lower bound for \defn{$\Sigma_1\CoR$},
+even with shared subterms~\citep[Theorems~6.1 and~6.12]{nakamura2022}.
+Here $\Sigma_1\CoR$ allows complement only on
+input relations and $\id$ (after pushing it to the leaves):
+$\overline R;\one$ is permitted, but $\overline{R;\one}$ is not.
+Although the original proof in~\citep{nakamura2022} uses formula-size
+games in the style of Adler and Immerman~\citep{adler-immerman2003},
+it can be viewed as a relational fooling-set argument.
+We first recall the fooling-set argument.
+
 The \defn{fooling-set argument}~\citep{yao1979,lipton-sedgewick1981,kushilevitz-nisan1997,rao-yehudayoff2020}
 is a standard technique for proving lower bounds in communication complexity.
 For a Boolean function $f\colon A\times B\to\{0,1\}$, a
@@ -9,16 +20,6 @@ $(a',b)$ of value $0$. A \defn{1\nobreakdash-rectangle} is a product
 $A'\times B'\subseteq f^{-1}(1)$. Since a rectangle containing two
 points also contains their crossings, each 1\nobreakdash-rectangle
 covers at most one point of $F$, so at least $|F|$ are needed.
-
-One might try the same argument for our \FOthree-to-\CoR\ lower bound.
-Indeed, the earlier exponential lower bound for \defn{$\Sigma_1\CoR$},
-even with shared subterms~\citep[Theorems~6.1 and~6.12]{nakamura2022},
-can be viewed as a \textbf{relational fooling-set argument}. Although the
-original proof in~\citep{nakamura2022} uses formula-size games in the style of Adler and
-Immerman~\citep{adler-immerman2003}, the underlying obstruction has a
-simple interpretation. Here $\Sigma_1\CoR$ allows complement only on
-input relations and $\id$ (after pushing it to the leaves):
-$\overline R;\one$ is permitted, but $\overline{R;\one}$ is not.
 
 Consider Nakamura's query of size $O(k)$,
 $\varphi_k(x,y)\coloneqq\exists z\,\bigwedge_{i=1}^k

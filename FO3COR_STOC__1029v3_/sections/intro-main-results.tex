@@ -122,14 +122,14 @@ asymptotically optimal remains open.
 
 \paragraph{Over a single binary relation.}
 How large is the succinctness gap from \FOthree\ to \CoR\ over a single binary relation? By encoding the $2k$ input relations of $G_k$ into one binary relation,
-with only a logarithmic factor increase in formula size, we obtain a \textbf{subexponential} lower bound.
+with only a logarithmic factor increase in formula size, we obtain tight \textbf{subexponential} bounds.
 
 \begin{theorem}[Subexponential bounds;
 see Theorem~\ref{thm:fixed-vocabulary:formal}]
 \label{thm:fixed-vocabulary}
 Over a single binary relation, every \FOthree\ query $\varphi(x, y)$, with $|\varphi|$ its syntax-tree size,
 has an equivalent \CoR\ circuit of size $2^{O(|\varphi|/\log |\varphi|)}$ (upper bound),
-and some queries $\psi(x, y)$ require
+and some \FOthree\ queries $\psi(x, y)$ require
 $2^{\Omega(|\psi|/\log |\psi|)}$ composition gates (lower bound).
 % Over a single binary relation,
 % \begin{description}
