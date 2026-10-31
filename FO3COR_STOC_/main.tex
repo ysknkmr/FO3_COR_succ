@@ -1,0 +1,172 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage{fullpage}
+
+% 行番号
+\usepackage[mathlines]{lineno}
+\linenumbers
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathrsfs} % for mathscr
+\usepackage{thmtools,thm-restate}
+% TeX Live 2026 (OverLeaf):
+% the LaTeX kernel now creates shared-counter aliases.
+% Avoid creating them twice in thmtools; older kernels keep their setup.
+% Official workaround: https://www.overleaf.com/blog/tex-live-2026-is-now-available
+\makeatletter
+\@ifundefined{newcounteralias}{}{%
+  \renewcommand\thmt@autorefsetup{\@xa\def\csname\thmt@envname autorefname\@xa\endcsname\@xa{\thmt@thmname}}%
+}
+\makeatother
+
+% restateする時にイントロ用のセクション番号を消去する
+\newif\ifintroproofrefs
+\introproofrefstrue
+\newcommand{\proofref}[1]{%
+  \ifintroproofrefs
+    ; \S\ref{#1}%
+  \fi
+}
+% restateする時にイントロ用のセクション番号を消去する
+
+
+
+\usepackage{booktabs,array,microtype,needspace}
+\usepackage{flafter}
+\usepackage{float}
+\usepackage[only,llbracket,rrbracket]{stmaryrd}
+% stmaryrd has no bold series; use the medium one inside \boldmath.
+\SetSymbolFont{stmry}{bold}{U}{stmry}{m}{n}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,arrows.meta}
+\usepackage{enumitem}
+\usepackage[mathlines]{lineno}
+\newif\ifreviewversion
+\reviewversionfalse
+\ifreviewversion\linenumbers\fi
+% Alphabetic citations; author names are written explicitly in the text.
+\newcommand{\citep}{\cite}
+\usepackage{xcolor}
+% Author comments; use [disable] to hide all of them.
+\usepackage{todonotes}
+\usepackage{CJKutf8} % Japanese in author comments
+\newcommand{\nakamura}[1]{\todo[color=blue!10,size=\tiny,author=Nakamura]{\begin{CJK}{UTF8}{min}#1\end{CJK}}}
+\definecolor{linkgreen}{RGB}{0,110,65}
+% Unique PDF anchors also for shared theorem counters and restatements.
+\usepackage[hypertexnames=false,colorlinks,citecolor=linkgreen,linkcolor=linkgreen,urlcolor=linkgreen]{hyperref}
+\usepackage{bookmark}
+\hypersetup{pdftitle={An Exponential Succinctness Gap between Three-Variable Logic and the Calculus of Relations},pdfauthor={Yuya Uezato and Yoshiki Nakamura}}
+\urlstyle{same}
+\newcommand{\doi}[1]{\href{https://doi.org/#1}{\nolinkurl{doi:#1}}}
+\allowdisplaybreaks[2]
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0.15em}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem*{proposition*}{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\set}[1]{\{ #1 \}}
+\newcommand{\tuple}[1]{\langle #1 \rangle}
+\newcommand{\customparag}[1]{{\noindent{}\textit{#1}}}
+\newcommand{\customparagB}[1]{{\noindent{}\textbf{#1}}}
+\newcommand{\CoR}{\ensuremath{\mathrm{CoR}}}
+\newcommand{\FOtwo}{\ensuremath{\mathrm{FO}^{2}}}
+\newcommand{\FOthree}{\ensuremath{\mathrm{FO}^{3}}}
+\newcommand{\FOfour}{\ensuremath{\mathrm{FO}^{4}}}
+\newcommand{\bolds}[1]{{\boldmath\textbf{#1}}}
+\newcommand{\zero}{\mathbf{0}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\id}{\mathbf{id}}
+\newcommand{\cost}[1]{\#_{;}(#1)}
+\newcommand{\gcost}[1]{g_{;}(#1)}
+\newcommand{\tcost}{\operatorname{cost}}
+\newcommand{\relatoms}[1]{\#_{\mathrm{rel}}(#1)}
+\newcommand{\mvcount}[1]{\#_{\mathrm{mv}}(#1)}
+\newcommand{\mmcount}[1]{\#_{\mathrm{mm}}(#1)}
+\newcommand{\eqfin}{\equiv_{\mathrm{fin}}}
+\newcommand{\bool}{\mathbb B}
+\newcommand{\agg}[1]{\mathbin{;_{#1}}}
+% \sem{\varphi}{\mathcal M}: the relation that a formula, term, or gate
+% \varphi computes on the structure \mathcal M.
+\newcommand{\sem}[2]{\llbracket #1\rrbracket_{#2}}
+% The hub of the reference structure (\S3.1).
+\newcommand{\hub}{\hslash}
+% \pred{X}{\lambda}: the prediction of X under the fold of \lambda (\S3.2).
+\newcommand{\pred}[2]{#1^{(#2)}}
+% The label of loops, which is not a color; X[\diagc] is the diagonal entry
+% of a color-determined relation.
+\newcommand{\diagc}{\id}
+% \defn marks a term where it is defined; \boldmath also sets math inside it
+% in bold, e.g. \defn{positive \CoR}. To return to italics, change the body
+% below to \emph{#1}.
+\newcommand{\defn}[1]{{\boldmath\textbf{\textit{#1}}}}
+% \newcommand{\defn}[1]{\emph{#1}}
+\title{An Exponential Succinctness Gap between\protect\\Three-Variable Logic and the Calculus of Relations}
+
+\author{Yuya Uezato \\
+CyberAgent, Inc. \\
+uezato\_yuya@cyberagent.co.jp
+\and 
+Yoshiki Nakamura \\
+Chiba University \\
+nakamura.yoshiki.ny@gmail.com
+}
+
+\date{}
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\maketitle
+\thispagestyle{empty}
+
+\begin{abstract}
+Three-variable first-order logic (\FOthree) and the calculus of relations (\CoR)
+% (also known as relation algebra)
+define the same binary queries, an
+equivalence that goes back to Tarski's work in the 1940s. The classical
+translation from \FOthree-to-CoR is single-exponential, but it
+has remained open whether this blowup is necessary. We prove that it is,
+even over finite structures and even for circuits that share subterms. Our proof introduces a new technique: we modify one finite
+structure in exponentially many small ways that each change the answer of a short \FOthree\ formula $\varphi$.
+In any equivalent \CoR\ circuit $T_\varphi$,
+only compositions of binary relations can notice these modifications, and each composition can
+notice at most two; thus, $T_\varphi$ requires exponentially many compositions.
+The same technique gives an exponential succinctness
+gap between \FOthree\ and \FOtwo,
+and exponential lower bounds for matrix query languages, where the analogous question was also open.
+\end{abstract}
+\end{titlepage}
+\setcounter{page}{1}
+\hypersetup{pageanchor=true}
+
+\input{sections/introduction}
+
+\introproofrefsfalse % restate時にイントロ用のsectionrefを消す
+
+\input{sections/aggregation}
+\input{sections/finite_core}
+\input{sections/logical_bounds}
+\input{sections/fixed_vocabulary}
+\input{sections/two_variable}
+\input{sections/matrix_languages}
+%\input{sections/discussion}
+
+\clearpage
+\bibliographystyle{alphaurl}
+\bibliography{bib}
+
+\appendix
+\input{sections/explicit}
+\input{sections/tree_limits}
+\input{sections/directed_legacy}
+\input{sections/classical_translation}
+
+\end{document}

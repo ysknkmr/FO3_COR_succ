@@ -1,0 +1,319 @@
+
+\section{Preliminaries}\label{sec:aggregation}
+We fix the semantics of finite-variable formulas, relational terms, and
+circuits, with examples that will be used throughout the paper. All
+structures have nonempty domains. Our lower bounds concern finite
+structures, whereas the explicit translations hold on all nonempty
+structures.
+
+\paragraph{Common notation.}
+
+Throughout the paper,
+we use $\log x\coloneqq\max\{\log_2 x,1\}$ for $x>0$,
+while $\ln$ denotes the natural logarithm.
+In running-time bounds, $n^\omega$ is shorthand for $n^{\omega+o(1)}$.
+
+We use $\mathbb N\coloneqq\{0,1,2,\ldots\}$; $\log_2$ is to base two,
+and $\ln$ is the natural logarithm. Subscripts on asymptotic notation
+indicate the parameters on which hidden constants may depend;
+$\operatorname{poly}_\sigma(m)$ also permits the polynomial degree to
+depend on $\sigma$.
+We use $[k]\coloneqq\{1,\ldots,k\}$ and $2^{[k]}$ for its power set;
+$A^c\coloneqq[k]\setminus A$ when $A\subseteq[k]$. Empty intersections and
+unions of relations mean $\one$ and $\zero$, respectively; the
+analogous Boolean operations mean true and false. Truth values are
+$\bool\coloneqq\{0,1\}$, and $[\mathcal P]$ is the indicator of a statement
+$\mathcal P$.
+
+\subsection{Finite-variable logic and binary queries}\label{sec:prelim-logic}
+\paragraph{Signatures and formulas.}
+A \emph{signature} (or \emph{vocabulary}) $\sigma$ is a finite set of binary relation symbols;
+there are no function or individual constant symbols. A $\sigma$-structure
+$\mathcal M$ has domain $D\coloneqq\operatorname{dom}(\mathcal M)\ne\varnothing$
+and interprets each $R\in\sigma$ as a relation $R^{\mathcal M}\subseteq D^2$.
+Equality is available. For $\ell\ge1$, the \emph{$\ell$-variable fragment}
+$\mathrm{FO}^{\ell}[\sigma]$ consists of first-order formulas using only
+$\ell$ variable names, with arbitrary reuse and rebinding of those names.
+Formally, with $u,v$ ranging over a fixed set of $\ell$ names, its syntax is
+\[
+ \varphi::=R(u,v)\mid u=v\mid\neg\varphi
+ \mid(\varphi\land\varphi)\mid(\varphi\lor\varphi)
+ \mid\exists u\,\varphi\mid\forall u\,\varphi.
+\]
+We use the names $x,y$ for \FOtwo\ and $x,y,z$ for \FOthree.
+The restriction is on the \emph{number of variable names}, not on the
+number or nesting depth of quantifiers. For example,
+\[
+ \varphi(x,y)\coloneqq P(x,y)\land\exists y\,Q(x,y)
+\]
+is an \FOtwo\ formula: the quantifier rebinds $y$ only in its own scope,
+leaving the occurrence of $y$ in $P(x,y)$ free. Write
+$\operatorname{FV}(\varphi)$ for the set of free variables.
+A \emph{sentence} has no free variables. The \emph{quantifier depth}
+is the maximum number of nested quantifiers, not their total number.
+We abbreviate $\neg\alpha\lor\gamma$ by $\alpha\to\gamma$, and
+$(\alpha\land\gamma)\lor(\neg\alpha\land\neg\gamma)$ by
+$\alpha\leftrightarrow\gamma$.
+A \emph{positive} formula uses atoms, $\land$, $\lor$, and quantifiers,
+but no negation; an \emph{existential-positive} formula also uses no
+universal quantifiers. A formula is in \emph{prenex form} if all its
+quantifiers precede a quantifier-free formula.
+
+For an assignment $s$ of variables to elements of $D$,
+$\mathcal M,s\models\varphi$ means that $\varphi$ is true in
+$\mathcal M$ under $s$. For a sentence, its truth is independent of
+$s$, and we write $\mathcal M\models\varphi$;
+$\mathcal M\not\models\varphi$ means that it is false.
+
+\paragraph{Assignment relations.}
+A binary query has an ordered pair of output coordinates, normally
+$(x,y)$. For a formula with at most two free variables using other
+names, we first fix their correspondence with these coordinates and
+apply a consistent permutation of variable names, including bound
+occurrences, so that no variable is captured. Under the $(x,y)$ interface, a formula with
+$\operatorname{FV}(\varphi)\subseteq\{x,y\}$ defines the
+\emph{binary query}
+\[
+ \sem\varphi{\mathcal M}
+ \coloneqq\{(a,b)\in D^2:\mathcal M\models
+       \varphi[x\mapsto a,y\mapsto b]\}.
+\]
+Here $[x\mapsto a,y\mapsto b]$ specifies an assignment, not a
+syntactic substitution of individual constants.
+A variable absent from $\operatorname{FV}(\varphi)$ contributes a
+\emph{dummy coordinate}: the query is independent of its assigned value.
+Thus a sentence $\varphi$ has the binary assignment value
+\[
+ \sem\varphi{\mathcal M}
+ =\begin{cases}
+     D^2,&\mathcal M\models\varphi,\\
+     \varnothing,&\mathcal M\not\models\varphi.
+   \end{cases}
+\]
+This convention lets formulas, relational terms, and circuits have the
+same kind of output. An \FOthree\ subformula may nevertheless have
+\emph{three} free variables: for example,
+$\theta(x,y,z)\coloneqq R(x,z)\land S(z,y)$ has the ternary assignment
+relation $\{(a,b,c)\in D^3:R(a,c)\land S(c,b)\}$. Quantifying $z$
+returns a binary query. Accordingly, direct \FOthree\ evaluation can
+store three-variable truth tables in $O(|\varphi|n^3)$ time on an
+$n$-element domain, whereas every intermediate value of a \CoR\ term
+or circuit is binary. Section~\ref{sec:matrix} revisits this arity
+contrast for matrix query languages.
+
+\subsection{The calculus of relations and relational circuits}\label{sec:prelim-cor}
+\paragraph{Relational terms.}
+The \emph{calculus of relations} (\CoR) has terms generated by
+\[
+ T::=R\mid\zero\mid\one\mid\id
+   \mid(T\cup T)\mid(T\cap T)\mid\overline T
+   \mid T^\smile\mid(T;T), \qquad R\in\sigma.
+\]
+Write $\sem T{\mathcal M}$ for the binary relation denoted by $T$
+on $D$. Its constants are
+$\zero\coloneqq\varnothing$, $\one\coloneqq D^2$, and
+$\id\coloneqq\{(a,a):a\in D\}$. Union and intersection are set operations;
+for relations $X,Y\subseteq D^2$ the other operations are
+\[
+  \overline X \coloneqq D^2\setminus X,\quad
+  X^\smile \coloneqq \set{(b,a):(a,b)\in X},\quad
+  (X;Y) \coloneqq 
+     \set{ (a, b) : \exists c\in D. (X(a,c)\land Y(c,b)) }.
+\]
+We identify a relation $X$ with its $\{0,1\}$-valued characteristic
+function: $X(a,b)=1$ exactly when $(a,b)\in X$. We also use $X(a,b)$
+as this membership predicate, and write $X(e)$ for $X(a,b)$ when
+$e=(a,b)$. Complement is unrestricted, including around compositions. A \emph{composition} $X;Y$ is Boolean
+matrix multiplication, with $c$ its existential \emph{witness}.
+
+Two useful special cases are the \emph{row and column projections}:
+\begin{equation*}\tag{Proj}\label{eq:prelim-projections}
+ \begin{aligned}
+  (X;\one)(a,b)&\iff\exists c\in D\ X(a,c),\\
+  (\one;X)(a,b)&\iff\exists c\in D\ X(c,b).
+ \end{aligned}
+\end{equation*}
+The first is independent of $b$, and the second of $a$. More generally,
+for binary predicates $A,B,C$ with the indicated variable pairs,
+\begin{equation*}\tag{QE}\label{eq:prelim-elimination}
+ \exists z\,\bigl(A(x,y)\land B(x,z)\land C(z,y)\bigr)
+ \quad\equiv\quad \bigl(A\cap(B;C)\bigr)(x,y).
+\end{equation*}
+For example, the \FOtwo\ query
+$P(x,y)\land\exists y\,Q(x,y)$ above is $P\cap(Q;\one)$ in \CoR.
+The position of complement matters: $\overline{R;\one}$ tests that
+$x$ has no $R$-successor, whereas $\overline R;\one$ tests that
+$x$ has some non-$R$ pair. These queries are not equivalent.
+
+\paragraph{A linear translation from \FOtwo.}\label{sec:FOtwo-translation}
+Under the assignment convention above, the standard translation
+$\tau$ from \FOtwo\ into \CoR\ is given on atoms and quantifiers by
+\[
+\begin{array}{c|c@{\qquad}c|c}
+ \varphi&\tau(\varphi)&\varphi&\tau(\varphi)\\\hline
+ R(x,y)&R&R(y,x)&R^\smile\\
+ R(x,x)&(R\cap\id);\one&R(y,y)&\one;(R\cap\id)\\
+ x=y\ \text{or}\ y=x&\id&x=x\ \text{or}\ y=y&\one\\
+ \exists x\,\psi&\one;\tau(\psi)&
+ \exists y\,\psi&\tau(\psi);\one
+\end{array}
+\]
+Conjunction, disjunction, and negation become intersection, union, and
+complement; universal quantifiers use
+$\forall u\,\psi\equiv\neg\exists u\,\neg\psi$. Structural induction,
+using~\eqref{eq:prelim-projections}, shows that
+\[
+ \sem{\tau(\varphi)}{\mathcal M}
+   =\sem\varphi{\mathcal M},\qquad
+ |\tau(\varphi)|=O(|\varphi|).
+\]
+The translation also preserves the number of relation-atom
+occurrences, including reflexive atoms. See
+\citep[Remark~3.22]{nakamura2022}. Section~\ref{sec:FOtwo} bounds the fold cost of this translation
+by its number of quantifiers.
+
+\paragraph{Terms versus circuits.}
+A \emph{term} is a syntax tree, so repeated occurrences of a subterm
+are distinct nodes. A \emph{relational circuit} is a finite directed
+acyclic graph (DAG): each gate is an input, a constant, or one of the
+same \CoR\ operations, with ordered input ports, and a designated
+output gate. A gate may feed multiple later gates, including both
+ports of one composition. Its value $\sem g{\mathcal M}$ is computed
+once from its predecessors; $\sem C{\mathcal M}$ is the value of the
+output gate. For any formula, term, or circuit $\Psi$ with a binary
+output interface, $\mathcal M\models\Psi(a,b)$ means
+$(a,b)\in\sem\Psi{\mathcal M}$, and
+$\mathcal M\not\models\Psi(a,b)$ means the opposite.
+
+For example, the term $(R;R);(R;R)$ has seven nodes and three
+composition occurrences. The circuit
+\[
+ g_0\coloneqq R,\qquad g_1\coloneqq g_0;g_0,\qquad g_2\coloneqq g_1;g_1
+\]
+has just three distinct gates, two of which are compositions
+(Figure~\ref{fig:term-vs-circuit}).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  comp/.style={draw,circle,fill=blue!7,minimum size=7mm,inner sep=0pt},
+  inp/.style={draw,rounded corners=2pt,fill=gray!8,minimum width=8mm,
+              minimum height=6mm,inner sep=1pt},
+  every node/.style={font=\small},>=Latex]
+ \begin{scope}[xshift=-2.25cm]
+   \node[font=\small\bfseries] at (0,0.65) {Term (tree)};
+   \node[comp] (t0) at (0,0) {$;$};
+   \node[comp] (t1) at (-0.95,-0.9) {$;$};
+   \node[comp] (t2) at (0.95,-0.9) {$;$};
+   \node[inp] (t3) at (-1.45,-1.8) {$R$};
+   \node[inp] (t4) at (-0.45,-1.8) {$R$};
+   \node[inp] (t5) at (0.45,-1.8) {$R$};
+   \node[inp] (t6) at (1.45,-1.8) {$R$};
+   \draw (t0)--(t1) (t0)--(t2);
+   \draw (t1)--(t3) (t1)--(t4) (t2)--(t5) (t2)--(t6);
+   \node[font=\footnotesize] at (0,-2.30) {3 composition nodes};
+ \end{scope}
+ \begin{scope}[xshift=2.25cm]
+   \node[font=\small\bfseries] at (0,0.65) {Circuit (DAG)};
+   \node[comp] (c2) at (0,0) {$;$};
+   \node[comp] (c1) at (0,-0.9) {$;$};
+   \node[inp] (c0) at (0,-1.8) {$R$};
+   \draw[-{Latex}] (c0.north west) to[out=130,in=225] (c1.south west);
+   \draw[-{Latex}] (c0.north east) to[out=50,in=315] (c1.south east);
+   \draw[-{Latex}] (c1.north west) to[out=130,in=225] (c2.south west);
+   \draw[-{Latex}] (c1.north east) to[out=50,in=315] (c2.south east);
+   \node[font=\footnotesize] at (0,-2.30) {2 composition gates};
+ \end{scope}
+\end{tikzpicture}
+\caption{The term $(R;R);(R;R)$ repeats the same subterm, whereas
+ the circuit reuses one gate as both inputs to the next composition.
+ Distinct gates, not wires or uses, are counted.}
+\label{fig:term-vs-circuit}
+\end{figure}
+
+More generally, $g_d$ defined by
+$g_{i+1}\coloneqq g_i;g_i$ computes the pairs joined by an $R$-walk of length
+$2^d$. Fully unfolding this computation gives a term with $2^d-1$
+compositions, while the circuit has only $d$ composition gates.
+For another example, a circuit can compute $h\coloneqq R;S$ once and use it
+in both branches of $(P\cap h)\cup(Q\cap h^\smile)$, still with only
+one composition gate. Thus sharing can save exponentially many
+compositions; our lower bounds hold \emph{despite} allowing it.
+
+\paragraph{Equations.}
+A \emph{\CoR\ equation} is a statement $T=S$, satisfied by a
+structure precisely when
+\[
+ \mathcal M\models T=S
+  \quad\iff\quad
+ \sem T{\mathcal M}=\sem S{\mathcal M}.
+\]
+For example, $\id\cup R=\one$ expresses the \FOtwo\ sentence
+$\forall x\,\forall y\,(x=y\lor R(x,y))$. Equivalence between a
+\CoR\ equation and an FO sentence means that they hold in exactly
+the same structures, rather than that they define the same binary query.
+A circuit computing an equation may have two designated output gates
+(for $T$ and $S$), with shared intermediate gates counted only once.
+
+\subsection{Resource measures and computational conventions}\label{sec:prelim-resources}
+\paragraph{Syntax size and gate counts.}
+Formula size $|\varphi|$ and term size $|T|$ count nodes in their
+\emph{syntax trees}; all connectives have arity at most two. Negation
+and quantification are unary, and displayed iterated connectives are
+abbreviations to be expanded, as are $\to$ and $\leftrightarrow$.
+Each relation-atom occurrence counts as
+one node even for a growing signature (so $|G_k|=8k$); the length of
+the written relation name is not charged. This is different from
+measuring the encoded bit length of a formula. Write
+$\relatoms\varphi$ for the number of relation-atom occurrences
+(including $R(x,x)$, but excluding equality atoms), and
+$\#_{\exists\forall}(\varphi)$ for its quantifier occurrences.
+
+For a term $T$, write $\relatoms T$ for occurrences of input relation
+symbols and $\cost T$ for occurrences of composition. For a circuit
+$C$, $|C|$ counts its distinct gates, including input and constant
+gates, and $\gcost C$ counts distinct composition gates. All other
+operations are uncharged by $\gcost C$, though they do count toward
+$|C|$. A shared gate counts once, irrespective of its fan-out. We will
+also use the elementary tree inequalities
+\[
+ |T|\ge2\cost T+1,
+ \qquad |T|\ge2\relatoms T-1.
+\]
+
+\paragraph{Equivalence and allowed inputs.}
+Let $\Psi$ and $\Gamma$ each be a \CoR\ term, a \CoR\ circuit, or
+an FO formula with at most two free variables, over a common signature
+$\sigma$ and with the same ordered output interface as above. We write
+\[
+ \Psi\equiv\Gamma
+ \quad\iff\quad
+ \sem\Psi{\mathcal M}=\sem\Gamma{\mathcal M}
+ \quad\text{for every nonempty $\sigma$-structure $\mathcal M$.}
+\]
+Thus $\equiv$ denotes agreement on arbitrary nonempty structures,
+finite or infinite. Our lower bounds are proved using finite test
+structures and hold even under the weaker requirement of agreement on
+all finite structures. A \emph{size-specific} circuit
+$C_n$ may depend on $n=|D|$, but not on the input interpretation;
+it must compute the intended query on \emph{every} $n$-element
+input. A relational circuit has only the input symbols and the three
+constants $\zero,\one,\id$; no built-in order, named vertices,
+extra vertex predicates, or arbitrary vertex-dependent constants are
+supplied for free. The more permissive typed matrix circuit model of
+Section~\ref{sec:typed} is defined separately.
+
+\paragraph{Randomized targets.}
+A randomized circuit is an input-independent distribution
+$\mathcal D_n$ over deterministic circuits, possibly of different
+sizes, for the given domain size $n$. Pointwise error at most
+$\varepsilon$ for a query $q$ means that, for every $n$-element input
+$\mathcal M$ and every $(a,b)\in D^2$,
+\[
+ \Pr_{C\sim\mathcal D_n}\!\left[
+   \sem C{\mathcal M}(a,b)=\sem q{\mathcal M}(a,b)
+ \right]\ge1-\varepsilon.
+\]
+The entire output relation need not be correct simultaneously.
+Randomized resource bounds concern expectations over $\mathcal D_n$;
+the circuit distribution is fixed independently of the input.

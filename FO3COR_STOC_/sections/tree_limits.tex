@@ -1,0 +1,108 @@
+\section{Tree bounds and limits of the method}\label{app:limits}
+\subsection{The input-occurrence charging lemma}\label{app:trees}
+This subsection proves the tree refinement stated in
+\S\ref{sec:trees}.
+
+\treecharging*
+\begin{proof}
+For a subterm whose value on the reference structure is $X$, let
+$S_X\subseteq\Lambda$ be the off-diagonal support of $X$. Boolean operations
+act on these sets in the usual way and converse fixes them. By the
+identities~\eqref{eq:table-off}, a composition $X;Y$ with both supports nonempty
+has off-diagonal support $\Lambda$. Call such a node \defn{active}.
+If either support is empty, the off-diagonal table of the product is
+zero or one of the two operand tables, according to the diagonal bits.
+Such an inactive node notices no fold: every outside-witness
+contribution in the local calculation vanishes.
+
+Construct a Boolean formula for the off-diagonal table of any subterm
+by replacing active compositions by the constant true, inactive
+compositions by zero or the relevant operand table, and converse by
+its argument. This operation never duplicates an input occurrence.
+For each active node $g=(X;Y)$, apply this pruning to its two operands.
+Let $\mathcal L_g$ be the set of original input occurrences that remain
+in the two resulting table formulas. These are the occurrences that
+\emph{survive the pruning}, not all input occurrences below $g$.
+This distinction prevents repeated charging at successive active nodes.
+The sets $\mathcal L_g$ are
+pairwise disjoint: an active descendant is replaced by a constant when
+an ancestor's operands are pruned, and incomparable nodes have disjoint
+subtrees.
+
+By Lemma~\ref{lem:local}, a composition notices the fold of a color
+$\lambda$ only if
+\[
+ S_X=\{\lambda\},\qquad S_Y=\{\lambda\},\qquad\text{or}\qquad
+ S_X\cap S_Y=\{\lambda\}.
+\]
+Let $E_g$ be the set of colors satisfying at least one of these
+conditions. Thus $|D_g|\le|E_g|$. If $S_X\cap S_Y$ is nonempty,
+$E_g$ has size at most one. Its unique color, if present, is selected
+by one operand table or by their conjunction. The selector assumption
+therefore gives $|\mathcal L_g|\ge d|E_g|$. If the two supports are
+disjoint, only singleton operands contribute to $E_g$. Each contributing
+operand has at least $d$ input occurrences, and the operands are disjoint
+trees. The same inequality follows. Summing over active nodes proves
+\[
+ \tcost(T)=\sum_g|D_g|\le\sum_g|E_g|
+       \le\frac1d\sum_g|\mathcal L_g|\le \relatoms{T}/d.
+\]
+Diagonal bits may affect which operand table an inactive node retains, but do not
+create additional input occurrences in this argument.
+\end{proof}
+
+\subsection{Factored trees for \texorpdfstring{$G_k$}{Gk}}\label{app:factored}
+A complete binary decision tree successively chooses $P_i$ or $Q_i$ for
+the read edge. At leaf $A$ place $H_{A^c};\one$. A branch at coordinate
+$i$ with child terms $U_1,U_0$ has the form
+\[
+ (P_i\cap U_1)\cup(Q_i\cap U_0).
+\]
+Distributing the branches recovers the DNF for $G_k$ on arbitrary inputs;
+no assumption that exactly one of $P_i,Q_i$ holds at each edge is used. Each of the $2^k$ leaves costs $2k+1$
+nodes, and each of the $2^k-1$ internal branches adds five. The total is
+$(2k+6)2^k-5$. The number of relation-input occurrences is
+$k2^k+2(2^k-1)$.
+
+\subsection{Why the requirements are crossed}
+For comparison, the superficially similar non-crossed formula collapses:
+\[
+ \exists z\,\bigwedge_{i=1}^k
+ [(P_i(x,y)\land P_i(x,z))\lor(Q_i(x,y)\land Q_i(x,z))]
+ \equiv\bigwedge_{i=1}^k(P_i(x,y)\lor Q_i(x,y)).
+\]
+The forward implication is immediate; for the reverse implication take
+$z=y$. In $G_k$, however, the two edges are subject to crossed
+requirements, so choosing $z=y$ need not satisfy them.
+
+\subsection{Sharpness of the fold tests}\label{app:promise}
+\begin{proposition}[Sharpness on the folded structures]\label{prop:promise}
+For every $k\ge1$, the minimum number of composition gates in a
+relational circuit that computes $G_k$ on the reference structure and on
+all its folded structures is $2^{k-1}$.
+\end{proposition}
+\begin{proof}
+For each unordered complementary pair $\{A,A^c\}$ of colors, choose one
+representative $A$ and compute, once,
+\[
+ X_A\coloneqq H_A;H_{A^c}.
+\]
+Use the shared result in
+\[
+ \bigcup_{\{A,A^c\}}
+ \left[(H_{A^c}\cap X_A)\cup(H_A\cap X_A^\smile)\right].
+\]
+This circuit has exactly $2^{k-1}$ compositions. We check that it
+computes $G_k$ on $\mathcal M_0$ and on every $\mathcal M_\lambda$. Let
+$J$ be the set of colors at the hub, so that $J=\Lambda$ on
+$\mathcal M_0$ and $J=\Lambda\setminus\{\lambda\}$ on
+$\mathcal M_\lambda$. On each of these structures, $H_A$ is the set of
+edges of color $A$. The relation $X_A$ is true on all pairs of distinct
+non-hub vertices, has zero diagonal, and has hub-row and hub-column
+values $[A\in J]$ and $[A^c\in J]$, respectively. The masks select the
+complementary read colors. At a non-hub vertex every color still occurs,
+so $G_k$ is true on every off-diagonal read edge there. At the hub it is
+true precisely when the complementary color lies in $J$. These are
+exactly the displayed circuit's values. The lower bound is
+Theorem~\ref{thm:main}, whose proof uses only these structures.
+\end{proof}

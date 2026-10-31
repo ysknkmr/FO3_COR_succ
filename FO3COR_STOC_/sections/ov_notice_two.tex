@@ -1,0 +1,118 @@
+\subsubsection{Each composition notices at most two folds}\label{ov:twocolors}
+
+We now show that any composition $X;Y$ of color-determined relations
+notices at most two folds (Lemma~\ref{lem:local}). The two-witness
+property first rules out noticing at pairs away from the hub.
+
+\paragraph{Away from the hub (Figure~\ref{fig:notice}).}
+At pairs $(u,v)$ with $u,v\ne\hub$, composition agrees with
+prediction.
+Figure~\ref{fig:notice} uses the same coloring, operands $X,Y$, and fold
+as Figure~\ref{fig:prediction}, but observes $e'=(u,v_\mu)$.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+    >=Latex,
+    every node/.style={font=\scriptsize},
+    vtx/.style={circle,draw,fill=white,inner sep=1.5pt},
+    edge/.style={line width=.55pt},
+    recolored/.style={red!75!black,densely dashed,line width=.85pt},
+    surviving/.style={line width=1.15pt},
+    read/.style={densely dotted,line width=.55pt},
+  ]
+    % Same four vertices and positions before and after folding.
+    % u is the vertex z of Figure 2, and w is its alternative witness.
+    \begin{scope}
+      \coordinate (u0) at (0,0);
+      \coordinate (v0) at (2.65,0);
+      \coordinate (h0) at (1.325,.98);
+      \coordinate (w0) at (1.325,-.98);
+      \draw[read] (u0)--node[below,pos=.57] {$\mu$} (v0);
+      \draw[edge] (u0)--node[above left] {$\lambda$} (h0);
+      \draw[edge] (h0)--node[above right] {$\mu$} (v0);
+      \draw[surviving] (u0)--node[below left] {$\lambda$} (w0);
+      \draw[surviving] (w0)--node[below right] {$\mu$} (v0);
+      \node[vtx,label=left:{$u$}] at (u0) {};
+      \node[vtx,label=right:{$v_\mu$}] at (v0) {};
+      \node[vtx,label=above:{$\hub$}] at (h0) {};
+      \node[vtx,label=below:{$w$}] at (w0) {};
+      \node[font=\small] at (.1, 1.2) {$\mathcal M_0$};
+    \end{scope}
+    \draw[-{Latex[length=2mm]},line width=.7pt]
+      (3.30,0)--node[above] {fold $\lambda$} (4.65,0);
+    \begin{scope}[xshift=5.25cm]
+      \coordinate (u1) at (0,0);
+      \coordinate (v1) at (2.65,0);
+      \coordinate (h1) at (1.325,.98);
+      \coordinate (w1) at (1.325,-.98);
+      \draw[read] (u1)--node[below,pos=.57] {$\mu$} (v1);
+      \draw[recolored] (u1)--node[above left,black] {$\lambda^c$} (h1);
+      \draw[edge] (h1)--node[above right] {$\mu$} (v1);
+      \draw[surviving] (u1)--node[below left] {$\lambda$} (w1);
+      \draw[surviving] (w1)--node[below right] {$\mu$} (v1);
+      \node[vtx,label=left:{$u$}] at (u1) {};
+      \node[vtx,label=right:{$v_\mu$}] at (v1) {};
+      \node[vtx,label=above:{$\hub$}] at (h1) {};
+      \node[vtx,label=below:{$w$}] at (w1) {};
+      \node[font=\small] at (.1, 1.2) {$\mathcal M_\lambda$};
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Away from the hub, the fold invalidates the path through $\hub$
+    but leaves the second witness path through $w$ unchanged.
+    Only these two witness paths are shown.}
+  \label{fig:notice}
+\end{figure}
+
+In $\mathcal M_0$, both paths have colors $(\lambda,\mu)$.
+After the fold, the path through $\hub$ is invalidated but the path through $w$ survives.
+Hence:
+$(X^{(\lambda)};Y^{(\lambda)})(e')
+=1
+=(X;Y)^{(\lambda)}(e')$.
+
+More generally, between any distinct $u,v\ne\hub$, the two-witness
+property preserves every two-color path pattern via a witness other
+than $\hub$. Loops away from $\hub$ retain edges of every color, and
+endpoint witnesses are unchanged. Thus composition cannot violate
+prediction away from the hub.
+
+\paragraph{At the hub (Figure~\ref{fig:prediction} revisited).}
+
+Only pairs involving $\hub$ remain.
+In Figure~\ref{fig:prediction}, $X$ holds only on $\lambda$ and
+$Y$ only on $\mu$, where $\lambda\ne\mu$.
+Their composition notices the folds of
+$\lambda$ and $\mu$ at $(\hub,v_\mu)$ and
+$(v_\lambda,\hub)$, respectively.
+
+Why can it not notice a third fold?
+To notice $\lambda$ at $(\hub,v)$, $X$ must
+hold on $\lambda$ and no other off-diagonal
+color. Indeed, if $X[\nu]=1$ for some
+$\nu\ne\lambda$ and $Y[\tau]=1$ for some
+color $\tau$, the two-witness property
+supplies a path
+$\hub\xrightarrow{\nu}z\xrightarrow{\tau}v$
+that survives the fold of $\lambda$.
+Thus $z$ remains a witness for
+$(X^{(\lambda)};Y^{(\lambda)})(\hub,v)$.
+%
+Likewise, noticing a distinct fold $\mu$
+at $(u,\hub)$ requires $Y$ to hold only
+on $\mu$. Hence noticing two distinct
+folds forces $X$ and $Y$ to be supported
+on $\{\lambda\}$ and $\{\mu\}$, respectively.
+No third color occurs in either support,
+and their supports are disjoint, ruling out
+an additional fold noticed at $(\hub,\hub)$.
+If $X$ and $Y$ share a color instead,
+all possible noticed folds must coincide.
+Thus $X;Y$ notices at most two folds.
+
+\paragraph{Summary.}
+Every one of the $2^k$ folds requires a noticing composition gate
+(\S\ref{ov:types}), whereas each distinct composition gate notices at
+most two (Lemma~\ref{lem:local}). Hence $2^k\le 2\gcost C$,
+proving the lower bound of Theorem~\ref{thm:main} even with sharing.
+% For these tests, the factor two is tight (Proposition~\ref{prop:promise}).

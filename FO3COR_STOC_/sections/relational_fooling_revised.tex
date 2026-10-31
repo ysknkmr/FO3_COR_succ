@@ -1,0 +1,81 @@
+\subsection{Limits of the relational fooling-set argument}\label{sec:natural-approaches}
+% \subsection{Natural approaches that fail}\label{sec:natural-approaches}
+A natural approach to lower bounds for full \CoR\ is to extend the earlier
+exponential circuit lower bound~\citep[Theorems~6.1 and~6.12]{nakamura2022}
+for the \defn{existential calculus of relations} $\Sigma_1\CoR$~\citep{nakamura2022,nakamura2023}, which is as expressive as existential \FOthree~\citep[Corollary~3.14]{nakamura2022}.
+Here $\Sigma_1\CoR$ allows complement only on input relations and $\id$:
+$\overline R;\one$ is permitted, but $\overline{R;\one}$ is not.
+Although that lower bound was proved with formula-size games in the
+style of Adler and Immerman~\citep{adler-immerman2003}, its proof can be
+viewed as a relational fooling-set argument, which we recall first.
+
+The \defn{fooling-set argument}~\citep{yao1979,lipton-sedgewick1981,kushilevitz-nisan1997,rao-yehudayoff2020}
+is a standard technique for proving lower bounds in communication complexity.
+For a Boolean function $f\colon A\times B\to\{0,1\}$, a
+\defn{fooling set} is a set $F\subseteq f^{-1}(1)$ such that any two
+distinct $(a,b),(a',b')\in F$ have a crossed input $(a,b')$ or
+$(a',b)$ of value $0$. A \defn{1\nobreakdash-rectangle} is a product
+$A'\times B'\subseteq f^{-1}(1)$. If a rectangle contains two distinct inputs of $F$,
+it also contains their crossed inputs, one of which has value $0$; hence each
+1\nobreakdash-rectangle contains at most one input of $F$, and covering
+$f^{-1}(1)$ needs at least $|F|$ 1\nobreakdash-rectangles.
+
+An \defn{embedding} is an injective map preserving and reflecting every input relation.
+Consider Nakamura's query of size $O(k)$,
+$\varphi_k(x,y)\coloneqq\exists z\,\bigwedge_{i=1}^k
+(R_i(x,z)\lor R_i(z,y))$~\citep{nakamura2022}, where $k\ge2$.
+Let $I,J\subseteq[k]$ record the relation labels on the two witness
+edges $(x,z)$ and $(z,y)$. The witness condition is precisely
+$f_k(I,J)=1\iff I\cup J=[k]$, with the fooling set
+$F_k\coloneqq\{(I,I^c):\varnothing\subsetneq I\subsetneq[k]\}$ of size
+$2^k-2$.
+In~\citep[\S5]{nakamura2022}, each input $(I,I^c)$ is realized by the
+three-element structure $\mathcal S_I$ consisting of a witness path
+$u_I\xrightarrow{\,I\,}w_I\xrightarrow{\,I^c\,}v_I$ (the \emph{$I$-path}), so $\mathcal S_I\models\varphi_k(u_I,v_I)$.
+A label $I$ means precisely the relations $R_i$ with $i\in I$ hold; unlisted entries, including loops, are false.
+For each pair $(I,J)$ with $f_k(I,J^c)=0$, glue copies of $\mathcal S_I$ and
+$\mathcal S_J$ at their middle vertices, so that the left half of the $I$-path
+and the right half of the $J$-path form a crossed path
+$u^*\xrightarrow{\,I\,}c_{I,J}\xrightarrow{\,J^c\,}v^*$; let $\mathcal N$ be the union of
+these glued copies, sharing only $u^*$ and $v^*$.
+Then $\mathcal S_I$ and $\mathcal S_J$ embed into $\mathcal N$ with
+$u_I\mapsto u^*$, $w_I,w_J\mapsto c_{I,J}$, and $v_J\mapsto v^*$.
+Since no crossed path is a witness,
+$\mathcal N\not\models\varphi_k(u^*,v^*)$.
+
+Like existential formulas, $\Sigma_1\CoR$ terms are \emph{preserved under
+embeddings}:
+every such term $V$ and embedding
+$\iota\colon\mathcal A\hookrightarrow\mathcal B$ satisfy
+\[
+\tag{$\diamond$}\label{eq:mono}
+% \iota\bigl(\sem V{\mathcal A}\bigr)\subseteq\sem V{\mathcal B},
+% \quad\text{or equivalently,}\quad
+\mathcal A\models V(u,v)\ \Longrightarrow\
+\mathcal B\models V(\iota(u),\iota(v)).
+\]
+%Thus, an accepted witness half remains accepted after embedding; this is exactly what makes relational crossing possible.
+Now let $T$ be a $\Sigma_1\CoR$ term equivalent to $\varphi_k$.
+For a composition $X;Y$ in $T$, let
+$A_X\coloneqq\{I:\mathcal S_I\models X(u_I,w_I)\}$ and
+$B_Y\coloneqq\{J^c:\mathcal S_J\models Y(w_J,v_J)\}$.
+If $\mathcal N\not\models(X;Y)(u^*,v^*)$, then \textbf{$A_X\times B_Y$ is a 1\nobreakdash-rectangle}:
+if some $(I,J^c)\in A_X\times B_Y$ had value $0$, then \eqref{eq:mono} applied to
+the embeddings of $\mathcal S_I$ and $\mathcal S_J$ into $\mathcal N$ would give
+$\mathcal N\models(X;Y)(u^*,v^*)$.
+Hence $A_X\times B_Y$ contains at most one input of $F_k$.
+For each $I$, $T$ contains a composition $X;Y$ with
+$\mathcal S_I\models X(u_I,w_I)\land Y(w_I,v_I)$ and
+$\mathcal N\not\models(X;Y)(u^*,v^*)$ (by induction on $T$, with converse pushed to the leaves); its rectangle
+contains $(I,I^c)$. Thus $T$ has at least $|F_k|$ compositions.
+This argument extends to circuits~\citep[\S6.3]{nakamura2022}.
+
+\smallskip
+\customparagB{Why complement defeats the argument.}
+The argument relies on \eqref{eq:mono}, which fails in full \CoR\ already for the structures above.
+Let $E\coloneqq\bigcup_{i=1}^k(R_i\cup R_i^\smile)$, and consider the term
+$U\coloneqq\overline{(E\cap(E;\overline{\id}));\one}$, which has two compositions. The term $U$ holds at $(x,y)$ if and only if
+$x$ has at most one $E$-neighbor. Hence $U$ holds at $(u_I,v_I)$ in every
+$\mathcal S_I$ but not at $(u^*,v^*)$ in $\mathcal N$.
+Thus these structures cannot certify an exponential lower bound for
+\CoR, though $U$ does not define $\varphi_k$.

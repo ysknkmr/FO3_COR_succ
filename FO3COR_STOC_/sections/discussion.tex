@@ -1,0 +1,36 @@
+\section{Open questions}\label{sec:discussion}
+Our bounds determine the worst-case circuit compilation rate:
+$2^{\Theta(m)}$ over growing binary signatures and
+$2^{\Theta(m/\log(m+2))}$ over every fixed nonempty binary signature,
+where $m$ is the source syntax-tree size. Several questions remain.
+
+\paragraph{Terms over a fixed signature.}
+Theorem~\ref{thm:fixed-vocabulary} determines the optimal rate for
+circuits, but its upper bound uses sharing. Does every \FOthree\
+formula of size $m$ over a single binary relation admit an equivalent
+\CoR\ term of size $2^{o(m)}$, or can some family require
+$2^{\Omega(m)}$ composition occurrences?
+Our current lower bound for terms is
+$2^{\Omega(m/\log(m+2))}$, and the classical general upper bound is
+$2^{O(m)}$. This question does not affect the model-checking
+application, which evaluates circuits directly.
+
+\paragraph{Domain size.}
+Propositions~\ref{prop:domain-size} and~\ref{prop:small-domains}
+place the onset of the blowup between
+domain sizes $2^k/(8k)$ and $O(k4^k)$. Our reference structures cannot
+be much smaller: for fixed distinct $u,v$, the $4^k$ pairs of colors have
+disjoint sets of at least two witnesses each, so a reference structure
+has at least $2\cdot4^k+2$ vertices. The upper bound, on the other hand,
+uses only row projections. Locating the onset may require a different
+reference structure or circuits whose compositions combine different
+rows.
+
+\paragraph{The exact composition count for $G_k$.}
+On arbitrary finite inputs the optimum lies between $2^{k-1}$ and $2^k$;
+without converse it is exactly $2^k$. Proposition~\ref{prop:promise}
+attains $2^{k-1}$ on the reference structure and all its folded
+structures. Consequently these tests alone cannot improve the full-\CoR\
+lower bound. Determining the optimum on arbitrary inputs calls for
+either a more efficient general circuit or tests exposing an additional
+obstruction.

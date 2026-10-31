@@ -1,0 +1,119 @@
+\subsection{Natural approaches that fail}\label{sec:natural-approaches}
+Before this work, exponential lower bounds on the size of translations
+from \FOthree\ into \CoR\ were known only for \defn{$\Sigma_1\CoR$}, even
+with shared subterms~\citep[Theorems~6.1 and~6.12]{nakamura2022}. This
+fragment of \CoR\ severely restricts complement: complement may be
+applied only to input relations and $\id$, and so never stands above a
+composition. For example, $\overline R;\one$ ($\exists z\,\neg R(x,z)$)
+lies in $\Sigma_1\CoR$, but $\overline{R;\one}$
+($\forall z\,\neg R(x,z)$) does not. Nakamura proved this bound with a
+formula-size game for \CoR~\citep[\S4]{nakamura2022} in the style of
+Adler and Immerman~\citep{adler-immerman2003}. Organized
+as a fooling-set argument, the proof becomes simpler and easier to
+extend, and it shows exactly where complement breaks it.
+
+In communication complexity,
+for some finite sets $A$ and $B$,
+an \defn{instance} is a pair $(a,b) \in A \times B$ with label $0$ or $1$.
+Two instances $(a,b)$ and $(a',b')$ have the \defn{crossed
+instances} $(a,b')$ and $(a',b)$. A \defn{fooling set} is a set $F \subseteq A \times B$ of instances with label $1$ in which any two distinct instances have a crossed instance with label $0$.
+For $A' \subseteq A$ and $B' \subseteq B$,
+$A'\times B'$ is a \defn{1\nobreakdash-rectangle}
+if every $(a, b) \in A' \times B'$ has the label~$1$.
+A 1\nobreakdash-rectangle contains the crossed instances of
+any two of its instances, so it contains at most one instance of~$F$. Covering
+$F$ thus takes at least $|F|$ 1\nobreakdash-rectangles~\citep{yao1979,lipton-sedgewick1981,kushilevitz-nisan1997,rao-yehudayoff2020}.
+
+On the side of \FOthree, an instance is a structure $\mathcal S$ with two of its vertices $u$ and $v$, 
+written $(\mathcal S;u,v)$.
+Let $\sem T{\mathcal S}$ denote the relation that a term or formula $T$ defines on~$\mathcal S$.
+The label of $(\mathcal S;u,v)$ is $1$
+if $(u,v)\in\sem\varphi{\mathcal S}$ and $0$ otherwise, where
+$\varphi(x,y) \coloneqq
+\exists z\bigwedge_{\ell=1}^k(R_\ell(x,z)\lor R_\ell(z,y))$
+is Nakamura's query of size $O(k)$.
+His construction~\citep[\S5]{nakamura2022} provides $t=\Theta(2^k)$ instances
+$(\mathcal S_1;u_1,v_1),\ldots,(\mathcal S_t;u_t,v_t)$
+in a suitable order
+and one more instance $(\mathcal N;u^*,v^*)$.
+We call $(\mathcal S_i;u_i,v_i)$ instance~$i$.
+Each $\mathcal S_i$ has exactly three vertices $u_i,w_i,v_i$,
+and $\mathcal N$ has $\Theta(4^k)$ vertices.
+%
+An \defn{embedding}
+$\iota\colon\mathcal S\hookrightarrow\mathcal S'$
+is an injective map that preserves and reflects every input relation.
+%
+We write
+$\tuple{\mathcal S; a_1,\ldots,a_n}
+\hookrightarrow
+\tuple{\mathcal S'; b_1,\ldots,b_n}$
+if some embedding $\iota\colon\mathcal S\hookrightarrow\mathcal S'$ satisfies $\iota(a_j)=b_j$ for $j=1,\ldots,n$.
+%
+Nakamura's construction guarantees the following:
+\begin{enumerate}[label=(\roman*),leftmargin=*]
+\item Each instance~$i$, $(\mathcal S_i; u_i, v_i)$, has label $1$. But $(\mathcal N;u^*,v^*)$ has label $0$.
+%
+\item The vertices $u_i$ and $v_i$ are not adjacent in $\mathcal S_i$, and
+  neither are $u^*$ and $v^*$ in $\mathcal N$.
+%
+\item $\tuple{\mathcal S_i;u_i}
+\hookrightarrow
+\tuple{\mathcal N; u^*}$ and
+$\tuple{\mathcal S_i; v_i}\hookrightarrow
+\tuple{\mathcal N; v^*}$ for every $i$.
+(But $\tuple{\mathcal S_i; u_i, v_i}
+\not\hookrightarrow
+\tuple{\mathcal N; u^*, v^*}$.)
+%  
+\item For all $i<j$, some vertex $c$ of $\mathcal N$ satisfies
+  $\tuple{\mathcal S_i; u_i,w_i}\hookrightarrow
+  \tuple{\mathcal N; u^*,c}$ and
+  $\tuple{\mathcal S_j; w_j,v_j}\hookrightarrow
+  \tuple{\mathcal N; c,v^*}$.
+\end{enumerate}
+For $i<j$, we consider $(\mathcal N;u^*,v^*)$ as the crossed instance of instances $i$ and $j$.
+By~(iv), it combines a copy $(u^*,c)$ of the pair $(u_i,w_i)$ of $\mathcal S_i$
+with a copy $(c,v^*)$ of the pair $(w_j,v_j)$ of $\mathcal S_j$,
+as $(a,b')$ combines $a$ from $(a,b)$ with $b'$ from $(a',b')$.
+By~(i), all instances in
+$F\coloneqq\{(\mathcal S_i;u_i,v_i):1\le i\le t\}$
+have label $1$ and all their crossed instances have label $0$, so $F$ is a fooling set.
+
+On the side of \CoR, we use that $\Sigma_1\CoR$ is \defn{preserved under
+extensions}. That is, every $\Sigma_1\CoR$ term $T$ and every embedding
+$\iota\colon\mathcal S\hookrightarrow\mathcal S'$ satisfy
+\begin{equation*}\tag{$\diamond$}\label{eq:mono}
+ \iota\bigl(\sem T{\mathcal S}\bigr)\subseteq\sem T{\mathcal S'}.
+\end{equation*}
+Let $T$ be a $\Sigma_1\CoR$ term defining $\varphi$. Pushing converses
+down~\citep[Proposition~6.2]{nakamura2022}, we may assume that $T$ is
+built by union, intersection, and composition from \defn{literals}, which
+are input relations, $\id$, and constants, possibly under complement and
+converse. We say that a term $U$ \defn{separates} instance~$i$ if
+$(u_i,v_i)\in\sem U{\mathcal S_i}$ but $(u^*,v^*)\notin\sem U{\mathcal N}$.
+By~(i), $T$ separates every instance~$i$. Let $T_i$ be a lowest subterm of
+$T$ that separates instance~$i$. By~(ii), no literal separates instance~$i$,
+and a union or intersection separates it only if an operand does. Hence
+$T_i$ is a composition $X;Y$ whose operands do not separate instance~$i$.
+By~(iii) and~\eqref{eq:mono}, its witness for $(u_i,v_i)$ is $w_i$, that
+is, $(u_i,w_i)\in\sem X{\mathcal S_i}$ and
+$(w_i,v_i)\in\sem Y{\mathcal S_i}$. Here $X$ and $Y$ play the roles of
+$A'$ and $B'$. Now suppose that $T_i=T_j=X;Y$ with $i<j$. Then
+$(u_i,w_i)\in\sem X{\mathcal S_i}$ and $(w_j,v_j)\in\sem Y{\mathcal S_j}$.
+By~(iv) and~\eqref{eq:mono}, we get $(u^*,c)\in\sem X{\mathcal N}$ and
+$(c,v^*)\in\sem Y{\mathcal N}$, so $(u^*,v^*)\in\sem{X;Y}{\mathcal N}$.
+Like a rectangle, $X;Y$ thus holds at the crossed instance of instances $i$
+and $j$. This contradicts that $X;Y$ separates instance~$i$. Hence
+$T_i\ne T_j$ for $i\ne j$, and $T$ has at least $t$ compositions.
+
+Allowing complement above compositions breaks both ingredients of this
+argument, so it cannot be used for full \CoR. First, complement
+reverses~\eqref{eq:mono}. For example, if $u$ has no $R$-successor in
+$\mathcal S$, then $(u,v)\in\sem{\overline{R;\one}}{\mathcal S}$, but
+$(\iota(u),\iota(v))\notin\sem{\overline{R;\one}}{\mathcal S'}$ once
+$\iota(u)$ has one in $\mathcal S'$. Second, with the adjacency relation
+$E\coloneqq\bigcup_R(R\cup R^\smile)$, the term
+$\overline{(E\cap(E;\overline{\id}));\one}$ has two compositions and
+separates every instance~$i$. Other lower-bound methods do not apply
+directly either; see \S\ref{sec:relwork}.

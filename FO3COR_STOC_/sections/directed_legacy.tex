@@ -1,0 +1,46 @@
+\section{Circuits without converse}\label{app:directed}
+We prove the sharper bound for circuits without converse with a directed
+version of the reference structure.
+
+\withoutconverse*
+\begin{proof}
+Color each ordered pair of distinct vertices independently from the
+palette $\Lambda=2^{[k]}$; write $\chi(u,v)$ for its color, with no
+relation between $\chi(u,v)$ and $\chi(v,u)$. Require that for every
+$u,v$, now allowing $u=v$, and every $\mu,\nu\in\Lambda$, at least two
+vertices $z$ outside $\{u,v\}$ realize
+\[
+ (\chi(u,z),\chi(z,v))=(\mu,\nu).
+\]
+Candidate witnesses use disjoint ordered arcs, even when $u=v$, so the
+proof of Lemma~\ref{lem:palette} applies with the same threshold
+$n_0(N)$ and at most $n^3N^2$ bad events. Interpret $P_i$ and $Q_i$ on
+each arc by its color as in \S\ref{sec:G}, with all loop entries zero.
+
+Reference relations have a diagonal value $X[\diagc]$ and one value
+$X[\mu]$ per arc color $\mu$; let $S_X$ be the set of colors on which $X$
+holds. These tables are closed under Boolean operations and
+composition: endpoint witnesses contribute as in~\eqref{eq:table-off},
+and every pair, including a diagonal pair, has an outside witness
+exactly when $S_X$ and $S_Y$ are both nonempty. The fold of $\lambda$
+now recolors only the arcs of color $\lambda$ that leave $\hub$, to
+$\lambda^c$, and leaves all arcs entering $\hub$ unchanged; predictions
+read the tables on this new coloring. Outside the row of $\hub$, the
+composition of the predicted operands equals the prediction of the
+composition, since for every pair of colors some outside witness other
+than $\hub$ uses two unchanged arcs. In the row of $\hub$, including
+$(\hub,\hub)$, an outside witness exists exactly when
+$S_X\setminus\{\lambda\}$ and $S_Y$ are both nonempty. Hence a
+composition notices the fold of $\lambda$ only if $S_X=\{\lambda\}$, and
+so it notices at most one fold.
+
+Choose $v_\mu$ so that the arc $(\hub,v_\mu)$ has color $\mu$, and read
+the output at $(\hub,v_{\lambda^c})$. The query $G_k$ inspects only arcs
+leaving $x$, so the first assertion of Lemma~\ref{lem:G-tests} holds
+with the same proof, reading the edges at a vertex as the arcs leaving
+it, and Theorem~\ref{thm:test-cost} gives $\gcost C\ge2^k$ for
+relational circuits without converse. The DNF of $G_k$ uses no converse
+and attains this bound on arbitrary inputs. Converse is excluded because
+the color of an arc does not determine the color of its reverse arc; the
+coefficient-one argument consequently does not apply to full \CoR.
+\end{proof}
