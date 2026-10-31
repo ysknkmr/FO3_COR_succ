@@ -1,0 +1,275 @@
+\section{Two-variable logic and tree size}\label{sec:FOtwo}
+The formula $G_k$ is \FOtwo-definable, but its displayed linear-size
+form uses three variable names. This section quantifies the difference,
+proves the term-size bound of Theorem~\ref{thm:tree}, and separates
+\CoR\ from \FOtwo\ (\S\ref{sec:reverse}).
+
+\subsection{Quantifiers and fold sensitivity}\label{sec:quantifier-cost}
+Recall the linear translation $\tau$ from \FOtwo\ formulas into \CoR\
+given in \S\ref{sec:FOtwo-translation}. On the reference structure,
+the off-diagonal support of $R\cap\id$ is empty. Therefore neither
+of the compositions used to represent a reflexive atom,
+$(R\cap\id);\one$ or $\one;(R\cap\id)$, notices a fold
+(see Lemma~\ref{lem:notice}). Every quantifier, by contrast, contributes
+one \emph{one-sided} composition $X;\one$ or $\one;X$; by the same
+lemma, it can notice at most one fold. Boolean operations notice none.
+This gives a bound in terms of quantifiers, rather than all
+composition occurrences in $\tau(\varphi)$.
+\begin{lemma}[Quantifier cost]\label{lem:FO-cost}
+On the reference structure, every \FOtwo\ formula $\varphi$ satisfies
+\[
+ \tcost(\tau(\varphi))\le \#_{\exists\forall}(\varphi).
+\]
+\end{lemma}
+The bound holds without restricting the Boolean connectives or the
+quantifier alternation of the target formula.
+
+Combining Lemma~\ref{lem:FO-cost} with Theorem~\ref{thm:test-cost} and
+the tests of Lemma~\ref{lem:G-tests} gives
+\[
+ \varphi\equiv G_k\Longrightarrow \#_{\exists\forall}(\varphi)\ge2^k.
+\]
+In fact, agreement with $G_k$ on all finite structures suffices for
+this bound. The \FOtwo\ expansion obtained from the DNF of \S\ref{sec:main-results}
+uses exactly $2^k$ quantifiers, so the optimum quantifier count for
+$G_k$ is exactly $2^k$. No restriction to existential target formulas is
+made.
+
+\subsection{Counting input occurrences in trees}\label{sec:trees}
+The test--cost theorem also yields a stronger bound for syntax trees.
+A \defn{singleton selector} for a color $\lambda$ is a
+Boolean formula in the tables of the input relations, with constants
+allowed, whose support on the entire palette is exactly $\{\lambda\}$.
+\begin{restatable}[Disjoint input-occurrence charging]{lemma}{treecharging}\label{lem:tree-charge}
+Fix the reference structure and its folds. Suppose every singleton
+selector requires at least $d>0$ input-relation occurrences.
+Then every \CoR\ term $T$, whether correct or not, satisfies
+\[
+ \tcost(T)\le \relatoms{T}/d.
+\]
+\end{restatable}
+Appendix~\ref{app:trees} proves the lemma by assigning disjoint sets of
+input occurrences to composition nodes. The disjointness uses the tree
+structure of a term.
+
+For the input relations of \S\ref{sec:G}, a Boolean formula in their
+tables that contains neither $P_i$ nor $Q_i$ takes the same value on a
+color and on its $i$-th-bit flip. Hence a singleton selector contains
+$P_i$ or $Q_i$ for every $i$, so $d=k$, and this is exact, since
+$H_\lambda$ selects $\lambda$. Theorem~\ref{thm:test-cost} and
+Lemma~\ref{lem:tree-charge} give $\relatoms{T}\ge k2^k$ for every \CoR\
+term $T$ agreeing with $G_k$ on all finite structures. By the
+tree-size inequality from \S\ref{sec:prelim-resources},
+\[
+ |T|\ge2k2^k-1\qquad(T\equiv G_k),
+\]
+which is the lower bound of the following theorem.
+\begin{theorem}[Term size]\label{thm:tree}
+For every $k\ge1$, every \CoR\ term $T\equiv G_k$ has at least $2k2^k-1$
+nodes. The lower bound holds even if $T$ and $G_k$ agree only on
+finite structures, and $G_k$ is equivalent on all nonempty structures
+to a \CoR\ term with $(2k+6)2^k-5$ nodes.
+\end{theorem}
+\begin{proof}
+The lower bound is the inequality above. Factoring the conditions on the
+read edge into a binary decision tree gives a term with $(2k+6)2^k-5$
+nodes that is equivalent to $G_k$ on all nonempty structures
+(Appendix~\ref{app:factored}).
+\end{proof}
+
+\subsection{Sentences and the variable hierarchy}\label{sec:sentences}
+The preceding subsections establish the binary-query bounds of
+Theorem~\ref{cor:sentences}. We now prove its sentence extension for
+$G_k^\forall=\forall x\,\forall y\,(x=y\lor G_k(x,y))$.
+
+\sentencebounds*
+\paragraph{Quantitative and sentence extensions.}
+We also prove two refinements. Every \FOtwo\ formula defining $G_k$
+has at least $k2^k$ relation-atom occurrences, and its minimum
+syntax-tree size is $\Theta(k2^k)$. Moreover, $G_k^\forall$ is an
+\FOtwo-definable \FOthree\ sentence of size $O(k)$ and quantifier
+depth three, but every equivalent \FOtwo\ sentence over finite
+structures has at least $2^k$ quantifiers and $k2^k$ relation-atom
+occurrences; its minimum \FOtwo\ tree size is $\Theta(k2^k)$.
+\begin{proof}[Proof of the quantitative and sentence extensions]
+The exact $2^k$-quantifier lower bound for the binary query $G_k$
+was established in \S\ref{sec:quantifier-cost}. For any equivalent \FOtwo\
+formula $\varphi$, apply Theorem~\ref{thm:test-cost} and
+Lemma~\ref{lem:tree-charge} to $\tau(\varphi)$. By the
+relation-atom preservation established in \S\ref{sec:FOtwo-translation},
+this gives
+$\relatoms{\varphi}\ge k2^k$. The \FOtwo\ DNF expansion from
+\S\ref{sec:main-results} has $O(k2^k)$ nodes and exactly $2^k$
+quantifiers, proving the tree-size claim for the binary query.
+
+For the sentence $G_k^\forall$, the source has size $8k+4$ and
+quantifier depth three. By Lemma~\ref{lem:G-tests}, it is true in
+$\mathcal M_0$ and false in every $\mathcal M_\lambda$. On each of
+these structures its assignment relation is $\zero$ or $\one$, and
+both relations are fixed by prediction. Thus these structures give $2^k$ tests for the
+sentence itself. For any equivalent \FOtwo\ sentence $\varphi$,
+apply Theorem~\ref{thm:test-cost} to $\tau(\varphi)$.
+Lemma~\ref{lem:FO-cost} gives $\#_{\exists\forall}(\varphi)\ge2^k$,
+and Lemma~\ref{lem:tree-charge}, together with exact preservation of
+$\#_{\mathrm{rel}}$, gives $\relatoms{\varphi}\ge k2^k$.
+Conversely, substitute the \FOtwo\ expansion of $G_k$ into the
+sentence. It has $2^k+2$ quantifiers and $O(k2^k)$ nodes, proving the
+sentence upper bounds and the matching order of tree size.
+\end{proof}
+The quantifier optimum for this sentence is therefore in
+$[2^k,2^k+2]$; the exact $2^k$ optimum proved earlier concerns the binary
+query.
+
+This complements the variable-saving separations of
+Vinall-Smeeth~\citep[Theorem~2]{vinall-smeeth2024}, whose stated range starts at three
+variables on the target side. Our result concerns the remaining comparison
+of three and two variables, over growing binary signatures. It does not
+claim a lower bound for separating a single prescribed pair of structures
+as a function of their size. On pure finite linear orders, in contrast,
+Grohe and Schweikardt~\citep[Theorem~4.3]{grohe-schweikardt2005} give a polynomial translation
+from three-variable sentences to two-variable sentences. The qualifications
+``pure orders'' and ``sentences'' are essential to that comparison.
+
+\subsection{Separating \texorpdfstring{{\boldmath\CoR}}{CoR} from
+ \texorpdfstring{{\boldmath\FOtwo}}{FO2}}\label{sec:reverse}
+The linear translation of \S\ref{sec:FOtwo-translation} goes from \FOtwo\ to \CoR. On the reference
+structure, a composition notices at most two folds and a quantifier at
+most one, so tests on the reference structure bound \CoR\ circuits and
+\FOtwo\ formulas alike, up to a factor of two. To separate the two
+formalisms, we use a structure on which a quantifier still notices at
+most one fold, but a single composition notices all of them.
+
+Use input symbols $R,P_1,\ldots,P_k$, and put
+\[
+ \mathscr P_i^1\coloneqq\id\cap P_i,\qquad \mathscr P_i^0\coloneqq\id\cap\overline{P_i},\qquad
+ U_k\coloneqq R;\bigcap_{i=1}^k
+ \left[(\mathscr P_i^0;\one;\mathscr P_i^0)\cup(\mathscr P_i^1;\one;\mathscr P_i^1)\right].
+\]
+The complement in $\mathscr P_i^0$ is taken before intersection with the identity;
+it is not the complement of $\mathscr P_i^1$. Expanding these abbreviations gives
+an $O(k)$-size tree. For a vertex $v$, let
+$\pi(v)\coloneqq\{i\in[k]:P_i(v,v)\}$ be its \defn{loop pattern}.
+Here $\pi(v)$ is a local one-vertex notation, distinct from the pair
+profile $\pi(u,v)$ of \S\ref{sec:domain-size}.
+Then $U_k(x,y)$ holds exactly when some $R$-successor $z$ of $x$
+satisfies $\pi(z)=\pi(y)$; equivalently, $U_k$ is defined by the
+\FOthree\ formula
+\[
+ \exists z\left(R(x,z)\land
+     \bigwedge_{i=1}^k(P_i(z,z)\leftrightarrow P_i(y,y))\right).
+\]
+
+\paragraph{The structures.}
+Let $\mathbb Z_{11}$ denote the integers modulo $11$, and put
+$V\coloneqq2^{[k]}\times\mathbb Z_{11}$ and
+$\Gamma\coloneqq\{1,2,3,4,7,8\}\subseteq\mathbb Z_{11}$. The structure
+$\mathcal W_0$ on $V$ has the loops $P_i((A,s),(A,s))$ for $i\in A$, no
+other $P_i$-entries, and $R((A,s),(B,s'))$ exactly when $s'-s\in\Gamma$;
+thus $\pi((A,s))=A$, and $R$ has no loops. The \defn{atomic type} of a pair
+$(u,v)$ of distinct vertices is $(R(u,v),R(v,u),\pi(u),\pi(v))$, and that
+of a loop $(u,u)$ is $\pi(u)$; it determines the values of all atomic
+formulas at the pair. As $s'-s$ ranges over
+$\mathbb Z_{11}\setminus\{0\}$, the truth values of $s'-s\in\Gamma$ and
+$s-s'\in\Gamma$ take each of the four combinations at least twice:
+$(1,0)$ at $s'-s\in\{1,2\}$, $(0,1)$ at $s'-s\in\{9,10\}$, $(1,1)$ at
+$s'-s\in\{3,4,7,8\}$, and $(0,0)$ at $s'-s\in\{5,6\}$. Hence every
+vertex $u$ is the first entry of at least two off-diagonal pairs of each
+atomic type $(r,r',\pi(u),B)$, and the second entry of at least two
+of each type $(r,r',B,\pi(u))$, for $r,r'\in\{0,1\}$ and $B\subseteq[k]$.
+
+Fix the hub $h\coloneqq(\varnothing,0)$. For $A\subseteq[k]$, the fold
+of $A$ yields the structure $\mathcal W_A$ obtained from $\mathcal W_0$ by
+removing from $R$ the edges $(h,v)$ with $v\ne h$ and $\pi(v)=A$. It
+changes the atomic types of these pairs and of their converses, and of no
+other pair. Afterwards, no pair with first entry $h$ has a type
+$(1,r',\varnothing,A)$, and no pair with second entry $h$ has a type
+$(r,1,A,\varnothing)$; all other types still occur at $h$.
+
+\paragraph{Type tables and predictions.}
+As in \S\ref{sec:types}, we use relations determined by a finite
+set of pair types, but here the types are atomic pair types rather
+than edge colors, and the folds delete edges rather than recolor them.
+A relation $X\subseteq V^2$ has a \defn{type table} if $X(u,v)$ depends
+only on the atomic type of $(u,v)$ in $\mathcal W_0$; let $S_X$ be the
+set of atomic types at which $X$ holds, rather than a set of colors.
+Every atomic type of $\mathcal W_A$ occurs in $\mathcal W_0$, so the prediction $\pred XA$ can
+read the same table at the atomic types of $\mathcal W_A$. As in
+\S\ref{sec:unnoticed}, for operand values $\mathbf U$ having type tables,
+an operation $\operatorname{op}$ whose result $\operatorname{op}(\mathbf U)$
+also has a type table notices the fold of $A$ if
+$\operatorname{op}(\pred{\mathbf U}A)\ne\pred{\operatorname{op}(\mathbf U)}A$,
+and Boolean operations never notice a fold.
+
+For each \FOtwo\ formula $\psi$, write $X_\psi$ for its binary
+assignment relation in the structure under consideration, as in
+\S\ref{sec:prelim-logic}. Existential quantifiers act as the projections
+\[
+ X_{\exists y\,\psi}=X_\psi;\one,\qquad
+ X_{\exists x\,\psi}=\one;X_\psi.
+\]
+Universal quantifiers are handled by complement.
+By induction on the formula, every relation that an \FOtwo\ formula
+defines on $\mathcal W_0$ has a type table: if $X$ has one, then
+$(X;\one)(u,v)$ holds exactly when $S_X$ contains the atomic type of some
+pair with first entry $u$, and these types are determined by $\pi(u)$;
+symmetrically for $\one;X$.
+
+\begin{lemma}[Projections notice at most one fold]\label{lem:W-projection}
+If $X$ has a type table, then $X;\one$ and $\one;X$ each notice the fold
+of at most one $A\subseteq[k]$.
+\end{lemma}
+\begin{proof}
+At a pair $(u,v)$, the prediction of $X;\one$ holds exactly when $S_X$
+contains the atomic type in $\mathcal W_0$ of some pair with first entry
+$u$, and $\pred XA;\one$ holds exactly when $S_X$ contains the atomic type
+in $\mathcal W_A$ of some such pair. If $u\ne h$, only the
+off-diagonal pair $(u,h)$ can change. Every off-diagonal atomic type
+realized among pairs with first entry $u$ is realized at least twice,
+so its old type is still realized after the fold. Its new type was
+already realized in $\mathcal W_0$, while the diagonal pair $(u,u)$
+is unchanged. Hence the sets of realized types coincide. If $u=h$, the fold removes exactly the types
+$(1,r',\varnothing,A)$ and adds none. Hence $X;\one$ notices the fold of
+$A$ only if the types in $S_X$ of pairs with first entry $h$ are all of
+the form $(1,r',\varnothing,A)$, and there is at least one; this
+determines $A$. The argument for $\one;X$ uses second entries.
+\end{proof}
+
+\reverse*
+\paragraph{Equational sentence extension.}
+The \CoR\ equation $\id\cup U_k=\one$ is \FOtwo-definable as a
+sentence, but every equivalent \FOtwo\ sentence over finite
+structures has at least $2^k$ quantifiers.
+\begin{proof}[Proof of the query and sentence claims]
+For the upper bounds, let $\vartheta_A(u)$ be the quantifier-free
+formula asserting that $\pi(u)=A$. The \FOtwo\ formula
+\[
+ \bigvee_{A\subseteq[k]}\left[\vartheta_A(y)\land
+       \exists y\,(R(x,y)\land\vartheta_A(y))\right]
+\]
+defines $U_k$ with exactly $2^k$ quantifiers; the inner $y$ is rebound
+only in the second conjunct. The equation $\id\cup U_k=\one$ says that
+for all $x$ and all $y\ne x$, some $R$-successor of $x$ has the loop
+pattern of $y$, and so does the \FOtwo\ sentence
+\[
+ \forall x\bigwedge_{A\subseteq[k]}\left[
+ \exists y\,(x \neq y\land\vartheta_A(y))\rightarrow
+ \exists y\,(R(x,y)\land\vartheta_A(y))\right].
+\]
+
+For the lower bounds, every vertex of $\mathcal W_0$ has an $R$-successor
+with each loop pattern, so $U_k$ is the full relation on $\mathcal W_0$
+and the equation holds there. On $\mathcal W_A$, the hub has no
+$R$-successor with loop pattern $A$, so $U_k(h,v)$ fails for every
+$v\ne h$ with $\pi(v)=A$, and the equation fails. Let $\psi$ be an
+\FOtwo\ formula agreeing with $U_k$ on all finite structures, or an
+\FOtwo\ sentence holding on exactly the finite structures satisfying
+the equation. Its value on $\mathcal W_0$ is the full relation, whose
+prediction on $\mathcal W_A$ is again full, but its value on
+$\mathcal W_A$ is not. If no quantifier of $\psi$ noticed the fold of
+$A$, then, as in the proof of Lemma~\ref{lem:unnoticed}, every subformula
+would take its predicted value on $\mathcal W_A$, by induction on the
+formula: atomic types determine atomic formulas, and Boolean operations
+notice nothing. Hence some quantifier notices the fold of each $A$, and
+by Lemma~\ref{lem:W-projection} each quantifier notices at most one, so
+$\psi$ has at least $2^k$ quantifiers.
+\end{proof}

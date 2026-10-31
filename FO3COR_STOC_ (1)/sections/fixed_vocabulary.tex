@@ -1,0 +1,308 @@
+\section{Fixed vocabularies and model checking}\label{sec:fixed-vocabulary}
+The lower bound for $G_k$ uses a growing input vocabulary. We now show
+that a single binary relation suffices for a superpolynomial composition
+lower bound, and that fixing the vocabulary changes the optimal circuit
+rate to $2^{\Theta(m/\log(m+2))}$. Throughout this section, $m$ counts
+nodes in the \emph{source syntax tree}; only the target may share
+subexpressions.
+
+\begin{theorem}[Fixed-vocabulary succinctness]
+\label{thm:fixed-vocabulary:formal}
+For every sufficiently large $m$, there is an \FOthree\ query of
+syntax-tree size at most $m$ over one binary relation such that every
+equivalent relational circuit over finite structures has at least
+$2^{\Omega(m/\log(m+2))}$ composition gates.
+Conversely, over any fixed finite binary vocabulary $\sigma$, every
+\FOthree\ formula of syntax-tree size $m$ with at most two free variables
+has an equivalent relational circuit of total size
+$2^{O_\sigma(m/\log(m+2))}$, constructible within the same time bound.
+The upper-bound translation is correct on all nonempty structures.
+\end{theorem}
+
+We first give the constructive upper bound, then transfer the main
+lower bound through a single-relation encoding. The final subsection
+derives the model-checking consequence.
+
+\subsection{The fixed-vocabulary upper bound}\label{sec:fixed-upper}
+Fix a finite binary vocabulary $\sigma$. Since the variable names
+are restricted to $x,y,z$, formulas are trees over a fixed finite
+alphabet whose symbols have fixed arities. Consequently, for some constant $a_\sigma>1$, there
+are at most $a_\sigma^{t+1}$ syntactically distinct formulas of size
+at most $t$. It follows that $d$ distinct formulas
+$\psi_1,\ldots,\psi_d$ satisfy
+\[
+ \sum_{j=1}^d|\psi_j|
+ \ge c_\sigma d\log(d+1)
+\]
+for a constant $c_\sigma>0$.
+Indeed, for all sufficiently large $d$, at most $d/2$ formulas have
+size below a sufficiently small constant times $\log d$.
+At least $d/2$ of the chosen formulas therefore have size
+$\Omega_\sigma(\log d)$; reducing $c_\sigma$ handles the remaining
+values of $d$.
+
+\begin{proof}[Proof of the upper bound in Theorem~\ref{thm:fixed-vocabulary:formal}]
+Use the Boolean-shell translation of
+Appendix~\ref{app:classical-translation}, but share the translated
+children instead of copying them into each DNF clause.
+For a quantified subformula $Qw\,\psi$ with
+$Q\in\{\exists,\forall\}$, its shell treats every atom and every
+maximal quantified subformula of $\psi$ as a Boolean input.
+Let $d$ be the number of \emph{distinct} quantified children.
+Choosing one occurrence of each gives disjoint subtrees of the source,
+whose total size is at most $m$. The preceding inequality yields
+\[
+ d\log(d+1)=O_\sigma(m),
+ \qquad d=O_\sigma\!\left(\frac{m}{\log(m+2)}\right).
+\]
+There are only $O_\sigma(1)$ possible relation and equality atoms.
+Thus the shell is a Boolean function of
+$r=d+O_\sigma(1)=O_\sigma(m/\log(m+2))$ distinct inputs.
+Repeated occurrences of the same child are assigned the same input.
+
+Process quantified subformulas from the inside out. By the
+binary-assignment convention of \S\ref{sec:prelim-logic}, each
+quantified child has at most two free variables and already has a
+binary representation. A unary child has a dummy coordinate, so its
+orientation can be changed by converse. On each structure, a sentence's
+representation has value $\zero$ or $\one$ according to its truth on
+that structure. Reflexive atoms have constant-size
+representations as in \S\ref{sec:FOtwo-translation}.
+
+The truth-table DNF of a shell has at most $2^r$ clauses and $r$
+literals per clause. At an existential quantifier, group the literals
+of a clause by their free-variable pairs, obtaining
+$A(u,v)\land B(u,w)\land D(w,v)$. Eliminating $w$ gives
+$A\cap(B;D)$, with empty groups represented by $\one$.
+Thus each clause introduces at most one composition.
+Negated literals and universal quantifiers use complement.
+Each child circuit is computed once and reused in every clause:
+only $O((r+1)2^r)$ new gates, including at most $2^r$ compositions,
+are introduced at this shell.
+
+There are at most $m$ quantified occurrences. The unquantified root
+shell, whose free variables are contained in a pair, is translated
+directly by Boolean operations. All atomic representations together
+cost $O_\sigma(1)$ gates if shared. Hence both the total size and the
+composition count are bounded by
+\[
+ |C_\varphi|
+ \le \operatorname{poly}_\sigma(m)\,
+       2^{O_\sigma(m/\log(m+2))}
+ =2^{O_\sigma(m/\log(m+2))}.
+\]
+The translation is correct on all nonempty structures by the same
+quantifier-elimination identity as the classical translation.
+Syntactic comparison of children, enumeration of shell truth
+assignments, and construction of the circuit take at most a polynomial
+factor in $m$ times this bound, which is absorbed into the exponent.
+\end{proof}
+
+The counting step uses disjoint subtrees of the source. It therefore
+does not give the same upper bound when $m$ instead measures a
+DAG-represented source formula. Nor does the construction guarantee a
+subexponential-size \CoR\ term: unfolding the shared children can
+increase its size.
+
+\subsection{The lower bound over one binary relation}\label{sec:single-relation}
+We encode the input relations of $G_k$ in a single relation on copies
+of the original domain. The following block calculation preserves
+the composition measure even with unrestricted complement and sharing.
+
+\begin{lemma}[Block simulation]\label{lem:block-simulation}
+Suppose an encoding maps each structure with domain $V$ to a structure
+on $V\times L$, where $|L|=q$, with one input relation $E$.
+Assume that each block
+$E_{ab}(u,v)\coloneqq E((u,a),(v,b))$ is an original input relation or one of
+$\zero,\one,\id$, with the choice depending only on $a,b\in L$.
+Every relational circuit $C(E)$ can then be simulated over the
+original signature so as to compute any designated output block,
+using at most $q^3\gcost C$ composition gates.
+\end{lemma}
+\begin{proof}
+For every gate $X$, compute all $q^2$ relations
+$X_{ab}(u,v)\coloneqq X((u,a),(v,b))$.
+The blocks of $\zero$ and $\one$ are respectively $\zero$ and $\one$;
+the identity has block $\id$ when $a=b$ and $\zero$ otherwise.
+Boolean operations act blockwise, including complement relative to
+$V^2$, and converse exchanges the layer indices:
+\[
+ (\overline X)_{ab}=\overline{X_{ab}},
+ \qquad
+ (X^\smile)_{ab}=(X_{ba})^\smile.
+\]
+Composition satisfies
+\[
+ (X;Y)_{ab}=\bigcup_{c\in L}(X_{ac};Y_{cb}).
+\]
+Thus each composition gate introduces at most $q^3$ compositions
+over all output blocks; the other operations introduce none.
+The blocks of a shared gate are computed once and reused.
+Induction over the circuit proves correctness.
+\end{proof}
+
+\paragraph{The encoding.}
+List the $2k$ input symbols of $G_k$ as
+$R_1,\ldots,R_{2k}$, with $R_i\coloneqq P_i$ and $R_{k+i}\coloneqq Q_i$.
+For binary words, $\epsilon$ denotes the empty word, $|t|$ the length
+of $t$, and juxtaposition concatenation. Thus $tb$ appends the bit $b$
+and $bs$ prepends it. Write $\{0,1\}^{\le\ell}$ for the words of length
+at most $\ell$. Put
+\[
+ \ell\coloneqq\lceil\log(2k)\rceil,\qquad
+ L\coloneqq\{0,1\}^{\le\ell},\qquad
+ q\coloneqq|L|=2^{\ell+1}-1<8k,
+\]
+and choose distinct leaves $w_1,\ldots,w_{2k}\in\{0,1\}^{\ell}$.
+For a structure $\mathcal M$ on $V$, the encoded structure
+$\operatorname{Enc}(\mathcal M)$ has domain $V\times L$.
+Its sole relation $E$ consists of the following edges:
+\[
+\begin{aligned}
+ &((u,t),(u,tb))
+       &&(u\in V,\ |t|<\ell,\ b\in\{0,1\}),\\
+ &((u,t),(u,t))
+       &&(u\in V,\ t\ne\epsilon,\ t\text{ ends in }1),\\
+ &((u,w_j),(v,\epsilon))
+       &&((u,v)\in R_j^{\mathcal M},\ 1\le j\le2k).
+\end{aligned}
+\]
+There are no other edges. Each $u$ has a binary routing tree; loops
+mark its $1$-children, and the edges from leaf $w_j$ back to the root
+layer store $R_j$.
+Every layer-to-layer block is $\zero$, $\id$, or some $R_j$, so
+Lemma~\ref{lem:block-simulation} applies.
+The encoded graphs are directed and may have loops.
+
+\paragraph{Three-variable decoders.}
+Let
+\[
+ N(u,v)\coloneqq E(u,v)\land u\ne v,\qquad
+ B_0(v)\coloneqq\neg E(v,v),\qquad B_1(v)\coloneqq E(v,v).
+\]
+For distinct variable names $u,v\in\{x,y,z\}$, define
+\[
+ \theta_\epsilon(u,v)\coloneqq N(u,v),\qquad
+ \theta_{bs}(u,v)\coloneqq
+ \exists w\bigl(N(u,w)\land B_b(w)\land\theta_s(w,v)\bigr),
+\]
+where $w$ is the third variable name.
+Inside $\theta_s(w,v)$, the old name $u$ may be rebound; all such
+bindings are local to that subformula.
+For every word $t$, expanding $\theta_t$ gives a genuine
+\FOthree\ formula of size $\Theta(|t|+1)$.
+
+Starting at $(u,\epsilon)$, the first $\ell$ non-loop steps of
+$\theta_{w_j}$ uniquely follow the word $w_j$ through the routing tree.
+Its final non-loop edge returns to the root layer and reads $R_j$.
+Consequently,
+\[
+ \operatorname{Enc}(\mathcal M)\models
+ \theta_{w_j}((u,\epsilon),(v,\epsilon))
+ \quad\Longleftrightarrow\quad
+ \mathcal M\models R_j(u,v).
+\]
+Furthermore, each selected decoder $\theta_{w_j}$ starting at the
+root layer can hold only when its second argument is also in that layer.
+The inequalities in $N$ exclude the marking loops from both the
+routing steps and the final data step; data edges can still encode
+loops of the original relations, since their two layer indices differ.
+
+\begin{proof}[Proof of the lower bound in Theorem~\ref{thm:fixed-vocabulary:formal}]
+Replace each relation-atom occurrence $R_j(u,v)$ in $G_k$ by
+$\theta_{w_j}(u,v)$, obtaining $\widehat G_k$ over the single symbol $E$.
+Each decoder uses only three variable names. Any rebinding of the
+third name is local to that atom replacement, so it does not affect
+another conjunct or disjunct of $G_k$.
+There are $4k$ relation-atom occurrences, hence
+\[
+ m_k\coloneqq|\widehat G_k|=\Theta(k\log(k+1)).
+\]
+When $x,y$ lie in the root layer, every successful decoded atom on
+$(x,z)$ forces $z$ into the root layer as well. Since $k\ge1$,
+\[
+ \operatorname{Enc}(\mathcal M)\models
+ \widehat G_k((u,\epsilon),(v,\epsilon))
+ \quad\Longleftrightarrow\quad
+ \mathcal M\models G_k(u,v).
+\]
+
+Let $C$ compute $\widehat G_k$ on all finite $E$-structures.
+Lemma~\ref{lem:block-simulation} produces a circuit $C^\downarrow$
+over the original signature computing its root--root output block,
+with $\gcost{C^\downarrow}\le q^3\gcost C$.
+For every finite original structure $\mathcal M$, the displayed
+equivalence shows that $C^\downarrow$ agrees with $G_k$ on
+$\mathcal M$. The finite-structure form of Theorem~\ref{thm:main}
+therefore yields
+\[
+ 2^{k-1}\le\gcost{C^\downarrow}\le q^3\gcost C,
+ \qquad
+ \gcost C\ge\frac{2^{k-1}}{q^3}
+       >\frac{2^{k-1}}{(8k)^3}.
+\]
+Since $k=\Theta(m_k/\log(m_k+2))$, this is
+$2^{\Omega(m_k/\log(m_k+2))}$.
+For every sufficiently large size bound $m$, choose
+$k=\lfloor c m/\log(m+2)\rfloor$ with a sufficiently small absolute
+constant $c>0$. Then $m_k\le m$ and the same estimate gives the
+stated $2^{\Omega(m/\log(m+2))}$ lower bound.
+No well-formedness test for the encoding is needed: correctness on
+all finite $E$-structures already includes the encoded ones. Moreover,
+if $C\equiv\widehat G_k$, then $C^\downarrow\equiv G_k$, since both
+the decoder equivalence and the block simulation hold on arbitrary
+nonempty structures.
+\end{proof}
+
+For any fixed vocabulary containing at least one binary symbol, the
+same lower bound follows by fixing all other input relations to
+$\zero$. Together with the upper bound, this determines both the
+worst-case composition count and the worst-case total circuit size
+at the scale $2^{\Theta(m/\log(m+2))}$.
+The composition lower bound also holds for terms, but does not
+determine their optimal general upper bound.
+
+\subsection{Model checking on directed graphs}\label{sec:fixed-model-checking}
+\begin{corollary}\label{cor:fixed-model-checking}
+Fix a finite binary vocabulary $\sigma$ and $\eta>0$.
+A tree-represented $\mathrm{FO}^3[\sigma]$ sentence of size $m$ can be
+evaluated on an $n$-element structure in
+\[
+ 2^{O_\sigma(m/\log(m+2))}\,n^{\omega+\eta}
+\]
+time, including compilation. In particular, this holds for directed
+graphs with one input edge relation.
+\end{corollary}
+\begin{proof}
+Construct the circuit of Theorem~\ref{thm:fixed-vocabulary:formal} and evaluate
+each gate once in topological order.
+A composition is a Boolean matrix product, computable in
+$O(n^{\omega+\eta})$ time for any fixed $\eta>0$; all other gates take
+$O(n^2)$ time. By the assignment semantics of \S\ref{sec:prelim-logic}, a
+sentence has value $\one$ or $\zero$ on the given structure, so any
+output entry gives its truth value.
+The circuit construction time and input-reading time are absorbed
+in the displayed bound.
+\end{proof}
+
+\paragraph{Conditional tightness.}
+For fixed vocabularies, this improves the $2^{O(m)}$ formula-size
+factor in~\citep[Theorem~10]{nakamura-uezato2027}.
+The 3-OV problem asks whether three $N$-element sets of $d$-bit vectors
+contain $a,b,c$ such that $a_jb_jc_j=0$ for every coordinate $j$.
+The \emph{low-dimensional 3-OV hypothesis} states that, for every
+$\delta>0$, there is a constant $c_0>0$ such that no
+$O(N^{3-\delta})$-time algorithm solves this problem when
+$d\le c_0\log N$~\citep[Appendices to \S7.5]{nakamura-uezato2027}.
+Under this hypothesis, their Theorem~72
+(Appendix~T) rules out $2^{o(m/\log(m+2))}n^{3-\delta}$ time
+for every fixed $\delta>0$, even for tree-represented
+existential-positive sentences over one binary relation.
+Their bound counts edges $M$ rather than vertices.
+Retaining at most three isolated vertices preserves \FOthree\
+sentences and leaves at most $2M+3$ vertices
+\citep[Proposition~6]{nakamura-uezato2027}, giving the stated vertex
+bound. Building an adjacency matrix takes $O((M+1)^2)$ time,
+absorbed after reducing $\delta$ to lie in $(0,1)$.
+Thus $m/\log(m+2)$ is the conditionally optimal exponent scale for
+truly subcubic evaluation, without a claim of optimality for $\omega$.

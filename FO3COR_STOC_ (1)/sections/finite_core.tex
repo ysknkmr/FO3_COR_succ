@@ -1,0 +1,441 @@
+\section{Folds, predictions, and the test--cost theorem}\label{sec:preservation}
+This section proves the machinery of the lower bounds in the order of the
+overview. We construct the reference structure (\S\ref{sec:structure}) and
+define color-determined relations, folds, and predictions
+(\S\ref{sec:types}). We then show
+that a relational circuit computes the predicted values on every folded
+structure whose fold none of its compositions notices (\S\ref{sec:unnoticed}),
+and that each composition notices at most two folds
+(\S\ref{sec:responses}). With the tests of \S\ref{sec:G}, this already
+proves the composition bounds of Theorem~\ref{thm:main}.
+Section~\ref{sec:simultaneous} states the test--cost theorem, a counting
+form of the same argument that also covers randomized circuits and the
+other targets of \S\ref{sec:additional-results};
+Section~\ref{sec:matrix} supplies its hypotheses for scalar-valued
+computations.
+
+\subsection{The reference structure}\label{sec:structure}
+Fix a palette $\Lambda$ of $N\ge2$ colors and a vertex set $V$ of size $n$.
+A coloring $\chi:\binom V2\to\Lambda$ assigns a color to every unordered
+pair of distinct vertices. We write $\chi(u,v)$ for $\chi(\{u,v\})$.
+
+\Needspace{7\baselineskip}
+\begin{lemma}[Two witnesses]\label{lem:palette}
+For every integer
+\[
+ n\ge n_0(N)\coloneqq\left\lceil12N^2\ln(2N)\right\rceil+3,
+\]
+there is a coloring such that, for all distinct $u,v\in V$ and all
+$\mu,\nu\in\Lambda$, at least two distinct vertices
+$z\in V\setminus\{u,v\}$ satisfy
+$\chi(u,z)=\mu$ and $\chi(z,v)=\nu$.
+\end{lemma}
+\begin{proof}
+Color the edges independently and uniformly. For fixed distinct $u,v,w$
+and colors $\mu,\nu$, the probability that no suitable witness occurs
+outside $\{u,v,w\}$ is at most $\exp(-(n-3)/N^2)$: the candidate witnesses
+use disjoint pairs of edges. A union bound gives failure probability at most
+\[
+ n^3N^2\exp(-(n-3)/N^2).
+\]
+At $n=n_0(N)$, the inequality $n_0(N)\le13N^3$ bounds this expression by
+$2197/(4096N)<1$. It decreases for $n>3N^2$, proving the assertion at every
+larger size. Hence some coloring has, for all distinct $u,v,w$ and all
+colors $\mu,\nu$, a witness outside $\{u,v,w\}$; applying this with $w$
+equal to one witness for $u,v$ yields a second.
+\end{proof}
+
+Fix such a coloring, and choose a vertex $\hub\in V$, called the
+hub. The two witnesses of Lemma~\ref{lem:palette} play different
+roles. One witness outside the endpoints already makes every computed
+relation a union of color classes, possibly together with the diagonal
+(Lemma~\ref{lem:tables}). The second ensures that two vertices other
+than $\hub$ have, for every pair of colors, a witness that also avoids
+$\hub$, so that recoloring the edges at $\hub$ does not affect pairs away
+from it (\S\ref{sec:responses}). Lemma~\ref{lem:palette} also implies that
+every vertex sees every color, and that every vertex other than $\hub$
+sees every color on edges avoiding $\hub$ (take $v=\hub$). For each color
+$\mu$, fix a vertex $v_\mu$ with $\chi(\hub,v_\mu)=\mu$. No vertex,
+color, or color neighborhood is supplied as an additional input
+predicate.
+
+Jipsen, Maddux, and Tuza~\citep{jipsen-maddux-tuza1995} gave
+the random and affine-plane colorings underlying our reference
+structures. Although they formulated a one-witness condition, their
+constructions also yield the two-witness property used here. The
+random-coloring argument above establishes it at every sufficiently
+large domain size; their affine-plane coloring has it for planes of
+order at least four. Appendix~\ref{app:explicit} verifies the latter
+and gives an explicit construction on fewer than $16N^2$ vertices.
+
+\subsection{Color-determined relations, folds, and predictions}\label{sec:types}
+For $\mu\in\Lambda$, let
+$e_\mu\coloneqq\{(u,v)\in V^2:u\ne v,\ \chi(u,v)=\mu\}$ be the set of edges of
+color $\mu$, in both orientations. We extend $\chi$ to loops by giving
+every loop the extra label $\diagc$, which is not a color. A relation
+$X\subseteq V^2$ is \defn{color-determined} if $X(u,v)$ depends only
+on $\chi(u,v)$. For such a relation, write $X[\mu]\in\bool$ for its
+common value at pairs $(u,v)$ with $\chi(u,v)=\mu$, where
+$\mu\in\Lambda\cup\{\diagc\}$. These $N+1$ values form a table, and
+\[
+ S_X\coloneqq\{\mu\in\Lambda:X[\mu]=1\}
+\]
+is the \defn{off-diagonal support} of $X$. Thus $X$ is the union of the
+classes $e_\mu$ with $\mu\in S_X$, together with the diagonal if
+$X[\diagc]=1$. A reference structure interprets every input relation
+by a color-determined relation; we write $\mathcal M_0$ for it.
+
+\begin{lemma}[Closure of color-determined relations]\label{lem:tables}
+The constants $\zero,\one,\id$ are color-determined, and
+color-determined relations are closed under Boolean operations, converse,
+and composition. If $X$ and $Y$ are color-determined, then for every color
+$\mu\in\Lambda$,
+\begin{equation*}\tag{CT}\label{eq:table-off}
+\begin{aligned}
+ (X;Y)[\mu]
+  &=\bigl(X[\diagc]\land Y[\mu]\bigr)\lor\bigl(X[\mu]\land Y[\diagc]\bigr)
+       \lor\bigl(S_X\ne\varnothing\land S_Y\ne\varnothing\bigr),\\
+ (X;Y)[\diagc]
+  &=\bigl(X[\diagc]\land Y[\diagc]\bigr)\lor\bigl(S_X\cap S_Y\ne\varnothing\bigr),
+\end{aligned}
+\end{equation*}
+where a condition stands for its truth value.
+\end{lemma}
+\begin{proof}
+Boolean operations act entry by entry, and converse preserves this
+property because $\chi$ is symmetric. For composition, consider a pair
+$(u,v)$ and a potential witness $z$. An endpoint witness,
+$z\in\{u,v\}$, contributes the disjuncts of~\eqref{eq:table-off} that involve
+$X[\diagc]$ or $Y[\diagc]$. An outside witness, $z\notin\{u,v\}$,
+contributes $X[\chi(u,z)]\land Y[\chi(z,v)]$. If $u\ne v$, then by
+Lemma~\ref{lem:palette} the color pairs $(\chi(u,z),\chi(z,v))$ of outside
+witnesses range over all of $\Lambda\times\Lambda$, so an outside witness
+exists exactly when $S_X$ and $S_Y$ are both nonempty. If $u=v$, both
+edges of an outside witness are the edge $\{u,z\}$, and every color
+occurs on an edge at $u$, so an outside witness exists exactly when
+$S_X\cap S_Y\ne\varnothing$.
+\end{proof}
+In particular, every value of a relational circuit on $\mathcal M_0$ is
+color-determined, and
+\[
+ e_\mu;e_\nu=
+ \begin{cases}\one,&\mu=\nu,\\
+ \overline{\id},&\mu\ne\nu.
+ \end{cases}
+\]
+Thus the color-determined relations give a concrete representation of
+the symmetric relation algebra $E_{N+1}(1,2,3)$ studied by Jipsen,
+Maddux, and Tuza~\citep{jipsen-maddux-tuza1995}. Its atoms are $\id$
+and the $e_\mu$, and $\overline{\id}=\bigcup_{\mu\in\Lambda}e_\mu$ is
+the diversity relation. This identification follows from the displayed
+multiplication table, not from automorphisms of the reference graph.
+
+\paragraph{Folds and predictions.}
+From now on, take the palette $\Lambda\coloneqq2^{[k]}$ for some $k\ge1$, so that
+$N=2^k$. The complement of a color $\mu$ is the color
+$\mu^c=[k]\setminus\mu$, and no color equals its complement. The fold of
+a color $\lambda$ recolors every edge of color $\lambda$ at the hub to
+$\lambda^c$ and leaves all other edges unchanged: for $u\ne v$,
+\[
+ \chi_\lambda(u,v)\coloneqq
+ \begin{cases}\lambda^c,&\hub\in\{u,v\}\text{ and }\chi(u,v)=\lambda,\\
+ \chi(u,v),&\text{otherwise},
+ \end{cases}
+\]
+and every loop keeps the label $\diagc$. Only two properties of the fold
+matter below: it removes exactly the color $\lambda$ from the hub, and
+it changes no edge away from the hub. Any target color other than
+$\lambda$ would serve as well. For a color-determined relation $X$,
+its prediction $\pred X\lambda$ reads the same values on $\chi_\lambda$:
+\[
+ \pred X\lambda(u,v)\coloneqq X[\chi_\lambda(u,v)]\qquad(u,v\in V).
+\]
+Thus $\pred X\lambda$ agrees with $X$ except on the recolored edges,
+where it takes the value $X[\lambda^c]$. Replacing every input relation
+by its prediction defines the folded structure $\mathcal M_\lambda$ on
+the same domain $V$. Predictions are defined only for color-determined relations, in
+particular for all values computed on $\mathcal M_0$. We do not assume
+that relations computed on $\mathcal M_\lambda$ are color-determined;
+in general, they are not.
+
+\subsection{Noticing, and unnoticed folds}\label{sec:unnoticed}
+Let $\lambda$ be a color and $\mathbf U=(U_1,\ldots,U_r)$ a tuple of
+color-determined relations. For an $r$-ary operation $\operatorname{op}$
+such that $\operatorname{op}(\mathbf U)$ is also color-determined, we say
+that it notices the fold of $\lambda$ at $\mathbf U$ if
+\[
+ \operatorname{op}\bigl(\pred{U_1}\lambda,\ldots,\pred{U_r}\lambda\bigr)\ne
+ \pred{\operatorname{op}(\mathbf U)}\lambda.
+\]
+Lemma~\ref{lem:tables} guarantees this condition for the \CoR\ operations.
+Both sides are determined by $\mathbf U$ and $\lambda$: noticing is a
+property of the operands on $\mathcal M_0$, not of any computation on
+$\mathcal M_\lambda$.
+
+\begin{proposition}[Commutation with prediction]\label{prop:prediction-commutation}
+For any color $\lambda$ and color-determined relations $X,Y$, prediction
+commutes with Boolean operations and converse:
+\[
+\begin{aligned}
+ \pred{(X\cup Y)}\lambda&=\pred X\lambda\cup\pred Y\lambda,&
+ \pred{(X\cap Y)}\lambda&=\pred X\lambda\cap\pred Y\lambda,\\
+ \pred{(\overline X)}\lambda&=\overline{\pred X\lambda},&
+ \pred{(X^\smile)}\lambda&=(\pred X\lambda)^\smile.
+\end{aligned}
+\]
+The constants $\zero,\one,\id$ are also fixed by prediction.
+\end{proposition}
+\begin{proof}
+Boolean operations act pair by pair, so both sides apply the same
+operation to the entries at $\chi_\lambda(u,v)$. Converse commutes with
+prediction because $\chi_\lambda(u,v)=\chi_\lambda(v,u)$. The constants
+are fixed because a fold preserves the diagonal.
+\end{proof}
+
+Thus only composition can notice a fold. A composition gate of a
+relational circuit notices the fold of $\lambda$ if the composition of
+its operand values on $\mathcal M_0$ notices it.
+\begin{lemma}[Unnoticed folds]\label{lem:unnoticed}
+Let $C$ be a relational circuit and $\lambda$ a color. If no composition
+gate of $C$ notices the fold of $\lambda$, then on $\mathcal M_\lambda$
+every gate of $C$ computes the prediction of its value on $\mathcal M_0$.
+In particular, the outputs of $C$ on $\mathcal M_0$ and on
+$\mathcal M_\lambda$ agree at every pair that the fold does not recolor.
+\end{lemma}
+\begin{proof}
+Evaluate $C$ on $\mathcal M_0$. By Lemma~\ref{lem:tables}, every gate
+value is color-determined, so its prediction is defined. We show by
+induction along a topological order of the gates that every gate computes
+on $\mathcal M_\lambda$ the prediction of its value on $\mathcal M_0$. For
+input relations this is the definition of $\mathcal M_\lambda$, and
+constants are their own predictions by Proposition~\ref{prop:prediction-commutation}.
+For Boolean and converse gates, the claim follows from the induction
+hypothesis and Proposition~\ref{prop:prediction-commutation}.
+If the operands of a composition gate have values $X$ and $Y$ on
+$\mathcal M_0$, then by induction they have values $\pred X\lambda$ and $\pred Y\lambda$ on
+$\mathcal M_\lambda$. The gate therefore computes
+$\pred X\lambda;\pred Y\lambda$ on $\mathcal M_\lambda$, which equals
+$\pred{(X;Y)}\lambda$ because the gate does not notice the fold. Finally,
+every value $U$ on $\mathcal M_0$ agrees with $\pred U\lambda$ at every
+pair that the fold does not recolor.
+\end{proof}
+
+\subsection{Each composition notices at most two folds}\label{sec:responses}
+Fix color-determined relations $X,Y$ and a color $\lambda$, and write
+$J\coloneqq\Lambda\setminus\{\lambda\}$ for the set of colors at $\hub$
+after the fold of $\lambda$.
+Endpoint witnesses contribute the same value to
+$\pred X\lambda;\pred Y\lambda$ and to $\pred{(X;Y)}\lambda$. At a pair
+$(u,v)$ with $u\ne v$ and $\mu\coloneqq\chi_\lambda(u,v)$, they contribute
+$(X[\diagc]\land Y[\mu])\lor(X[\mu]\land Y[\diagc])$ to
+$\pred X\lambda;\pred Y\lambda$, because $\pred X\lambda$ and
+$\pred Y\lambda$ take the values $X[\diagc]$ and $Y[\diagc]$ on the
+diagonal and $X[\mu]$ and $Y[\mu]$ at $(u,v)$, and the same value to
+$\pred{(X;Y)}\lambda(u,v)=(X;Y)[\mu]$ by~\eqref{eq:table-off}; at a
+diagonal pair, they contribute $X[\diagc]\land Y[\diagc]$ to both. The
+following table compares the outside witnesses. Its left column states
+when $\pred X\lambda;\pred Y\lambda$ has an outside witness at the pair,
+and its right column states the last disjunct of~\eqref{eq:table-off},
+which $\pred{(X;Y)}\lambda$ reads at the pair; here $u$ and $v$ range
+over vertices other than $\hub$, and $S\ne\varnothing\ne S'$ means that
+both sets are nonempty.
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{lll}
+\toprule
+Output pair & Outside witness in $\pred X\lambda;\pred Y\lambda$
+ & Last disjunct of~\eqref{eq:table-off}\\
+\midrule
+$(u,v)$, $u\ne v$ & $S_X\ne\varnothing\ne S_Y$ & $S_X\ne\varnothing\ne S_Y$\\
+$(u,u)$ & $S_X\cap S_Y\ne\varnothing$ & $S_X\cap S_Y\ne\varnothing$\\
+$(\hub,v)$ & $S_X\cap J\ne\varnothing\ne S_Y$ & $S_X\ne\varnothing\ne S_Y$\\
+$(u,\hub)$ & $S_X\ne\varnothing\ne S_Y\cap J$ & $S_X\ne\varnothing\ne S_Y$\\
+$(\hub,\hub)$ & $S_X\cap S_Y\cap J\ne\varnothing$ & $S_X\cap S_Y\ne\varnothing$\\
+\bottomrule
+\end{tabular}
+\end{center}
+For the left column, consider the outside witnesses $z$ of a pair. For
+distinct $u,v\ne\hub$, Lemma~\ref{lem:palette} gives, for every pair of
+colors, an outside witness other than $\hub$, whose two edges keep their
+colors; the witness $\hub$ contributes one more color pair, which is
+already realized. For $(u,u)$ with $u\ne\hub$, every color occurs on an
+edge at $u$ that avoids $\hub$. At a pair $(\hub,v)$ of the
+\defn{hub row}, the left edge $\{\hub,z\}$ of every outside witness lies
+at the hub, so its color becomes $\chi_\lambda(\hub,z)\in J$, while the
+right edge $\{z,v\}$ keeps its color; by Lemma~\ref{lem:palette} the
+realized color pairs are exactly $J\times\Lambda$. The pairs $(u,\hub)$
+of the \defn{hub column} are symmetric, with $\Lambda\times J$. At
+$(\hub,\hub)$ both edges of an outside witness are the edge
+$\{\hub,z\}$, whose color $\chi_\lambda(\hub,z)$ ranges exactly over $J$.
+
+\begin{lemma}[When a composition notices a fold]\label{lem:local}\label{lem:notice}
+Let $X,Y$ be color-determined. The composition $X;Y$
+notices the fold of $\lambda$ only if
+\[
+ S_X=\{\lambda\},\qquad S_Y=\{\lambda\},\qquad\text{or}\qquad
+ S_X\cap S_Y=\{\lambda\}.
+\]
+Hence it notices at most two folds, at most one if $S_X$ or $S_Y$ is
+$\varnothing$ or $\Lambda$, and none if both are.
+\end{lemma}
+\begin{proof}
+By the table, the two sides can differ only in the hub row, in the hub
+column, or at $(\hub,\hub)$. In the hub row they can differ only if
+$S_X\ne\varnothing$ but $S_X\cap J=\varnothing$, that is,
+$S_X=\{\lambda\}$; in the hub column only if $S_Y=\{\lambda\}$; and at
+$(\hub,\hub)$ only if $S_X\cap S_Y=\{\lambda\}$. Each condition
+determines $\lambda$. If $S_X\cap S_Y\ne\varnothing$, each of the first
+two conditions implies the third, so at most one fold is noticed;
+otherwise the third condition never holds, and at most two are. If $S_Y$
+is $\varnothing$ or $\Lambda$, then $S_Y\ne\{\lambda\}$ because $N\ge2$,
+and $S_X\cap S_Y$ is $\varnothing$ or $S_X$, so only the condition
+$S_X=\{\lambda\}$ remains; the case of $S_X$ is symmetric. If both are
+$\varnothing$ or $\Lambda$, none of the conditions can hold.
+\end{proof}
+The bound two is attained. The composition $e_\mu;e_{\mu^c}$ has
+$S_X=\{\mu\}$ and $S_Y=\{\mu^c\}$, and notices the folds of both $\mu$
+and $\mu^c$. On the reference structure of \S\ref{sec:G}, the relation
+$e_\mu$ is the relation $H_\mu$ of the DNF.
+Proposition~\ref{prop:promise} computes $G_k$ on the reference structure
+and all its folded structures with $2^{k-1}$ such compositions.
+By Lemma~\ref{lem:notice}, each composition gate notices at most two
+folds. What a gate notices depends only on its operand values on
+$\mathcal M_0$, so a shared gate counts once, regardless of its fan-out.
+Hence at most $2\gcost C$ folds are noticed by some gate of $C$, and
+Lemma~\ref{lem:unnoticed} applies to all other folds. Nothing here
+depends on the query or on the interpretation of the input relations. If
+a query has different answers on $\mathcal M_0$ and on
+$\mathcal M_\lambda$ at a pair that the fold of $\lambda$ does not
+recolor, for every color $\lambda$, then every relational circuit $C$
+defining it satisfies $2\gcost C\ge2^k$. Section~\ref{sec:logical} shows
+that $G_k$ is such a query.
+
+\subsection{Tests and the test--cost theorem}\label{sec:simultaneous}
+For randomized circuits and for the other targets of
+\S\ref{sec:additional-results}, we formalize the same
+\emph{fold-counting argument} as a test--cost theorem, using only a few
+abstract properties. For a color $\lambda$,
+the \defn{test} for $\lambda$ consists of the structures $\mathcal M_0$
+and $\mathcal M_\lambda$ and the \defn{output observation}
+$\rho_\lambda(U)\coloneqq U(\hub,v_{\lambda^c})$, the entry of an output
+value $U$ at the pair $(\hub,v_{\lambda^c})$ of \S\ref{sec:structure}.
+Since $\lambda^c\ne\lambda$, the fold of $\lambda$ does not recolor this
+pair, so
+\begin{equation*}\tag{O}\label{eq:observation}
+ \rho_\lambda(\pred U\lambda)=\rho_\lambda(U)
+\end{equation*}
+for every reference output value $U$, as defined in~(i) below.
+
+The counting argument uses only three properties of this construction.
+We call data satisfying them a \defn{test system}:
+\begin{enumerate}[label=(\roman*),leftmargin=*]
+\item Each type of value has a collection of \defn{reference values},
+which contains the input values on $\mathcal M_0$ and is closed under the
+permitted operations, and every reference value $U$ has a prediction
+$\pred U\lambda$ for each color $\lambda$.
+\item Every input value on $\mathcal M_\lambda$ is the prediction of the
+same input value on $\mathcal M_0$.
+\item Every test satisfies~\eqref{eq:observation}, and the required
+answers at its observation on $\mathcal M_0$ and on $\mathcal M_\lambda$
+differ.
+\end{enumerate}
+For relational circuits, the reference values are the color-determined
+relations, and Lemma~\ref{lem:tables} supplies~(i). The typed scalar
+computations in \S\ref{sec:matrix} will satisfy the same conditions;
+predictions carry the type of their argument, which we suppress in the
+notation. For a gate $g$ of a deterministic circuit $C$, let
+$\operatorname{op}_g$ be its operation and $\mathbf U_g$ the tuple of its
+operand values on $\mathcal M_0$. As in \S\ref{sec:unnoticed}, $g$
+notices the fold of $\lambda$ if
+$\operatorname{op}_g(\pred{\mathbf U_g}\lambda)\ne
+\pred{\operatorname{op}_g(\mathbf U_g)}\lambda$, where predictions act
+componentwise on tuples. Define
+\[
+ \begin{split}
+ D_g&\coloneqq\{\lambda\in\Lambda:g\text{ notices the fold of }\lambda\},\\
+ \tcost(C)&\coloneqq\sum_{g\text{ distinct}}|D_g|.
+ \end{split}
+\]
+For input nodes put $D_g\coloneqq\varnothing$; constant gates are nullary
+operations. The definition of $D_g$ compares the entire output of the
+gate, and it uses predicted operands computed from $\mathcal M_0$, not
+operands recomputed on $\mathcal M_\lambda$.
+
+We call $\tcost(C)$ the \defn{cost} of $C$. It counts the pairs of a
+distinct gate and a fold that the gate notices. This integer depends on
+the reference structure and the tests, which remain fixed, but is
+defined even for an incorrect circuit.
+
+\begin{theorem}[Test--cost theorem]\label{thm:test-cost}
+Fix a test system. A deterministic circuit $C$ correct at both
+observations of every test satisfies
+\[
+ 2^k\le\tcost(C).
+\]
+If $C$ is drawn from an input-independent distribution $\mathcal D$ of
+circuits, and each observation in each test is incorrect with probability
+at most $\varepsilon<1/2$, then
+\[
+ (1-2\varepsilon)2^k\le
+ \mathbb E_{C\sim\mathcal D}[\tcost(C)].
+\]
+\end{theorem}
+\begin{proof}
+Fix a deterministic circuit, not assumed correct, and put
+$D_C\coloneqq\bigcup_gD_g$. For $\lambda\notin D_C$, no gate notices the
+fold of $\lambda$, so the induction in the proof of
+Lemma~\ref{lem:unnoticed}, with~(ii) for the input values, gives
+\[
+ \sem C{\mathcal M_\lambda}=\pred{(\sem C{\mathcal M_0})}\lambda.
+\]
+The equality concerns the whole output. By the observation
+condition~\eqref{eq:observation}, the two observations are equal, whereas
+their correct values differ. Hence at least one is wrong. If
+$\mathrm{err}_{\lambda,0}(C),\mathrm{err}_{\lambda,1}(C)$ are the
+corresponding zero-one error indicators, then
+\[
+ \tcost(C)+\sum_{\lambda\in\Lambda}
+   \bigl(\mathrm{err}_{\lambda,0}(C)+\mathrm{err}_{\lambda,1}(C)\bigr)\ge2^k,
+\]
+because $|D_C|\le\tcost(C)$. Zero error proves the first assertion.
+Take expectations using the same random circuit on the two structures
+of each test. Each error indicator has expectation at most $\varepsilon$,
+which proves the second assertion. No independence among the tests or
+their errors is required.
+\end{proof}
+
+For lower bounds obtained from the color-based reference structures
+of \S\ref{sec:structure}, this argument also gives fixed-size and
+randomized forms. Each such bound estimates $\tcost(C)$ from above by
+a resource count, such as $2\gcost C$ in Lemma~\ref{lem:cor-cost}. First, Lemma~\ref{lem:palette} gives the
+reference structure on every domain of size $n\ge n_0(2^k)$, and the
+folds keep the domain, so each bound holds for targets that need to be
+correct only on $n$-element inputs and may be chosen for $n$. Second, by
+the randomized assertion of Theorem~\ref{thm:test-cost}, each bound for
+targets that compute a query also holds for an input-independent
+distribution of targets with pointwise error at most
+$\varepsilon<1/2$, after the resource count is replaced by its
+expectation and the bound is multiplied by $1-2\varepsilon$; for scalar
+outputs, an error is a failure to return the exact required value.
+
+For ordinary \CoR, call a composition gate whose operand values on
+$\mathcal M_0$ are $X,Y$ \defn{one-sided} if $S_X$ or $S_Y$ is
+$\varnothing$ or $\Lambda$. Let
+$m_1(C)$ count these gates and $m_2(C)$ the other composition gates,
+counting shared gates once.
+\begin{lemma}[Cost of compositions]\label{lem:cor-cost}
+Every relational circuit $C$ satisfies
+\[
+ \tcost(C)\le m_1(C)+2m_2(C)\le2\gcost{C}.
+\]
+\end{lemma}
+\begin{proof}
+By Lemma~\ref{lem:local}, a one-sided composition notices at most one
+fold and any other composition at most two. Other gates notice nothing.
+Summing over distinct gates proves the inequalities.
+\end{proof}
+The row and column projections $X;\one$ and $\one;X$ of
+\S\ref{sec:prelim-cor} are examples of one-sided compositions; the
+one-sided condition itself is semantic and may hold for other gates.
+If a syntactic count is preferred, one may charge all non-projection
+compositions at cost two, without changing Lemma~\ref{lem:cor-cost}.

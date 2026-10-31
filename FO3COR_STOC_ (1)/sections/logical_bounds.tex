@@ -1,0 +1,312 @@
+\section{Lower bounds for relational circuits}\label{sec:logical}
+The construction of \S\ref{sec:preservation} is independent of the
+query. We now interpret the input relations of $G_k$ on it; the read
+edge of each test identifies the witness color that the fold removes.
+
+\subsection{The tests for \texorpdfstring{$G_k$}{Gk}}\label{sec:G}
+On a color $\mu$, interpret $P_i$ as $1$ precisely when $i\in\mu$, and
+$Q_i$ as $1$ precisely when $i\notin\mu$. Put both values zero on every
+loop. More explicitly,
+\[
+ P_i^{\mathcal M_0}\coloneqq\bigcup_{\mu\in\Lambda:\,i\in\mu}e_\mu,\qquad
+ Q_i^{\mathcal M_0}\coloneqq\bigcup_{\mu\in\Lambda:\,i\notin\mu}e_\mu.
+\]
+For each color $\lambda$, use the read edge $(\hub,v_{\lambda^c})$,
+of color $\lambda^c$ (\S\ref{sec:structure}), and the fold of $\lambda$
+(\S\ref{sec:types}). Since $\lambda\ne\lambda^c$, the fold does not
+recolor this read edge.
+
+\begin{lemma}[The tests for $G_k$]\label{lem:G-tests}
+For every color $\lambda$,
+\[
+ \sem{G_k}{\mathcal M_0}(\hub,v_{\lambda^c})=1,\qquad
+ \sem{G_k}{\mathcal M_\lambda}(\hub,v_{\lambda^c})=0.
+\]
+Moreover, the sentence $G_k^\forall=\forall x\,\forall y\,(x=y\lor
+G_k(x,y))$ of \S\ref{sec:main-results} is true in $\mathcal M_0$
+and false in every $\mathcal M_\lambda$. Thus $G_k$ and $G_k^\forall$
+each supply $2^k$ tests.
+\end{lemma}
+\begin{proof}
+For non-loop edges with colors $\mu,\nu$, the body of $G_k$ holds
+exactly when $\nu=\mu^c$. A loop, whose $P_i,Q_i$ values are all zero,
+cannot be a witness edge. Hence, on $\mathcal M_0$ and on every
+$\mathcal M_\lambda$, $G_k$ holds at a pair $(u,v)$ of distinct vertices
+exactly when $u$ has an edge whose color is the complement of the color
+of $(u,v)$. Against the read color $\lambda^c$, the sole accepted
+witness color is $\lambda$. That color occurs at $\hub$ in
+$\mathcal M_0$ and does not occur there after the fold. In
+$\mathcal M_0$, every vertex has edges of every color, so $G_k$ holds at
+every pair of distinct vertices, and $x=y$ handles the diagonal; in
+$\mathcal M_\lambda$, $G_k$ fails at the pair $(\hub,v_{\lambda^c})$ of
+distinct vertices.
+\end{proof}
+
+\subsection{Consequences}\label{sec:query-bounds}
+\mainbounds*
+\begin{proof}
+Let $C\equiv G_k$, or more generally let $C$ agree with $G_k$
+on all finite structures. Take the reference structure at any size
+$n\ge n_0(2^k)$. For each color $\lambda$, the answers of $G_k$
+at $(\hub,v_{\lambda^c})$ on $\mathcal M_0$ and on $\mathcal M_\lambda$ differ
+by Lemma~\ref{lem:G-tests}, and the fold of $\lambda$ does not recolor
+this pair. By Lemma~\ref{lem:unnoticed}, some composition gate of $C$
+notices the fold of $\lambda$. By Lemma~\ref{lem:notice}, each
+composition gate notices at most two folds, so $2\gcost C\ge2^k$. A term
+is a circuit without sharing, so the same bound holds for its number of
+compositions.
+\end{proof}
+Together with the expansion of $G_k$ in \S\ref{sec:main-results}, these
+lower bounds show that the minimum circuit size for $G_k$ is
+$\Theta(2^k)$; Theorem~\ref{thm:tree} in \S\ref{sec:trees}
+determines the minimum term size.
+
+The lower bound does not rest on the difficulty of evaluating $G_k$. As
+its proof shows, it holds even for circuits that are correct only on the
+reference structure and its folded structures, on which every non-loop
+edge has a color from the palette. A read edge there accepts exactly the
+witness edges of the complementary color, so a trie of the colors
+present in each row evaluates $G_k$ on all pairs of these structures in
+time $O(kn^2)$, linear in the size of the input.
+
+\paragraph{Equations.}
+By the semantics of \CoR\ equations in \S\ref{sec:prelim-cor},
+the same tests also bound the equational form of Tarski's correspondence.
+\begin{corollary}[\CoR\ equations]\label{cor:equations}
+If a \CoR\ equation $T=S$ holds on exactly those finite structures that
+satisfy $G_k^\forall$, then every relational circuit with gates computing
+$T$ and $S$ has at least $2^{k-1}-1$ composition gates.
+\end{corollary}
+\begin{proof}
+Let $C$ have gates computing $T$ and $S$, and add gates for
+\[
+ \mathrm{Eq}\coloneqq\overline{\one;\bigl((T\cap\overline S)\cup(\overline T\cap S)\bigr);\one},
+\]
+which is the full relation when $T=S$ and empty otherwise. This adds two
+compositions, both one-sided. By Lemma~\ref{lem:G-tests}, $G_k^\forall$
+is true in $\mathcal M_0$ and false in every $\mathcal M_\lambda$, so
+$\mathrm{Eq}$ is full on $\mathcal M_0$ and empty on every
+$\mathcal M_\lambda$. Both constants are their own predictions, so these
+are $2^k$ tests, and Theorem~\ref{thm:test-cost} with
+Lemma~\ref{lem:cor-cost} gives $2^k\le2\gcost C+2$.
+\end{proof}
+The DNF of \S\ref{sec:main-results} gives the equivalent equation
+$\id\cup\bigcup_{A\subseteq[k]}[H_A\cap(H_{A^c};\one)]=\one$
+with $2^k$ compositions, so the bound is tight up to a factor of two.
+
+\paragraph{Fixed sizes and bounded error.}
+The reference structure and its folded structures share one domain,
+which may have any size $n\ge n_0(2^k)$, and the randomized assertion of
+Theorem~\ref{thm:test-cost} handles bounded error.
+\randomizedbounds*
+\begin{proof}
+At the prescribed size $n$, Lemma~\ref{lem:palette} gives the reference
+structure, and Lemma~\ref{lem:G-tests} gives all $2^k$ tests on that domain.
+Apply the expected-cost assertion of Theorem~\ref{thm:test-cost} and
+$\tcost(C)\le2\gcost C$. Setting $\varepsilon=0$ includes every exact
+size-specific circuit.
+\end{proof}
+
+\paragraph{Circuits without converse.}
+Without converse, a directed version of the reference structure lets
+each composition notice at most one fold, and the bound becomes exact.
+\begin{restatable}[Without converse]{corollary}{withoutconverse}\label{cor:without-converse}
+For every $k\ge1$, every relational circuit without converse that
+defines $G_k$ on finite structures has at least $2^k$ composition gates.
+This bound is attained by the DNF.
+\end{restatable}
+Appendix~\ref{app:directed} proves the corollary with a directed
+reference coloring. For full \CoR, Proposition~\ref{prop:promise} gives
+a circuit with $2^{k-1}$ compositions that is correct on the reference
+structure and all its folded structures. Thus these tests attain the
+coefficient two of Lemma~\ref{lem:notice} and cannot give more than
+$2^{k-1}$. The optimum for $G_k$ on arbitrary inputs remains between
+$2^{k-1}$ and $2^k$.
+
+\subsection{Domain size}\label{sec:domain-size}
+On arbitrary inputs, the \defn{pair profile} is the ordered bit vector
+\[
+ \pi(x,z)\coloneqq
+ ([P_1(x,z)],\ldots,[P_k(x,z)],
+  [Q_1(x,z)],\ldots,[Q_k(x,z)])\in\{0,1\}^{2k}.
+\]
+On the reference structure, the profile of an edge is determined by its color.
+By the definition of $G_k$,
+the read edge $(x,y)$ accepts the witness edge $(x,z)$ exactly when, for
+every $i$, the profile $\pi(x,y)$ has $P_i$ and $\pi(x,z)$ has $Q_i$, or
+$\pi(x,y)$ has $Q_i$ and $\pi(x,z)$ has $P_i$. Hence $G_k(x,y)$ depends
+only on $\pi(x,y)$ and the set $\Pi_x\coloneqq\{\pi(x,z):z\in V\}$ of profiles in
+row $x$, which has at most $|V|$ elements.
+
+\begin{proposition}[Small domains]\label{prop:small-domains}
+For all $k,n\ge1$ there is a converse-free relational circuit with $4kn$
+composition gates, all of them row projections $X;\one$, and $O(k^2n^2)$
+other gates, that computes $G_k$ on every structure with at most $n$
+elements.
+\end{proposition}
+\begin{proof}
+A relation is \defn{row-constant} if its value at $(x,y)$ does not
+depend on $y$. By~\eqref{eq:prelim-projections}, each row projection $S;\one$
+is row-constant and holds in row $x$ exactly when some pair
+$(x,z)$ lies in $S$; Boolean
+combinations of row-constant relations are row-constant. For
+$1\le b\le2k$, let $E_b$ be the input relation giving bit $b$ of the
+profile, and put $E_b^1\coloneqq E_b$ and $E_b^0\coloneqq\overline{E_b}$.
+
+In a structure with at most $n$ elements, call a word
+$w\in\{0,1\}^\ell$ \defn{live} in row $x$ if some profile in $\Pi_x$
+begins with $w$. Live words of one length begin distinct profiles, so
+there are at most $n$ of each length, and the empty word is live because
+$\pi(x,x)\in\Pi_x$. The circuit stores the live words of length $\ell$ in
+$n$ slots: row-constant relations $L_{\ell,r}$ and $W_{\ell,r,b}$, for
+$1\le r\le n$ and $1\le b\le\ell$, state that slot $r$ is occupied in row $x$ and
+that its word has bit $b$. The invariant is that, in each row, the
+occupied slots store every live word of length $\ell$ exactly once;
+bits in unoccupied slots are irrelevant. Initially $L_{0,1}\coloneqq\one$ and
+$L_{0,r}\coloneqq\zero$ for $2\le r\le n$; the only stored word
+is empty, so there are no word bits. For each slot $r$ and each
+$\sigma\in\{0,1\}$, the relation
+\[
+ S_{\ell,r,\sigma}\coloneqq L_{\ell,r}\cap
+ \bigcap_{b=1}^{\ell}\bigl((E_b\cap W_{\ell,r,b})\cup
+     (\overline{E_b}\cap\overline{W_{\ell,r,b}})\bigr)\cap E_{\ell+1}^\sigma
+\]
+holds at $(x,z)$ exactly when slot $r$ is occupied in row $x$ and
+$\pi(x,z)$ begins with its word followed by $\sigma$. The row projection
+$S_{\ell,r,\sigma};\one$ therefore tells, in every row at once, whether
+this extension is live. The at most $n$ live extensions are placed into the slots of length
+$\ell+1$ in the fixed order of their pairs $(r,\sigma)$; no order on
+the input vertices is used. Index the $2n$ candidate pairs by
+$(r_i,\sigma_i)$, for $1\le i\le 2n$, and put
+$f_i\coloneqq S_{\ell,r_i,\sigma_i};\one$. Using only Boolean gates,
+compute, for $0\le i\le 2n$ and $0\le j\le n$, the row-constant
+relation $C_{i,j}$ that holds in a row exactly when $j$ of
+$f_1,\ldots,f_i$ hold:
+\[
+ C_{0,0}\coloneqq\one,\qquad C_{0,j}\coloneqq\zero\ (j>0),\qquad
+ C_{i,j}\coloneqq(\overline{f_i}\cap C_{i-1,j})
+       \cup(f_i\cap C_{i-1,j-1}),
+\]
+where $1\le i\le 2n$, $0\le j\le n$, and
+$C_{i,-1}\coloneqq\zero$. For $1\le j\le n$, put
+\[
+ A_{i,j}\coloneqq f_i\cap C_{i-1,j-1}\qquad(1\le i\le 2n).
+\]
+In each row, $A_{i,j}$ holds exactly if candidate $i$ is the $j$th
+live candidate. In particular, at most one $A_{i,j}$ holds for a given
+slot $j$. Thus occupancy and every bit of the new slots are computed by
+\[
+\begin{aligned}
+ L_{\ell+1,j}
+   &\coloneqq\bigcup_{i=1}^{2n} A_{i,j},\\
+ W_{\ell+1,j,b}
+   &\coloneqq\bigcup_{i=1}^{2n}
+       (A_{i,j}\cap W_{\ell,r_i,b})
+       &&(1\le b\le\ell),\\
+ W_{\ell+1,j,\ell+1}
+   &\coloneqq\bigcup_{\substack{1\le i\le 2n\\\sigma_i=1}} A_{i,j}.
+\end{aligned}
+\]
+Distinct live prefixes have distinct extensions, and every live word
+of length $\ell+1$ extends a live prefix. Thus these formulas preserve
+the slot invariant. They use only Boolean operations on row-constant
+relations, so no further compositions are needed. At each length, the
+$2n$ projections producing
+the $f_i$ are the only composition gates. The candidate tests use
+$O((\ell+1)n)$ Boolean gates, the prefix counts and ranks use
+$O(n^2)$, and updating all slots and their $\ell+1$ bits uses
+$O((\ell+1)n^2)$. Summing over the $2k$ lengths, together with the
+final output gates below, yields $O(k^2n^2)$ non-composition gates.
+After length $2k$ the occupied slots
+hold exactly the profiles in $\Pi_x$, and
+\[
+ G_k=\bigcup_{r=1}^{n}\Bigl(L_{2k,r}\cap\bigcap_{i=1}^k
+ \bigl((P_i\cap W_{2k,r,k+i})\cup(Q_i\cap W_{2k,r,i})\bigr)\Bigr),
+\]
+because the intersection over $i$ says that the read edge $(x,y)$
+accepts the witness edges whose profile is in slot $r$. The circuit
+makes $2n$ row projections
+at each of the $2k$ lengths, $4kn$ in all, and uses no converse.
+\end{proof}
+
+\domainsize*
+\begin{proof}
+By Corollary~\ref{cor:randomized} with $\varepsilon=0$, the lower
+bound holds at every domain size $n\ge n_0(2^k)$. Since
+\[
+n_0(2^k)=\lceil12\cdot4^k(k+1)\ln2\rceil+3\le18k4^k
+\]
+for all $k\ge1$, we may take $c=18$.
+\end{proof}
+
+\subsection{Random inputs}\label{sec:random-inputs}
+Unlike the randomized targets of \S\ref{sec:prelim-resources}, the
+circuit here is fixed and the input is random.
+\begin{corollary}[Random inputs]\label{cor:random-inputs}
+Fix $k\ge1$ and $n$. Color the edges of the complete graph on $n$
+vertices independently and uniformly with the colors in $2^{[k]}$,
+determine $P_i,Q_i$ by the colors as in \S\ref{sec:overview}, and
+fix a vertex $\hub$. Choose a color $\lambda$ uniformly, a vertex $v$
+uniformly among those with $\chi(\hub,v)=\lambda^c$ (any vertex if there
+is none), and a fair bit; if the bit is one, apply the fold of
+$\lambda$. Then every relational circuit with $g$ composition gates
+answers $G_k(\hub,v)$ correctly with probability at most
+$\frac12+g/2^k+\delta$,
+where $\delta\coloneqq n^34^k\exp(-(n-3)/4^k)$, and for each
+$g\le2^{k-1}$ some circuit with $g$ composition gates answers correctly
+with probability at least $\frac12+g/2^k-\delta$.
+\end{corollary}
+\begin{proof}
+Let $\mathcal W$ be the event that the coloring has the two-witness
+property. The proof of Lemma~\ref{lem:palette}, with $N=2^k$, gives
+$\Pr[\lnot\mathcal W]\le\delta$. Fix a coloring in $\mathcal W$. Then
+$\hub$ has edges of every color, so $v$ is uniform among the vertices
+with $\chi(\hub,v)=\lambda^c$. For each color $\lambda$, let
+$\mathrm{err}_{\lambda,0},\mathrm{err}_{\lambda,1}$ indicate an error of
+$C$ at $(\hub,v_{\lambda^c})$ on $\mathcal M_0$ and on $\mathcal M_\lambda$.
+The error-count inequality in the proof of Theorem~\ref{thm:test-cost},
+with the tests of Lemma~\ref{lem:G-tests} and Lemma~\ref{lem:cor-cost},
+gives
+\[
+ \sum_\lambda(\mathrm{err}_{\lambda,0}+\mathrm{err}_{\lambda,1})
+ \ge2^k-\tcost(C)\ge2^k-2g
+\]
+for every choice of the vertices $v_\mu$ of \S\ref{sec:structure}, hence
+also in expectation when each $v_\mu$ is uniform among the vertices with
+$\chi(\hub,v_\mu)=\mu$. Given the coloring, the probability of
+an error is the average of $\mathrm{err}_{\lambda,b}$ over uniform
+$\lambda$ and $b$, so it is
+at least $(2^k-2g)/2^{k+1}=\frac12-g/2^k$. Averaging over the colorings
+proves the upper bound.
+
+For the lower bound, choose $g$ of the pairs $\{\lambda,\lambda^c\}$ and keep, in the
+circuit of Proposition~\ref{prop:promise}, only the terms for these pairs.
+This circuit has $g$ composition gates. On a coloring in $\mathcal W$, it
+is correct on both structures of the $2g$ tests whose colors lie in the
+chosen pairs, and for every other color it answers zero at the read
+edge, which is correct when the bit is one. Its success probability is
+therefore at least $(1-\delta)(\frac12+g/2^k)\ge\frac12+g/2^k-\delta$.
+\end{proof}
+
+\subsection{Reflexive--transitive closure}\label{sec:closure}
+For a relation $X$, define $X^0\coloneqq\id$ and
+$X^{m+1}\coloneqq X^m;X$ for $m\ge0$. Its reflexive--transitive
+closure is $X^*\coloneqq\bigcup_{m\ge0}X^m$.
+\closure*
+\begin{proof}
+On the reference structure,
+\eqref{eq:table-off} gives $X;X=\one$ whenever
+the off-diagonal support $S_X$ is nonempty. Hence $X^*=\one$ if
+$S_X\ne\varnothing$ and $X^*=\id$ otherwise; in particular, closure
+preserves color-determined relations, as condition~(i) of a test system requires. Let
+$\lambda$ be a color, and put $J\coloneqq\Lambda\setminus\{\lambda\}$. If
+$S_X=\varnothing$, then $\pred X\lambda=X$, and both
+$(\pred X\lambda)^*$ and $\pred{(X^*)}\lambda$ equal $\id$. If $S_X$
+contains a color in $J$, the table of \S\ref{sec:responses} gives
+$\pred X\lambda;\pred X\lambda=\one$, so
+$(\pred X\lambda)^*=\one=\pred{(X^*)}\lambda$. Thus a closure gate
+notices the fold of $\lambda$ only when $S_X=\{\lambda\}$, so it notices
+at most one fold. Theorem~\ref{thm:test-cost} and Lemma~\ref{lem:cor-cost}
+give $2^k\le m_1(C)+2m_2(C)+g_*(C)\le2\gcost C+g_*(C)$ with the tests of
+Lemma~\ref{lem:G-tests}.
+\end{proof}
