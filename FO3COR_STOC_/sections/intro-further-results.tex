@@ -111,6 +111,7 @@ The fold of $A\subseteq[k]$ deletes all $R$-edges from $h$ to
 vertices of pattern $A$.
 Thus $U_k(h,y_A)$ changes from true to false
 for a vertex $y_A$ of pattern $A$, even when $(h,y_A)$ is unchanged.
+\nakamura{\S1.3 の fold（塗り替え）とここの fold（削除）は、$R^c$ を対のラベルとみればどちらもラベル対の反転（$P_i\leftrightarrow Q_i$ / $R\leftrightarrow R^c$）なので、同じ枠組みで捉えられないか}
 
 \begin{figure}[!htbp]
 \centering
@@ -207,7 +208,7 @@ by replacing intersections with pointwise $\otimes$, and
 $\mathbf 1_S$ is the all-$1_S$ column vector. Then
 \[
   \mathcal G_k(x,y)=\smash{\bigoplus_{A\subseteq[k]}}
-       H_A(x,y)\otimes (H_{A^c}\mathbf \cdot \mathbf{1}_S)(x).
+       H_A(x,y)\otimes (H_{A^c}\cdot \mathbf{1}_S)(x).
 \]
 
 This uses $2^k$ mv products, together with row broadcasting and
@@ -226,7 +227,7 @@ where $D\in\{\mathbb N,\mathbb Z\}$.
 \begin{restatable}[Tropical arity-elimination overhead\proofref{sec:matrix}]{theorem}{tropicalmatrixbounds}\label{thm:tropical-matrix}
 For every $k\ge1$ and $\mathfrak S\in\{\mathsf{Trop}_{\mathbb N},\mathsf{Trop}_{\mathbb Z}\}$,
 the query $\mathcal G_k$ has an ARA$(3)$ expression of size $O(k)$,
-but every typed matrix circuit $C$ over $\mathfrak S$ computing it
+but every typed matrix circuit\nakamura{未定義?} $C$ over $\mathfrak S$ computing it
 on all finite inputs satisfies $\mvcount C+3\mmcount C\ge2^k$.
 \end{restatable}
 The lower bound holds even with arbitrary uniform entrywise functions

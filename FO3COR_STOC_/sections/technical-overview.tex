@@ -8,7 +8,7 @@ We use a complete undirected graph $\mathbb{G} = (V,\chi)$ whose edges are color
 We write $\chi(u,v)=\chi(v,u)$ for the color of the edge between distinct vertices $u$ and $v$,
 and use $\lambda,\mu,\nu$ for colors.
 The key property of $\mathbb{G}$ is the \defn{two-witness property}: for all distinct
-$u,v\in V$ and all colors $\mu,\nu$,
+$u,v\in V$ and all colors $\mu,\nu$,\nakamura{図の $u$--$v$ の点線の意図が不明です（$z$--$z'$にないのはなぜ）}
 \[
 \text{at least two vertices $z\notin\{u,v\}$ satisfy $\chi(u,z)=\mu$ and
  $\chi(z,v)=\nu$.}
@@ -41,6 +41,7 @@ In \S\ref{ov:types}, we show that every circuit gate on $\mathcal M_0$ is consta
 Boolean operations, including complement, and converse preserve these predictions; only composition can violate them.
 %
 In \S\ref{ov:twocolors}, we show that, thanks to the two-witness property, each composition can violate the prediction for at most two folds. Since every fold must be detected, any circuit for $G_k$ requires at least $2^{k-1}$ compositions, even with sharing.
+\nakamura{violate / detect / notice は重複？（notice は後で定義がある）}
 
 \subsubsection{Folding the reference structure}\label{ov:outline}\label{ov:fold}
 
@@ -56,6 +57,7 @@ has edges of every color, so $G_k$ holds
 at every non-loop pair of $\mathcal M_0$.
 
 Fix a vertex $\hub \in V$, the \defn{hub}, and for each color $\mu$ choose $v_\mu$ with $\chi(\hbar,v_\mu)=\mu$.
+\nakamura{$\hbar$, $h$, $\hub$ が混在}
 %
 For each color $\lambda$, let $\chi_\lambda$ be obtained from $\chi$ by recoloring every $\lambda$-colored edge incident to $\hub$ as $\lambda^c$, leaving all other edges unchanged.
 Let $\mathcal M_\lambda$ be the input structure induced by $\chi_\lambda$ in the same way as $\mathcal M_0$.
@@ -93,6 +95,7 @@ In $\mathcal M_\lambda$, the hub has no edge of color $\lambda$, but the read ed
 \end{figure}
 
 The read edge $(\hub,v_{\lambda^c})$ requires a $\lambda$-colored edge at $\hub$; the fold removes all such edges. 
+\nakamura{辺は削除ではなく、ラベルの反転 (flip)、あるいはラベルの変更か (Fig~\ref{fig:prediction}周辺も同様)}
 Hence
 \[
 \chi_\lambda(\hbar,v_{\lambda^c})
